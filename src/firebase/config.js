@@ -1,0 +1,64 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBQQD9FF-oUZEQVqod6Pq2ZbBB6QRJT6DA",
+  authDomain: "health-wallet-001.firebaseapp.com",
+  projectId: "health-wallet-001",
+  storageBucket: "health-wallet-001.appspot.com",
+  messagingSenderId: "743471112396",
+  appId: "1:743471112396:web:d60b218bf02228258c2269",
+};
+//-Initialize-Firebase------------------------
+const app = initializeApp(firebaseConfig);
+//-configuracion-autenticacion------------
+export const auth = getAuth();
+export const provider = new GoogleAuthProvider();
+//-funcion-autenticacion------------------
+export const signInWithGoogle = () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      // Esto le da un token de acceso de Google. Puede usarlo para acceder a la API de Google.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // La información del usuario registrado.
+    })
+    .catch((error) => {
+      // Manejar errores aquí.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // El correo electrónico de la cuenta de usuario utilizada.
+      const email = error.customData.email;
+      // El tipo AuthCredential que se utilizó.
+      console.warn({ errorCode, errorMessage, email });
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
+};
+
+export const signOutWithGoogle = () => {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      // Sign-out successful.
+      console.log("finalizada");
+    })
+    .catch((error) => {
+      console.error("Problema al cerra la sesion con google".error);
+      // An error happened.
+    });
+};
+
+/*
+-data pcm-r6 24 info druid detectar el topico dode estoy agregando info, luego druid limpio la data para presentar y de druid a super set kaskat un canal streamen de dato archivo punto service
+-topico:
+-dataset:
+*/
