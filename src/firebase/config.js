@@ -11,16 +11,17 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBQQD9FF-oUZEQVqod6Pq2ZbBB6QRJT6DA",
-  authDomain: "health-wallet-001.firebaseapp.com",
-  projectId: "health-wallet-001",
-  storageBucket: "health-wallet-001.appspot.com",
-  messagingSenderId: "743471112396",
-  appId: "1:743471112396:web:d60b218bf02228258c2269",
+  apiKey: "AIzaSyCCYDth5Sem4sEGnofHS6cj7447-vQBfPc",
+  authDomain: "bieni-health.firebaseapp.com",
+  projectId: "bieni-health",
+  storageBucket: "bieni-health.appspot.com",
+  messagingSenderId: "762358975378",
+  appId: "1:762358975378:web:fa38463d10336c9e930f4b",
+  measurementId: "G-XF00T0YFME"
 };
 //-Initialize-Firebase------------------------
 const app = initializeApp(firebaseConfig);
-//-configuracion-autenticacion------------
+//-configuracion-autenticacion------------ 
 export const auth = getAuth();
 export const provider = new GoogleAuthProvider();
 //-funcion-autenticacion------------------
@@ -49,10 +50,10 @@ export const signOutWithGoogle = () => {
   signOut(auth)
     .then(() => {
       // Sign-out successful.
-      console.log("finalizada");
+      console.log("Finalizada");
     })
     .catch((error) => {
-      console.error("Problema al cerra la sesion con google".error);
+      console.error("Problema al cerrar la sesión con google".error);
       // An error happened.
     });
 };
