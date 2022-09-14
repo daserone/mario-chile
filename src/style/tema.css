@@ -107,8 +107,9 @@ ion-tab-button {
 }
 .bg-info-alt {
   /*background: rgb(14, 56, 92);
-  background: linear-gradient(120deg, rgba(158,144,194,1) 0%, rgba(58,34,128,1) 100%);*/
-  background: transparent conic-gradient(from 3deg at 31% -8%, #00BFBB 0.00%, #1585A5 28.17%, #372983 49.71%, #3A2280 100.00%) 0% 0% no-repeat padding-box;
+  background: linear-gradient(120deg, rgba(158,144,194,1) 0%, rgba(58,34,128,1) 100%);
+  background: transparent conic-gradient(from 3deg at 31% -8%, #00BFBB 0.00%, #1585A5 28.17%, #372983 49.71%, #3A2280 100.00%) 0% 0% no-repeat padding-box;*/
+  background: transparent linear-gradient(120deg, #00BFBB 0%, #372983 75%, #3A2280 100%) 0% 0% no-repeat padding-box;
   box-shadow: 0px 2px 20px #3881C34D;
   opacity: 1;
 }

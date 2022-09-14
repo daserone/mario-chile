@@ -1,63 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { faCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   IonContent,
   IonPage,
   IonCol,
   IonGrid,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonRow,
   IonSearchbar,
   IonButton,
-  IonHeader,
-  IonInput,
   IonItem,
   IonLabel,
-  IonModal,
-  IonSelect,
-  IonSelectOption,
-  IonTitle,
-  IonToolbar,
   IonImg,
   IonCard,
   IonCardContent,
-  IonBadge,
   IonThumbnail,
   useIonViewDidEnter,
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { InfoPaciente } from "../../components";
+import { InfoPaciente, Header } from "../../components";
 import { Card } from "./card";
 import {
-  getComboAfiliados,
   getImagenologias,
   serviciosImagenologia,
   getImagenologiaUltimoRg,
-  getFichaCompleta, URLPERFIL
+  getFichaCompleta
 } from "../../servicios/servicios";
 import "./imagenologia.css";
-import { formtFechaCorta, INITIALPERFIL, fechaPerfil } from "../../helpers";
+import { formtFechaCorta } from "../../helpers";
 
 const Imagenologia: React.FC = () => {
-  const [perfil, setPerfil] = useState(INITIALPERFIL);
-  const [alergias, setAlergias] = useState([]);
-  const [enfermedades, setEnfermedades] = useState([]);
-  const [discapacidades, setDiscapacidades] = useState([]);
   const user = useSelector((state: any) => state.reducerAuth.user);
 
-  const [afiliado, setAfiliado] = useState<any>("");
-  const [afiliados, setAfiliados] = useState<any>([]);
   const [load, setLoad] = useState<Boolean>(true);
   const [data, setData] = useState<any>([]);
   const [totalResults, setTotalResults] = useState(0);
   const [page, setPage] = useState<any>(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isInfiniteDisabled, setInfiniteDisabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
@@ -81,11 +60,11 @@ const Imagenologia: React.FC = () => {
         }
       })
       .catch((error) => {
-        console.error("Error en peticion laboratorio" + error);
+        console.error("Error en petici&oacute;n laboratorio" + error);
       });
   };
 
-  const utlimoRegistros = (cancelToken: any = null) => {
+  const ultimoRegistros = (cancelToken: any = null) => {
     getImagenologiaUltimoRg("", user.idpaciente, user.cedula, cancelToken)
       .then((rsp) => {
         const { data, status } = rsp;
@@ -136,29 +115,11 @@ const Imagenologia: React.FC = () => {
       });
   };
 
-  const getafiliados = () => {
-    getComboAfiliados()
-      .then((rsp) => {
-        const { data, status } = rsp;
-        if (status === 200) {
-          if (data) {
-            setAfiliados(data.data);
-          } else {
-            setAfiliados([]);
-          }
-        }
-      })
-      .catch((e) => {
-        console.warn(e);
-      });
-  };
-
   useEffect(() => {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
     fecthIntial(source);
-    utlimoRegistros(source);
-    getafiliados();
+    ultimoRegistros(source);
     return () => {
       source.cancel("Canceled");
     };
@@ -197,39 +158,6 @@ const Imagenologia: React.FC = () => {
       });
   };
 
-  const loadData = (ev: any) => {
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
-    setTimeout(() => {
-      ev.target.complete();
-      if (data.length === totalResults) {
-        setInfiniteDisabled(true);
-      } else {
-        fecth(source);
-      }
-    }, 500);
-  };
-
-  useIonViewDidEnter(() => {
-    getFichaCompleta(user.idpaciente)
-      .then((rsp: any) => {
-        const { data } = rsp;
-        setPerfil(data.data);
-        if (data.discapacidades) {
-          setDiscapacidades(data.discapacidades);
-        }
-        if (data.alergias) {
-          setAlergias(data.alergias);
-        }
-        if (data.enfermedades) {
-          setEnfermedades(data.enfermedades);
-        }
-      })
-      .catch((error) => {
-        console.error("Error en get perfiles" + error);
-      });
-  });
-
   const handelImagenes = () => {
     history.push("/app/imagenologia");
   };
@@ -248,13 +176,13 @@ const Imagenologia: React.FC = () => {
       <IonContent fullscreen className="bg-light">
         <IonGrid className="bg-light">
           <IonRow className="pt-4 pb-4 mb-2">
-            <IonCol size="2" className="px-3 fs-14 text-white">              
-                <div className="d-inline">
-                  <img src="./images/logo-bieni.svg" alt="imagen" className="d-inline" width={25} />
-                  <p className="ml-3 fs-20 font-w600 text-blue-medium d-inline">Bieni</p>
-                </div>
+            <IonCol size="2" className="px-3 fs-14 text-white">
+              <div className="d-inline">
+                <img src="./images/logo-bieni.svg" alt="imagen" className="d-inline" width={25} />
+                <p className="ml-3 fs-20 font-w600 text-blue-medium d-inline">Bieni</p>
+              </div>
             </IonCol>
-            <IonCol size="7" className="px-3 fs-14 text-white">              
+            <IonCol size="7" className="px-3 fs-14 text-white">
               <div
                 className="searchContainer d-inline-block"
                 style={{ width: "60%" }}

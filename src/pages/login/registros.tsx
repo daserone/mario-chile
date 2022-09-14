@@ -73,12 +73,14 @@ const Registros: React.FC = () => {
         <IonGrid className="ion-padding">
           <IonRow>
             <IonCol size="8" className="bg-info-alt">
-              <p className="mt-5 pt-4 fs-36 text-white text-center">Bienvenido a <span className="font-w700">Bieni</span></p>
-              <div className="text-center">
-                <img src="./images/Doctors-panama.svg" alt="imagen" style={{maxWidth: '700px'}} />
+              <div>
+                <p className="mt-5 pt-4 fs-36 text-white text-center">Bienvenido a <span className="font-w700">Bieni</span></p>
+                <div className="text-center">
+                  <img src="./images/Doctors-panama.svg" alt="imagen" style={{maxWidth: '700px'}} />
+                </div>
+                <p className="mt-2 mb-0 fs-16 text-white text-center">Todos tus registros m&eacute;dicos</p>
+                <p className="mt-0 mb-4 fs-16 text-white text-center">en un solo lugar</p>
               </div>
-              <p className="mt-2 mb-0 fs-16 text-white text-center">Todos tus registros m&eacute;dicos</p>
-              <p className="mt-0 mb-4 fs-16 text-white text-center">en un solo lugar</p>
             </IonCol>
             <IonCol size="4">
               <IonRow>
@@ -95,7 +97,7 @@ const Registros: React.FC = () => {
                     className=""
                     width={80}
                   />
-                  <p className="mt-2 fs-30 font-w500 text-info">Bieni</p>
+                  <p className="mt-2 fs-30 font-w500 text-blue-medium">Bieni</p>
                 </IonCol>
               </IonRow>
               <IonRow>

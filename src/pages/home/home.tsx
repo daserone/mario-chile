@@ -33,6 +33,10 @@ const Home: React.FC = () => {
     estado: false,
   });
 
+  const handleImagenologia = (event: any) => {
+    history.push("./imagenologia");
+  };
+
   return (
     <IonPage className="fondo">
       <IonContent fullscreen className="bg-light">
@@ -132,7 +136,7 @@ const Home: React.FC = () => {
                   fill="outline"
                 >
                   <IonImg
-                    src={"./images/soporte-light.svg"}
+                    src={"./images/descargar.svg"}
                     className="mr-2"
                     style={{ width: "16px" }}
                   />
@@ -179,7 +183,7 @@ const Home: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
-                      <tr>
+                      <tr onClick={handleImagenologia} className="cursor-pointer">
                         <td>
                           <img src="./images/laura.jpg" alt="imagen" className="border-radius" style={{width: '32px'}} />
                         </td>
