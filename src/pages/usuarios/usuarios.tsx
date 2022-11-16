@@ -18,10 +18,10 @@ import {
 } from "@ionic/react";
 import { useHistory, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "./home.css";
+import "./usuarios.css";
 import { Nav } from "../../components";
 
-const Home: React.FC = () => {
+const Usuarios: React.FC = () => {
   const history = useHistory();
   const user = useSelector((state: any) => state.reducerAuth.user);
 
@@ -327,4 +327,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Usuarios;

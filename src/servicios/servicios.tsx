@@ -1,14 +1,14 @@
 import axio from "axios";
 
 export const URLPERFIL =
-  "https://toolkit.maxialatam.com/wallethealth/asset/perfiles/";
+  "https://toolkit.maxialatam.com/bieni/asset/perfiles/";
 
 export const services = axio.create({
   baseURL: "https://toolkit.maxialatam.com/portalcss/api/",
 });
 
 export const servicesWh = axio.create({
-  baseURL: "https://toolkit.maxialatam.com/wallethealth/",
+  baseURL: "https://toolkit.maxialatam.com/bieni/",
 });
 
 export const authentication = (form: any) =>
@@ -437,5 +437,35 @@ export const getMisMedicos = (id: any, page: number) =>
       page: page,
       imestamp: new Date().getTime(),
     },
+    responseType: "json",
+  });
+
+  /*-NIVELES----------------------------------------*/
+export const getNiveles = (
+  idafiliado: any,
+  idpaciente: any,
+  busqueda: any,
+  desde: any,
+  hasta: any,
+  page: any,
+  listado: string
+) =>
+  servicesWh.get("/controller/nivelesback.php", {
+    params: {
+      op: "listadoNiveles",
+      idafiliado: idafiliado,
+      idpaciente: idpaciente,
+      busqueda: busqueda,
+      desde: desde,
+      hasta: hasta,
+      page: page,
+      lista: listado,
+      imestamp: new Date().getTime(),
+    },
+    responseType: "json",
+  });
+
+  export const serviciosNiveles = (form: any) =>
+  servicesWh.post("/controller/nivelesback.php", form, {
     responseType: "json",
   });

@@ -18,12 +18,18 @@ import {
 } from "@ionic/react";
 import { useHistory, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "./home.css";
+import "./niveles.css";
 import { Nav } from "../../components";
+import { getNiveles } from "../../servicios/servicios";
 
-const Home: React.FC = () => {
+const Niveles: React.FC = () => {
   const history = useHistory();
   const user = useSelector((state: any) => state.reducerAuth.user);
+  const [load, setLoad] = useState<Boolean>(true);
+  const [data, setData] = useState<any>([]);
+  const [totalResults, setTotalResults] = useState(0);
+  const [page, setPage] = useState<any>(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
@@ -45,6 +51,35 @@ const Home: React.FC = () => {
   const handleUsuarios = (event: any) => {
     history.push("./usuarios");
   };
+
+  const handleDetail = (id: any) => {
+    history.push(`./nivel/${id}`);
+  };
+
+  const fecthIntial = () => {
+    getNiveles("", user.idpaciente, "", "", "", 1, "")
+      .then((rsp: any) => {
+        const { data, status } = rsp;
+        if (status === 200) {
+          if (data) {
+            setLoad(false);
+            setData(data.data);
+            setPage(2);
+            setTotalResults(data.totalResults);
+          } else {
+            setLoad(false);
+            setData([]);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error en petici&oacute;n laboratorio" + error);
+      });
+  };
+
+  useEffect(() => {
+    fecthIntial();
+  }, [user]);
 
   return (
     <IonPage className="fondo">
@@ -98,7 +133,7 @@ const Home: React.FC = () => {
               {/*<Nav/>*/}
 
               <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
-                <IonItem lines="none" button onClick={() => { }} className="mb-3 active">
+                <IonItem lines="none" button onClick={() => { }} className="mb-3">
                   <IonImg
                     src={"./images/afiliados-light.svg"}
                     className="mr-3"
@@ -128,7 +163,7 @@ const Home: React.FC = () => {
                     Soporte
                   </IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={handleNiveles} className="mb-3">
+                <IonItem lines="none" button onClick={handleNiveles} className="mb-3 active">
                   <IonImg
                     src={"./images/configuracion.svg"}
                     className="mr-2"
@@ -204,109 +239,50 @@ const Home: React.FC = () => {
                   <table className="table table-striped">
                     <thead className="text-gray">
                       <tr>
-                        <th scope="col"></th>
+                        <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">C&eacute;dula</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Motivo de la consulta</th>
+                        <th scope="col">Descripci&oacute;n</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
-                      <tr onClick={handleImagenologia} className="cursor-pointer">
-                        <td>
-                          <img src="./images/laura.jpg" alt="imagen" className="border-radius" style={{width: '32px'}} />
-                        </td>
-                        <td>Laura Cristina Garcia</td>
-                        <td>10102234</td>
-                        <td>lauracristinagarcia@gmail.com</td>
-                        <td>Consulta</td>
-                        <td>
-                          <IonBadge color="warning" className="px-2 py-1 fs-12 font-w100 border-badge">Agendado</IonBadge>
-                        </td>
-                        <td>
-                          <div className="d-flex flex-row">
-                            <IonImg
-                              src={"./images/ver.svg"}
-                              className="mr-2 cursor-pointer"
-                              style={{ width: "26px" }}
-                            />
-                            <IonImg
-                              src={"./images/editar.svg"}
-                              className="mr-2 cursor-pointer"
-                              style={{ width: "19px" }}
-                            />
-                            <IonImg
-                              src={"./images/eliminar.svg"}
-                              className="cursor-pointer"
-                              style={{ width: "19px" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img src="./images/juan.jpg" alt="imagen" className="border-radius" style={{width: '32px'}} />
-                        </td>
-                        <td>Juan Moreno</td>
-                        <td>10347234</td>
-                        <td>juanmoreno@gmail.com</td>
-                        <td>Consulta</td>
-                        <td>
-                          <IonBadge color="warning" className="px-2 py-1 fs-12 font-w100 border-badge">Agendado</IonBadge>
-                        </td>
-                        <td>
-                          <div className="d-flex flex-row">
-                            <IonImg
-                              src={"./images/ver.svg"}
-                              className="mr-2 cursor-pointer"
-                              style={{ width: "26px" }}
-                            />
-                            <IonImg
-                              src={"./images/editar.svg"}
-                              className="mr-2 cursor-pointer"
-                              style={{ width: "19px" }}
-                            />
-                            <IonImg
-                              src={"./images/eliminar.svg"}
-                              className="cursor-pointer"
-                              style={{ width: "19px" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img src="./images/andrea.jpg" alt="imagen" className="border-radius" style={{width: '32px'}} />
-                        </td>
-                        <td>Andrea Fuentes</td>
-                        <td>111272834</td>
-                        <td>andreafuentes@gmail.com</td>
-                        <td>Consulta</td>
-                        <td>
-                          <IonBadge color="success" className="px-2 py-1 fs-12 font-w100 border-badge">Atendido</IonBadge>
-                        </td>
-                        <td>
-                          <div className="d-flex flex-row">
-                            <IonImg
-                              src={"./images/ver.svg"}
-                              className="mr-2 cursor-pointer"
-                              style={{ width: "26px" }}
-                            />
-                            <IonImg
-                              src={"./images/editar.svg"}
-                              className="mr-2 cursor-pointer"
-                              style={{ width: "19px" }}
-                            />
-                            <IonImg
-                              src={"./images/eliminar.svg"}
-                              className=" cursor-pointer"
-                              style={{ width: "19px" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
+                      {load ? (
+                        "Cargando..."
+                      ) : data.length === 0 ? (
+                        <IonCard className="m-0 mb-4 card-slide w-100">
+                          <IonCardContent className="card-content-slide">
+                            <div className="my-2 text-center">
+                              Sin resultados de imagenolog&iacute;a
+                            </div>
+                          </IonCardContent>
+                        </IonCard>
+                      ) : (
+                        data.map((item: any, index: any) => (
+                          <tr onClick={() => { handleDetail(item.id); }} className="cursor-pointer" key={index}>
+                            <td>
+                              {item.id}
+                            </td>
+                            <td>{item.nombre}</td>
+                            <td>{item.descripcion}</td>
+                            <td className="text-center">{item.estado}</td>
+                            <td>
+                              <div className="d-flex flex-row">
+                                <IonImg
+                                  src={"./images/editar.svg"}
+                                  className="mr-2 cursor-pointer"
+                                  style={{ width: "19px" }}
+                                />
+                                <IonImg
+                                  src={"./images/eliminar.svg"}
+                                  className="cursor-pointer"
+                                  style={{ width: "19px" }}
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </IonCardContent>
@@ -327,4 +303,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Niveles;

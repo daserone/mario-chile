@@ -6,6 +6,8 @@ import { Imagenologia } from "./imagenologia";
 import { Laboratorio, ExamenLab } from "./laboratorio";
 import { Medicamentos } from "./medicamentos";
 import { Home } from "./home";
+import { Niveles, Nivel } from "./niveles";
+import { Usuarios } from "./usuarios";
 import { Registro } from "./registro";
 import { Afiliados, Afiliado } from "./afiliados";
 import {
@@ -44,6 +46,9 @@ export {
   ExamenLab,
   Medicamentos,
   Home,
+  Niveles,
+  Nivel,
+  Usuarios,
   Registro,
   Afiliados,
   Afiliado,

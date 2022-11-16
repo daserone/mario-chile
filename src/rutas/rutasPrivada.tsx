@@ -12,6 +12,9 @@ import {
 import {
   Cuentas,
   Home,
+  Niveles,
+  Nivel,
+  Usuarios,
   CitaCrear,
   Datos,
   EditDatos,
@@ -69,6 +72,15 @@ const RutasPrivadas: React.FC = () => {
           </Route>
           <Route exact path="/app/home">
             <Home />
+          </Route>
+          <Route exact path="/app/niveles">
+            <Niveles />
+          </Route>
+          <Route exact path="/app/nivel/:id">
+            <Nivel />
+          </Route>
+          <Route exact path="/app/usuarios">
+            <Usuarios />
           </Route>
           <Route exact path="/app/crear-cita">
             <CitaCrear />
@@ -163,7 +175,8 @@ const RutasPrivadas: React.FC = () => {
         </IonRouterOutlet>
         <IonTabBar
           slot="bottom"
-          className={`bar-menu ${NOTAB.includes(pathname) ? "d-none" : ""}`}
+          /*className={`bar-menu ${NOTAB.includes(pathname) ? "d-none" : ""}`}*/
+          className="d-none"
         >
           <IonTabButton tab="tab1" href="/app/home" className="text-info">
             <div

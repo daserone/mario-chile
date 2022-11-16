@@ -40,3 +40,15 @@ export const valTratamiento = (
   }
   return { estado: true, msg: "" };
 };
+
+export const valNiveles = (
+  nombre: string,
+  descripcion: string
+) => {
+  if (nombre === null) {
+    return { estado: false, msg: "Por favor agregue el nombre" };
+  } else if (descripcion === null) {
+    return { estado: false, msg: "Por favor agregue la descripci&oacute;n" };
+  } 
+  return { estado: true, msg: "" };
+};

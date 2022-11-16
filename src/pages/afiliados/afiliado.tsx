@@ -254,7 +254,7 @@ const Afiliado = () => {
                         >
                           <div>
                             <IonImg
-                              src={`https://toolkit.maxialatam.com/wallethealth/asset/${item.logo}`}
+                              src={`https://toolkit.maxialatam.com/bieni/asset/${item.logo}`}
                               alt="employee avatar"
                               style={{ width: "50px", height: "50px" }}
                               className="float-left mr-2"

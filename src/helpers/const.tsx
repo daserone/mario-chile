@@ -31,6 +31,12 @@ export const FORMTRATAMIENTOS = {
   notas: "",
 };
 
+export const FORMNIVELES = {
+  nombre: "",
+  descripcion: "",
+  estatus: 1
+};
+
 export const NOTAB = ["/app/home", "/app/soporte", "/app/cuentas", "/app/imagenologia", "/app/perfil-crear"];
 
 export const INITIALIMAGENOLOGIA = {
