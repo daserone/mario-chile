@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { services } from "../servicios/servicios";
+import { servicesWh } from "../servicios/servicios";
 import axio from "axios";
 
 export function useFetch(
@@ -10,12 +10,12 @@ export function useFetch(
   reload = ""
 ) {
   const [load, setLoad] = useState(true);
-  const [data, setData] = useState<Array<string>>([]);
+  const [data, setData] = useState<any>([]);
   const [totalResults, settotalResults] = useState(0);
   const [recordsFiltered, setrecordsFiltered] = useState(0);
 
   function concatState(response: any) {
-    setData((prev) => [...prev, response]);
+    setData((prev:any) => [...prev, response]);
   }
 
   function deletState(id: any) {
@@ -34,7 +34,7 @@ export function useFetch(
     const cancelToken = axio.CancelToken;
     const source = cancelToken.source();
     if (id !== "0") {
-      services
+      servicesWh
         .get(url, {
           params: {
             op: action,
@@ -46,7 +46,7 @@ export function useFetch(
         })
         .then((rsp: any) => {
           const { data, totalResults, estatus, recordsFiltered } = rsp.data;
-          if (estatus === "ok") {
+          //if (estatus === "ok") {
             if (data) {
               setLoad(false);
               setData(data);
@@ -58,7 +58,7 @@ export function useFetch(
               settotalResults(0);
               setrecordsFiltered(0);
             }
-          }
+          //}
         })
         .catch((e: any) => {
           console.warn(e);
@@ -79,3 +79,4 @@ export function useFetch(
     updateState,
   ];
 }
+

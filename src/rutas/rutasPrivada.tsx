@@ -15,6 +15,7 @@ import {
   Niveles,
   Nivel,
   Usuarios,
+  Usuario,
   CitaCrear,
   Datos,
   EditDatos,
@@ -81,6 +82,9 @@ const RutasPrivadas: React.FC = () => {
           </Route>
           <Route exact path="/app/usuarios">
             <Usuarios />
+          </Route>
+          <Route exact path="/app/usuario/:id">
+            <Usuario />
           </Route>
           <Route exact path="/app/crear-cita">
             <CitaCrear />

@@ -19,37 +19,30 @@ import {
   IonSelect,
   IonSelectOption,
 } from "@ionic/react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./niveles.css";
 import { Nav } from "../../components";
-import { FORMNIVELES } from "../../helpers";
-import { useForm, useListado } from "../../hook";
 import { valNiveles } from "../../helpers/validacion";
 import { serviciosNiveles } from "../../servicios/servicios";
 
 const Nivel: React.FC = () => {
   const history = useHistory();
+  const {id}:any = useParams();
   const user = useSelector((state: any) => state.reducerAuth.user);
   const [load, setLoad] = useState<Boolean>(true);
   const [data, setData] = useState<any>([]);
   const [totalResults, setTotalResults] = useState(0);
-  const [page, setPage] = useState<any>(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [select, setSelect] = useState<any>(null);
-  const [estatus, setEstatus] = useState("");
 
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
   };
 
-  const [formulario, handleInputReset, setFormulario] =
-    useForm(FORMNIVELES);
-
-  const [
-    handleAddItem,
-    handleUpdateItem
-  ] = useListado();
+  const [nombre,setNombre] = useState("");
+  const [descripcion,setDescripcion] = useState("");
+  const [estatus,setEstatus] = useState("");
 
   const [notificacion, setNotificacion] = useState({
     msg: "",
@@ -64,35 +57,16 @@ const Nivel: React.FC = () => {
     history.push("/app/usuarios");
   };
 
-  const handleNombre = (nombre: string) => {
-    if (nombre !== null && nombre !== '') {
-      setFormulario({
-        ...formulario,
-        nombre: nombre
-      });
-    }
-  };
-
-  const handleDescripcion = (descripcion: string) => {
-    if (descripcion !== null && descripcion !== '') {
-      setFormulario({
-        ...formulario,
-        descripcion: descripcion
-      });
-    }
-  };
-
   const handleAdd = () => {
     const { estado, msg } = valNiveles(
-      formulario.nombre,
-      formulario.descripcion
+      nombre,
+      descripcion
     );
     if (estado) {
-      console.table(formulario);
       let formDa = new FormData();
       formDa.append("op", "addNivel");
-      formDa.append("nombre", formulario.nombre);
-      formDa.append("descripcion", formulario.descripcion);      
+      formDa.append("nombre", nombre);
+      formDa.append("descripcion", descripcion);      
       formDa.append("estatus", estatus);
       serviciosNiveles(formDa)
         .then(function (response: any) {
@@ -105,14 +79,10 @@ const Nivel: React.FC = () => {
               });
 
               const state: any = {
-                nombre: formulario.nombre,
-                descripcion: formulario.descripcion,
+                nombre: nombre,
+                descripcion: descripcion,
                 estado: estado
               };
-              console.log(state);
-              handleAddItem(state);
-              setEstatus("1");
-              handleInputReset();
             } else {
               setNotificacion({
                 msg: data.msg,
@@ -131,7 +101,6 @@ const Nivel: React.FC = () => {
       });
     }
   };
-  
 
   return (
     <IonPage className="fondo">
@@ -259,9 +228,9 @@ const Nivel: React.FC = () => {
                     </IonLabel>
                     <IonInput
                       name="nombre"
-                      value={formulario.nombre}
+                      value={nombre}
                       onIonChange={(e) => {
-                        handleNombre(e.detail.value!);
+                        setNombre(e.detail.value!)
                       }}
                     ></IonInput>
                   </IonItem>
@@ -271,9 +240,9 @@ const Nivel: React.FC = () => {
                     </IonLabel>
                     <IonInput
                       name="descripcion"
-                      value={formulario.descripcion}
+                      value={descripcion}
                       onIonChange={(e) => {
-                        handleDescripcion(e.detail.value!);
+                        setDescripcion(e.detail.value!)
                       }}
                     ></IonInput>
                   </IonItem>
@@ -285,9 +254,9 @@ const Nivel: React.FC = () => {
                       interface="action-sheet"
                       placeholder="Seleccione"
                       value={estatus}
-                      onIonChange={(e) => {
-                        setEstatus(e.detail.value!);
-                      }}
+                      onIonChange={(e: any) =>
+                        setEstatus(e.detail.value!)
+                      }
                     >
                       <IonSelectOption value="1">Activo</IonSelectOption>
                       <IonSelectOption value="2">Inactivo</IonSelectOption>

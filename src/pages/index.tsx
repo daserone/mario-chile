@@ -7,7 +7,7 @@ import { Laboratorio, ExamenLab } from "./laboratorio";
 import { Medicamentos } from "./medicamentos";
 import { Home } from "./home";
 import { Niveles, Nivel } from "./niveles";
-import { Usuarios } from "./usuarios";
+import { Usuarios, Usuario } from "./usuarios";
 import { Registro } from "./registro";
 import { Afiliados, Afiliado } from "./afiliados";
 import {
@@ -49,6 +49,7 @@ export {
   Niveles,
   Nivel,
   Usuarios,
+  Usuario,
   Registro,
   Afiliados,
   Afiliado,

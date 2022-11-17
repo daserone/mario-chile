@@ -15,20 +15,27 @@ import {
   IonLabel,
   IonButton,
   IonBadge,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/react";
-import { useHistory, Link } from "react-router-dom";
+import ReactDOM from 'react-dom';
+ import { Formik, Form, useField } from 'formik';
+ import * as Yup from 'yup';
+import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "./niveles.css";
-import { Nav } from "../../components";
-import { getNiveles } from "../../servicios/servicios";
-import { useFetch } from "../../hook/useFetch";
+import "./usuarios.css";
+import { serviciosNiveles } from "../../servicios/servicios";
 
-const Niveles: React.FC = () => {
+const Usuario: React.FC = () => {
   const history = useHistory();
+  const {id}:any = useParams();
   const user = useSelector((state: any) => state.reducerAuth.user);
+  const [load, setLoad] = useState<Boolean>(true);
+  const [data, setData] = useState<any>([]);
   const [totalResults, setTotalResults] = useState(0);
-  const [page, setPage] = useState<any>(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [select, setSelect] = useState<any>(null);
 
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
@@ -40,24 +47,60 @@ const Niveles: React.FC = () => {
   });
 
   const handleNiveles = (event: any) => {
-    history.push("./niveles");
+    history.push("/app/niveles");
   };
 
   const handleUsuarios = (event: any) => {
-    history.push("./usuarios");
+    history.push("/app/usuarios");
   };
 
-  const handleDetail = (id: any) => {
-    history.push(`./nivel/${id}`);
+  const MyTextInput = ({ label, ...props }) => {
+    // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
+    // which we can spread on <input>. We can use field meta to show an error
+    // message if the field is invalid and it has been touched (i.e. visited)
+    const [field, meta] = useField(props);
+    return (
+      <>
+        <label htmlFor={props.id || props.name}>{label}</label>
+        <input className="text-input" {...field} {...props} />
+        {meta.touched && meta.error ? (
+          <div className="error">{meta.error}</div>
+        ) : null}
+      </>
+    );
   };
-
-  const [data,load] = useFetch(
-    "/controller/nivelesback.php",
-    "listadoNiveles",
-    "1",
-    "1",
-    ""
-  );
+  
+  const MyCheckbox = ({ children, ...props }) => {
+    // React treats radios and checkbox inputs differently other input types, select, and textarea.
+    // Formik does this too! When you specify `type` to useField(), it will
+    // return the correct bag of props for you -- a `checked` prop will be included
+    // in `field` alongside `name`, `value`, `onChange`, and `onBlur`
+    const [field, meta] = useField({ ...props, type: 'checkbox' });
+    return (
+      <div>
+        <label className="checkbox-input">
+          <input type="checkbox" {...field} {...props} />
+          {children}
+        </label>
+        {meta.touched && meta.error ? (
+          <div className="error">{meta.error}</div>
+        ) : null}
+      </div>
+    );
+  };
+  
+  const MySelect = ({ label, ...props }) => {
+    const [field, meta] = useField(props);
+    return (
+      <div>
+        <label htmlFor={props.id || props.name}>{label}</label>
+        <select {...field} {...props} />
+        {meta.touched && meta.error ? (
+          <div className="error">{meta.error}</div>
+        ) : null}
+      </div>
+    );
+  };
 
   return (
     <IonPage className="fondo">
@@ -175,94 +218,82 @@ const Niveles: React.FC = () => {
             </IonCol>
             <IonCol size="10" className="px-3">
               <div className="pb-2">
-                <IonButton
-                  className="btn-outline text-info fs-12"
-                  fill="outline"
-                >
-                  <IonImg
-                    src={"./images/descargar.svg"}
-                    className="mr-2"
-                    style={{ width: "16px" }}
-                  />
-                  Exportar (Excel)
-                </IonButton>
-              
-                <div className="float-right">
-                  <IonButton
-                    className="button-deg-gen fs-12 mr-2"
-                    fill="outline"
-                  >
-                    <IonImg
-                      src={"./images/filtrar.svg"}
-                      className="mr-2 filter-white"
-                      style={{ width: "16px" }}
-                    />
-                    Filtrar
-                  </IonButton>
-                  <IonButton
-                    className="button-deg-gen fs-12"
-                    fill="outline"
-                  >
-                    <IonImg
-                      src={"./images/ordenar.svg"}
-                      className="mr-2 filter-white"
-                      style={{ width: "16px" }}
-                    />
-                    Ordenar
-                  </IonButton>
-                </div>
+                <p>Formulario de nivel</p>
               </div>
               <IonCard className="m-0 card-slide shadow-full">
                 <IonCardContent className="card-content-slide height-vh-con-table">
-                  <table className="table table-striped">
-                    <thead className="text-gray">
-                      <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Descripci&oacute;n</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody className="fs-13 font-w500">
-                      {load ? (
-                        "Cargando..."
-                      ) : data.length === 0 ? (
-                        <IonCard className="m-0 mb-4 card-slide w-100">
-                          <IonCardContent className="card-content-slide">
-                            <div className="my-2 text-center">
-                              Sin resultados
-                            </div>
-                          </IonCardContent>
-                        </IonCard>
-                      ) : (
-                        data.map((item: any, index: any) => (
-                          <tr onClick={() => { handleDetail(item.id); }} className="cursor-pointer" key={item.id}>
-                            <td>
-                              {item.id}
-                            </td>
-                            <td>{item.nombre}</td>
-                            <td>{item.descripcion}</td>
-                            <td className="text-center">{item.estado}</td>
-                            <td>
-                              <div className="d-flex flex-row">
-                                <IonImg
-                                  src={"./images/editar.svg"}
-                                  className="mr-2 cursor-pointer"
-                                  style={{ width: "19px" }}
-                                />
-                                <IonImg
-                                  src={"./images/eliminar.svg"}
-                                  className="cursor-pointer"
-                                  style={{ width: "19px" }}
-                                />
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
+                  <Formik
+                    initialValues={{
+                      firstName: '',
+                      lastName: '',
+                      email: '',
+                      acceptedTerms: false, // added for our checkbox
+                      jobType: '', // added for our select
+                    }}
+                    validationSchema={Yup.object({
+                      firstName: Yup.string()
+                        .max(15, 'Must be 15 characters or less')
+                        .required('Required'),
+                      lastName: Yup.string()
+                        .max(20, 'Must be 20 characters or less')
+                        .required('Required'),
+                      email: Yup.string()
+                        .email('Invalid email address')
+                        .required('Required'),
+                      acceptedTerms: Yup.boolean()
+                        .required('Required')
+                        .oneOf([true], 'You must accept the terms and conditions.'),
+                      jobType: Yup.string()
+                        .oneOf(
+                          ['designer', 'development', 'product', 'other'],
+                          'Invalid Job Type'
+                        )
+                        .required('Required'),
+                    })}
+                    onSubmit={(values, { setSubmitting }) => {
+                      setTimeout(() => {
+                        alert(JSON.stringify(values, null, 2));
+                        setSubmitting(false);
+                      }, 400);
+                    }}
+                  >
+                    <Form>
+                      <MyTextInput
+                        label="First Name"
+                        name="firstName"
+                        type="text"
+                        placeholder="Jane"
+                      />
+            
+                      <MyTextInput
+                        label="Last Name"
+                        name="lastName"
+                        type="text"
+                        placeholder="Doe"
+                      />
+            
+                      <MyTextInput
+                        label="Email Address"
+                        name="email"
+                        type="email"
+                        placeholder="jane@formik.com"
+                      />
+            
+                      <MySelect label="Job Type" name="jobType">
+                        <option value="">Select a job type</option>
+                        <option value="designer">Designer</option>
+                        <option value="development">Developer</option>
+                        <option value="product">Product Manager</option>
+                        <option value="other">Other</option>
+                      </MySelect>
+            
+                      <MyCheckbox name="acceptedTerms">
+                        I accept the terms and conditions
+                      </MyCheckbox>
+            
+                      <button type="submit">Submit</button>
+                    </Form>
+                  </Formik>
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -281,4 +312,4 @@ const Niveles: React.FC = () => {
   );
 };
 
-export default Niveles;
+export default Usuario;
