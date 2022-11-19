@@ -14,28 +14,24 @@ import {
   IonItem,
   IonLabel,
   IonButton,
-  IonBadge,
-  IonInput,
-  IonSelect,
-  IonSelectOption,
 } from "@ionic/react";
 import ReactDOM from 'react-dom';
- import { Formik, Form, useField } from 'formik';
- import * as Yup from 'yup';
+import {
+  Formik,
+  Form
+} from 'formik';
+import MyTextInput from "./MyTextInput.js";
+import MySelect from "./MySelect.js";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./usuarios.css";
-import { serviciosNiveles } from "../../servicios/servicios";
+import { advancedSchema } from "./validaciones.js";
+import { nivelService } from '../../servicios/niveles';
 
 const Usuario: React.FC = () => {
   const history = useHistory();
-  const {id}:any = useParams();
+  const [nivel,setNivel] = useState("");
   const user = useSelector((state: any) => state.reducerAuth.user);
-  const [load, setLoad] = useState<Boolean>(true);
-  const [data, setData] = useState<any>([]);
-  const [totalResults, setTotalResults] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [select, setSelect] = useState<any>(null);
 
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
@@ -54,53 +50,60 @@ const Usuario: React.FC = () => {
     history.push("/app/usuarios");
   };
 
-  const MyTextInput = ({ label, ...props }) => {
-    // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-    // which we can spread on <input>. We can use field meta to show an error
-    // message if the field is invalid and it has been touched (i.e. visited)
-    const [field, meta] = useField(props);
-    return (
-      <>
-        <label htmlFor={props.id || props.name}>{label}</label>
-        <input className="text-input" {...field} {...props} />
-        {meta.touched && meta.error ? (
-          <div className="error">{meta.error}</div>
-        ) : null}
-      </>
-    );
+  const {id}:any = useParams();
+  let isAddMode = id;
+
+  const initialValues = {
+      nombre: '',
+      descripcion: '',
+      estatus: ''
   };
-  
-  const MyCheckbox = ({ children, ...props }) => {
-    // React treats radios and checkbox inputs differently other input types, select, and textarea.
-    // Formik does this too! When you specify `type` to useField(), it will
-    // return the correct bag of props for you -- a `checked` prop will be included
-    // in `field` alongside `name`, `value`, `onChange`, and `onBlur`
-    const [field, meta] = useField({ ...props, type: 'checkbox' });
-    return (
-      <div>
-        <label className="checkbox-input">
-          <input type="checkbox" {...field} {...props} />
-          {children}
-        </label>
-        {meta.touched && meta.error ? (
-          <div className="error">{meta.error}</div>
-        ) : null}
-      </div>
-    );
-  };
-  
-  const MySelect = ({ label, ...props }) => {
-    const [field, meta] = useField(props);
-    return (
-      <div>
-        <label htmlFor={props.id || props.name}>{label}</label>
-        <select {...field} {...props} />
-        {meta.touched && meta.error ? (
-          <div className="error">{meta.error}</div>
-        ) : null}
-      </div>
-    );
-  };
+
+  function onSubmit(fields: any, { setStatus, setSubmitting, resetForm }: any) {
+      setStatus();
+      if (id === 'nuevo') {
+        createNivel(fields, setSubmitting, resetForm);
+      } else {
+        updateNivel(id, fields, setSubmitting, resetForm);
+      }
+  }
+
+  function createNivel(fields: any, setSubmitting: (arg0: boolean) => void, resetForm: Function) {
+    nivelService.create(fields)
+    .then(() => {
+        //alertService.success('User added', { keepAfterRouteChange: true });
+        setNotificacion({
+          msg: 'Nivel agregado',
+          estado: true,
+        });
+        resetForm({})
+        //history.push('.');
+    })
+    .catch((error: any) => {
+        setSubmitting(false);
+        //alertService.error(error);
+        console.warn("Error:" + error);
+    });
+  }
+
+  function updateNivel(id: any, fields: any, setSubmitting: (arg0: boolean) => void, resetForm: Function) {
+      fields['id'] = id;
+      nivelService.update(id, fields)
+          .then(() => {
+              //alertService.success('User updated', { keepAfterRouteChange: true });
+              setNotificacion({
+                msg: 'Nivel actualizado',
+                estado: true,
+              });
+              //resetForm({})
+              //history.push('..');
+          })
+          .catch((error: any) => {
+              setSubmitting(false);
+              //alertService.error(error);
+              console.warn("Error:" + error);
+          });
+  }
 
   return (
     <IonPage className="fondo">
@@ -223,76 +226,68 @@ const Usuario: React.FC = () => {
               <IonCard className="m-0 card-slide shadow-full">
                 <IonCardContent className="card-content-slide height-vh-con-table">
                   <Formik
-                    initialValues={{
-                      firstName: '',
-                      lastName: '',
-                      email: '',
-                      acceptedTerms: false, // added for our checkbox
-                      jobType: '', // added for our select
-                    }}
-                    validationSchema={Yup.object({
-                      firstName: Yup.string()
-                        .max(15, 'Must be 15 characters or less')
-                        .required('Required'),
-                      lastName: Yup.string()
-                        .max(20, 'Must be 20 characters or less')
-                        .required('Required'),
-                      email: Yup.string()
-                        .email('Invalid email address')
-                        .required('Required'),
-                      acceptedTerms: Yup.boolean()
-                        .required('Required')
-                        .oneOf([true], 'You must accept the terms and conditions.'),
-                      jobType: Yup.string()
-                        .oneOf(
-                          ['designer', 'development', 'product', 'other'],
-                          'Invalid Job Type'
-                        )
-                        .required('Required'),
-                    })}
-                    onSubmit={(values, { setSubmitting }) => {
+                    initialValues= {initialValues}
+                    validationSchema={advancedSchema}
+                    //onSubmit={onSubmit}
+                    onSubmit={(values, actions) => {
+                      if (isAddMode === 'nuevo') {
+                        createNivel(values, actions.setSubmitting, actions.resetForm);
+                      } else {
+                        updateNivel(id, values, actions.setSubmitting, actions.resetForm);
+                      }
                       setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2));
-                        setSubmitting(false);
-                      }, 400);
+                          actions.setSubmitting(false)
+                      }, 500)
                     }}
                   >
-                    <Form>
-                      <MyTextInput
-                        label="First Name"
-                        name="firstName"
-                        type="text"
-                        placeholder="Jane"
-                      />
-            
-                      <MyTextInput
-                        label="Last Name"
-                        name="lastName"
-                        type="text"
-                        placeholder="Doe"
-                      />
-            
-                      <MyTextInput
-                        label="Email Address"
-                        name="email"
-                        type="email"
-                        placeholder="jane@formik.com"
-                      />
-            
-                      <MySelect label="Job Type" name="jobType">
-                        <option value="">Select a job type</option>
-                        <option value="designer">Designer</option>
-                        <option value="development">Developer</option>
-                        <option value="product">Product Manager</option>
-                        <option value="other">Other</option>
-                      </MySelect>
-            
-                      <MyCheckbox name="acceptedTerms">
-                        I accept the terms and conditions
-                      </MyCheckbox>
-            
-                      <button type="submit">Submit</button>
-                    </Form>
+                    {({ isSubmitting, setFieldValue }) => {
+                        {/*useEffect(() => {
+                          if (isAddMode !== 'nuevo') {
+                              // get nivel and set form fields
+                              nivelService.getById(id).then(nivel => {
+                                  const fields = ['nombre', 'descripcion', 'estatus'];
+                                  fields.forEach(field => setFieldValue(field, nivel[field], false));
+                                  //setNivel(nivel);
+                              });
+                              isAddMode = 'nuevo';
+                          }
+                        }, []);*/}
+                      
+                    return (
+                      <Form>
+                        <h2>{isAddMode ==='nuevo' ? 'Agregar Nivel' : 'Editar Nivel'}</h2>
+                        <MyTextInput
+                          label="Nombre"
+                          name="nombre"
+                          type="text"
+                        />
+                        
+                        <MyTextInput
+                          label="Descripción"
+                          name="descripcion"
+                          type="text"
+                        />
+
+                        <MySelect label="Estatus" name="estatus">
+                          <option value="">Seleccione</option>
+                          <option value="1">Activo</option>
+                          <option value="0">Inactivo</option>
+                        </MySelect>
+
+                        <div className="w-100 text-center mt-3">
+                          <IonButton
+                            disabled={isSubmitting}
+                            className="btn-outline text-info"
+                            fill="outline"
+                            type="submit"
+                          >
+                            {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
+                            Guardar
+                          </IonButton>
+                        </div>
+                      </Form>
+                    );
+                  }}
                   </Formik>
                 </IonCardContent>
               </IonCard>

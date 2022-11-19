@@ -35,6 +35,7 @@ import {
   INITIALCONSULTA,
 } from "./const";
 import { valEnfermedad, valTratamiento } from "./validacion";
+import { fetchWrapper } from "./fetchWrapper";
 export {
   /*-HELPERS-----------------------*/
   filterNombre,
@@ -72,4 +73,6 @@ export {
   /*-VALIDACIONES---------------*/
   valEnfermedad,
   valTratamiento,
+  /*-BACK---------------*/
+  fetchWrapper
 };
