@@ -22,19 +22,15 @@ import "./niveles.css";
 import { Nav } from "../../components";
 import { getNiveles } from "../../servicios/servicios";
 import { useFetch } from "../../hook/useFetch";
-import { nivelService } from '../../servicios/niveles';
+import { nivelService } from "../../servicios/niveles";
 
 const Niveles: React.FC = () => {
   const history = useHistory();
   const user = useSelector((state: any) => state.reducerAuth.user);
-  const [totalResults, setTotalResults] = useState(0);
-  const [page, setPage] = useState<any>(1);
-  const [searchTerm, setSearchTerm] = useState("");
-
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
   };
-
+  const [niveles, setNiveles] = useState<any>([]);
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
@@ -52,7 +48,7 @@ const Niveles: React.FC = () => {
     history.push(`./nivel/${id}`);
   };
 
-  const [data,load] = useFetch(
+  const [data, load] = useFetch(
     "/controller/nivelesback.php",
     "listadoNiveles",
     "1",
@@ -60,20 +56,22 @@ const Niveles: React.FC = () => {
     ""
   );
 
-  const [niveles, setNiveles] = useState<any>([]);
-
   useEffect(() => {
-    nivelService.getAll().then(x => setNiveles(x.data));
+    nivelService.getAll().then((x) => setNiveles(x.data));
   }, []);
 
   function deleteNivel(id: any) {
-    setNiveles(niveles.map((x: any) => {
-        if (x.id === id) { x.isDeleting = true; }
+    setNiveles(
+      niveles.map((x: any) => {
+        if (x.id === id) {
+          x.isDeleting = true;
+        }
         return x;
-    }));
+      })
+    );
     nivelService.delete(id).then(() => {
       console.log(id);
-      setNiveles((niveles: any[]) => niveles.filter(x => x.id !== id));
+      setNiveles((niveles: any[]) => niveles.filter((x) => x.id !== id));
     });
   }
 
@@ -82,13 +80,18 @@ const Niveles: React.FC = () => {
       <IonContent fullscreen className="bg-light">
         <IonGrid className="bg-light">
           <IonRow className="pt-4 pb-4 mb-2">
-            <IonCol size="2" className="px-3 fs-14 text-white">              
-                <div className="d-inline">
-                  <img src="./images/logo-bieni.svg" alt="imagen" className="d-inline" width={25} />
-                  <p className="ml-3 fs-20 font-w600 text-info d-inline">Bieni</p>
-                </div>
+            <IonCol size="2" className="px-3 fs-14 text-white">
+              <div className="d-inline">
+                <img
+                  src="./images/logo-bieni.svg"
+                  alt="imagen"
+                  className="d-inline"
+                  width={25}
+                />
+                <p className="ml-3 fs-20 font-w600 text-info d-inline">Bieni</p>
+              </div>
             </IonCol>
-            <IonCol size="7" className="px-3 fs-14 text-white">              
+            <IonCol size="7" className="px-3 fs-14 text-white">
               <div
                 className="searchContainer d-inline-block"
                 style={{ width: "60%" }}
@@ -104,23 +107,30 @@ const Niveles: React.FC = () => {
               </div>
             </IonCol>
             <IonCol size="3" className="px-3">
-                <div className="float-right fs-14 d-flex flex-row"
-                  onClick={handelNotificaciones}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div className="align-self-center">
-                    <IonImg src={"./images/notificaciones.svg"} className="w-24-p" />
-                  </div>
-                  <div className="ml-5 p-perfil-sub">
-                    <IonThumbnail slot="start" class="">
-                      <img src="./images/sandra.jpg" alt="Laura" />
-                    </IonThumbnail>
-                  </div>
-                  <div className="ml-3 mr-2">
-                    <span className="fs-15 font-w700 text-info d-block">Dra. {}{user.nombre}</span>
-                    <span className="text-info font-w600">Ginecología</span>
-                  </div>
+              <div
+                className="float-right fs-14 d-flex flex-row"
+                onClick={handelNotificaciones}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="align-self-center">
+                  <IonImg
+                    src={"./images/notificaciones.svg"}
+                    className="w-24-p"
+                  />
                 </div>
+                <div className="ml-5 p-perfil-sub">
+                  <IonThumbnail slot="start" class="">
+                    <img src="./images/sandra.jpg" alt="Laura" />
+                  </IonThumbnail>
+                </div>
+                <div className="ml-3 mr-2">
+                  <span className="fs-15 font-w700 text-info d-block">
+                    Dra. {}
+                    {user.nombre}
+                  </span>
+                  <span className="text-info font-w600">Ginecología</span>
+                </div>
+              </div>
             </IonCol>
           </IonRow>
 
@@ -129,65 +139,83 @@ const Niveles: React.FC = () => {
               {/*<Nav/>*/}
 
               <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
-                <IonItem lines="none" button onClick={() => { }} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/afiliados-light.svg"}
                     className="mr-3"
                     style={{ width: "20px" }}
                   />
-                  <IonLabel>
-                    Mis pacientes
-                  </IonLabel>
+                  <IonLabel>Mis pacientes</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={() => { }} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/doctor-light.svg"}
                     className="mr-3"
                     style={{ width: "20px" }}
                   />
-                  <IonLabel>
-                    Perfil
-                  </IonLabel>
+                  <IonLabel>Perfil</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={() => { }} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/configuracion.svg"}
                     className="mr-2"
                     style={{ width: "26px" }}
                   />
-                  <IonLabel>
-                    Soporte
-                  </IonLabel>
+                  <IonLabel>Soporte</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={handleNiveles} className="mb-3 active">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={handleNiveles}
+                  className="mb-3 active"
+                >
                   <IonImg
                     src={"./images/configuracion.svg"}
                     className="mr-2"
                     style={{ width: "26px" }}
                   />
-                  <IonLabel>
-                    Niveles
-                  </IonLabel>
+                  <IonLabel>Niveles</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={handleUsuarios} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={handleUsuarios}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/configuracion.svg"}
                     className="mr-2"
                     style={{ width: "26px" }}
                   />
-                  <IonLabel>
-                    Usuarios
-                  </IonLabel>
+                  <IonLabel>Usuarios</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={() => { }} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/cerrar-sesion.svg"}
                     className="mr-3"
                     style={{ width: "20px" }}
                   />
-                  <IonLabel>
-                    Cerrar sesi&oacute;n
-                  </IonLabel>
+                  <IonLabel>Cerrar sesi&oacute;n</IonLabel>
                 </IonItem>
               </div>
             </IonCol>
@@ -204,7 +232,7 @@ const Niveles: React.FC = () => {
                   />
                   Exportar (Excel)
                 </IonButton>
-              
+
                 <div className="float-right">
                   <IonButton
                     className="button-deg-gen fs-12 mr-2"
@@ -217,10 +245,7 @@ const Niveles: React.FC = () => {
                     />
                     Filtrar
                   </IonButton>
-                  <IonButton
-                    className="button-deg-gen fs-12"
-                    fill="outline"
-                  >
+                  <IonButton className="button-deg-gen fs-12" fill="outline">
                     <IonImg
                       src={"./images/ordenar.svg"}
                       className="mr-2 filter-white"
@@ -255,10 +280,14 @@ const Niveles: React.FC = () => {
                         </IonCard>
                       ) : (
                         niveles.map((item: any, index: any) => (
-                          <tr onClick={() => { handleDetail(item.id); }} className="cursor-pointer" key={item.id}>
-                            <td>
-                              {item.id}
-                            </td>
+                          <tr
+                            onClick={() => {
+                              handleDetail(item.id);
+                            }}
+                            className="cursor-pointer"
+                            key={item.id}
+                          >
+                            <td>{item.id}</td>
                             <td>{item.nombre}</td>
                             <td>{item.descripcion}</td>
                             <td className="text-center">{item.estado}</td>
@@ -271,16 +300,20 @@ const Niveles: React.FC = () => {
                                     style={{ width: "19px" }}
                                   />
                                 </Link>
-                                <button onClick={() => deleteNivel(item.id)} className="btn btn-delete-nivel" 
-                                  disabled={item.isDeleting}>
-                                    {item.isDeleting 
-                                        ? <span className="spinner-border spinner-border-sm"></span>
-                                        : <IonImg
-                                            src={"./images/eliminar.svg"}
-                                            className="cursor-pointer text-danger"
-                                            style={{ width: "19px" }}
-                                          />
-                                    }
+                                <button
+                                  onClick={() => deleteNivel(item.id)}
+                                  className="btn btn-delete-nivel"
+                                  disabled={item.isDeleting}
+                                >
+                                  {item.isDeleting ? (
+                                    <span className="spinner-border spinner-border-sm"></span>
+                                  ) : (
+                                    <IonImg
+                                      src={"./images/eliminar.svg"}
+                                      className="cursor-pointer text-danger"
+                                      style={{ width: "19px" }}
+                                    />
+                                  )}
                                 </button>
                               </div>
                             </td>

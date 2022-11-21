@@ -16,10 +16,9 @@ import {
   IonButton,
   IonBadge,
 } from "@ionic/react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./usuarios.css";
-import { Nav } from "../../components";
 
 const Usuarios: React.FC = () => {
   const history = useHistory();
@@ -55,13 +54,18 @@ const Usuarios: React.FC = () => {
       <IonContent fullscreen className="bg-light">
         <IonGrid className="bg-light">
           <IonRow className="pt-4 pb-4 mb-2">
-            <IonCol size="2" className="px-3 fs-14 text-white">              
-                <div className="d-inline">
-                  <img src="./images/logo-bieni.svg" alt="imagen" className="d-inline" width={25} />
-                  <p className="ml-3 fs-20 font-w600 text-info d-inline">Bieni</p>
-                </div>
+            <IonCol size="2" className="px-3 fs-14 text-white">
+              <div className="d-inline">
+                <img
+                  src="./images/logo-bieni.svg"
+                  alt="imagen"
+                  className="d-inline"
+                  width={25}
+                />
+                <p className="ml-3 fs-20 font-w600 text-info d-inline">Bieni</p>
+              </div>
             </IonCol>
-            <IonCol size="7" className="px-3 fs-14 text-white">              
+            <IonCol size="7" className="px-3 fs-14 text-white">
               <div
                 className="searchContainer d-inline-block"
                 style={{ width: "60%" }}
@@ -77,23 +81,30 @@ const Usuarios: React.FC = () => {
               </div>
             </IonCol>
             <IonCol size="3" className="px-3">
-                <div className="float-right fs-14 d-flex flex-row"
-                  onClick={handelNotificaciones}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div className="align-self-center">
-                    <IonImg src={"./images/notificaciones.svg"} className="w-24-p" />
-                  </div>
-                  <div className="ml-5 p-perfil-sub">
-                    <IonThumbnail slot="start" class="">
-                      <img src="./images/sandra.jpg" alt="Laura" />
-                    </IonThumbnail>
-                  </div>
-                  <div className="ml-3 mr-2">
-                    <span className="fs-15 font-w700 text-info d-block">Dra. {}{user.nombre}</span>
-                    <span className="text-info font-w600">Ginecología</span>
-                  </div>
+              <div
+                className="float-right fs-14 d-flex flex-row"
+                onClick={handelNotificaciones}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="align-self-center">
+                  <IonImg
+                    src={"./images/notificaciones.svg"}
+                    className="w-24-p"
+                  />
                 </div>
+                <div className="ml-5 p-perfil-sub">
+                  <IonThumbnail slot="start" class="">
+                    <img src="./images/sandra.jpg" alt="Laura" />
+                  </IonThumbnail>
+                </div>
+                <div className="ml-3 mr-2">
+                  <span className="fs-15 font-w700 text-info d-block">
+                    Dra. {}
+                    {user.nombre}
+                  </span>
+                  <span className="text-info font-w600">Ginecología</span>
+                </div>
+              </div>
             </IonCol>
           </IonRow>
 
@@ -102,65 +113,83 @@ const Usuarios: React.FC = () => {
               {/*<Nav/>*/}
 
               <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
-                <IonItem lines="none" button onClick={() => { }} className="mb-3 active">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3 active"
+                >
                   <IonImg
                     src={"./images/afiliados-light.svg"}
                     className="mr-3"
                     style={{ width: "20px" }}
                   />
-                  <IonLabel>
-                    Mis pacientes
-                  </IonLabel>
+                  <IonLabel>Mis pacientes</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={() => { }} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/doctor-light.svg"}
                     className="mr-3"
                     style={{ width: "20px" }}
                   />
-                  <IonLabel>
-                    Perfil
-                  </IonLabel>
+                  <IonLabel>Perfil</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={() => { }} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/configuracion.svg"}
                     className="mr-2"
                     style={{ width: "26px" }}
                   />
-                  <IonLabel>
-                    Soporte
-                  </IonLabel>
+                  <IonLabel>Soporte</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={handleNiveles} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={handleNiveles}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/configuracion.svg"}
                     className="mr-2"
                     style={{ width: "26px" }}
                   />
-                  <IonLabel>
-                    Niveles
-                  </IonLabel>
+                  <IonLabel>Niveles</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={handleUsuarios} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={handleUsuarios}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/configuracion.svg"}
                     className="mr-2"
                     style={{ width: "26px" }}
                   />
-                  <IonLabel>
-                    Usuarios
-                  </IonLabel>
+                  <IonLabel>Usuarios</IonLabel>
                 </IonItem>
-                <IonItem lines="none" button onClick={() => { }} className="mb-3">
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={() => {}}
+                  className="mb-3"
+                >
                   <IonImg
                     src={"./images/cerrar-sesion.svg"}
                     className="mr-3"
                     style={{ width: "20px" }}
                   />
-                  <IonLabel>
-                    Cerrar sesi&oacute;n
-                  </IonLabel>
+                  <IonLabel>Cerrar sesi&oacute;n</IonLabel>
                 </IonItem>
               </div>
             </IonCol>
@@ -189,8 +218,7 @@ const Usuarios: React.FC = () => {
                   />
                   Exportar (Excel)
                 </IonButton>
-                
-              
+
                 <div className="float-right">
                   <IonButton
                     className="button-deg-gen fs-12 mr-2"
@@ -203,10 +231,7 @@ const Usuarios: React.FC = () => {
                     />
                     Filtrar
                   </IonButton>
-                  <IonButton
-                    className="button-deg-gen fs-12"
-                    fill="outline"
-                  >
+                  <IonButton className="button-deg-gen fs-12" fill="outline">
                     <IonImg
                       src={"./images/ordenar.svg"}
                       className="mr-2 filter-white"
@@ -231,16 +256,29 @@ const Usuarios: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
-                      <tr onClick={handleImagenologia} className="cursor-pointer">
+                      <tr
+                        onClick={handleImagenologia}
+                        className="cursor-pointer"
+                      >
                         <td>
-                          <img src="./images/laura.jpg" alt="imagen" className="border-radius" style={{width: '32px'}} />
+                          <img
+                            src="./images/laura.jpg"
+                            alt="imagen"
+                            className="border-radius"
+                            style={{ width: "32px" }}
+                          />
                         </td>
                         <td>Laura Cristina Garcia</td>
                         <td>10102234</td>
                         <td>lauracristinagarcia@gmail.com</td>
                         <td>Consulta</td>
                         <td>
-                          <IonBadge color="warning" className="px-2 py-1 fs-12 font-w100 border-badge">Agendado</IonBadge>
+                          <IonBadge
+                            color="warning"
+                            className="px-2 py-1 fs-12 font-w100 border-badge"
+                          >
+                            Agendado
+                          </IonBadge>
                         </td>
                         <td>
                           <div className="d-flex flex-row">
@@ -264,14 +302,24 @@ const Usuarios: React.FC = () => {
                       </tr>
                       <tr>
                         <td>
-                          <img src="./images/juan.jpg" alt="imagen" className="border-radius" style={{width: '32px'}} />
+                          <img
+                            src="./images/juan.jpg"
+                            alt="imagen"
+                            className="border-radius"
+                            style={{ width: "32px" }}
+                          />
                         </td>
                         <td>Juan Moreno</td>
                         <td>10347234</td>
                         <td>juanmoreno@gmail.com</td>
                         <td>Consulta</td>
                         <td>
-                          <IonBadge color="warning" className="px-2 py-1 fs-12 font-w100 border-badge">Agendado</IonBadge>
+                          <IonBadge
+                            color="warning"
+                            className="px-2 py-1 fs-12 font-w100 border-badge"
+                          >
+                            Agendado
+                          </IonBadge>
                         </td>
                         <td>
                           <div className="d-flex flex-row">
@@ -295,14 +343,24 @@ const Usuarios: React.FC = () => {
                       </tr>
                       <tr>
                         <td>
-                          <img src="./images/andrea.jpg" alt="imagen" className="border-radius" style={{width: '32px'}} />
+                          <img
+                            src="./images/andrea.jpg"
+                            alt="imagen"
+                            className="border-radius"
+                            style={{ width: "32px" }}
+                          />
                         </td>
                         <td>Andrea Fuentes</td>
                         <td>111272834</td>
                         <td>andreafuentes@gmail.com</td>
                         <td>Consulta</td>
                         <td>
-                          <IonBadge color="success" className="px-2 py-1 fs-12 font-w100 border-badge">Atendido</IonBadge>
+                          <IonBadge
+                            color="success"
+                            className="px-2 py-1 fs-12 font-w100 border-badge"
+                          >
+                            Atendido
+                          </IonBadge>
                         </td>
                         <td>
                           <div className="d-flex flex-row">
