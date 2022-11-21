@@ -38,6 +38,10 @@ const Usuarios: React.FC = () => {
     history.push("./imagenologia");
   };
 
+  const handleUsuario = (event: any) => {
+    history.push("./usuario/nuevo");
+  };
+
   const handleNiveles = (event: any) => {
     history.push("./niveles");
   };
@@ -165,6 +169,18 @@ const Usuarios: React.FC = () => {
                 <IonButton
                   className="btn-outline text-info fs-12"
                   fill="outline"
+                  onClick={handleUsuario}
+                >
+                  <IonImg
+                    src={"./images/descargar.svg"}
+                    className="mr-2"
+                    style={{ width: "16px" }}
+                  />
+                  Nuevo
+                </IonButton>
+                <IonButton
+                  className="btn-outline text-info fs-12"
+                  fill="outline"
                 >
                   <IonImg
                     src={"./images/descargar.svg"}
@@ -173,6 +189,7 @@ const Usuarios: React.FC = () => {
                   />
                   Exportar (Excel)
                 </IonButton>
+                
               
                 <div className="float-right">
                   <IonButton

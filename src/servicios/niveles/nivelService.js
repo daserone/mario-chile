@@ -11,7 +11,7 @@ export const nivelService = {
 };
 
 function getAll() {
-    return fetchWrapper.get(baseUrl);
+    return fetchWrapper.get(`${baseUrl}?op=getNiveles`);
 }
 
 function getById(id) {
@@ -29,5 +29,5 @@ function update(id, params) {
 
 // prefixed with underscored because delete is a reserved word in javascript
 function _delete(id) {
-    return fetchWrapper.delete(`${baseUrl}/${id}`);
+    return fetchWrapper.delete(`${baseUrl}?op=deleteNivel&id=${id}`);
 }

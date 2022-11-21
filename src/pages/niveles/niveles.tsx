@@ -22,6 +22,7 @@ import "./niveles.css";
 import { Nav } from "../../components";
 import { getNiveles } from "../../servicios/servicios";
 import { useFetch } from "../../hook/useFetch";
+import { nivelService } from '../../servicios/niveles';
 
 const Niveles: React.FC = () => {
   const history = useHistory();
@@ -58,6 +59,23 @@ const Niveles: React.FC = () => {
     "1",
     ""
   );
+
+  const [niveles, setNiveles] = useState<any>([]);
+
+  useEffect(() => {
+    nivelService.getAll().then(x => setNiveles(x.data));
+  }, []);
+
+  function deleteNivel(id: any) {
+    setNiveles(niveles.map((x: any) => {
+        if (x.id === id) { x.isDeleting = true; }
+        return x;
+    }));
+    nivelService.delete(id).then(() => {
+      console.log(id);
+      setNiveles((niveles: any[]) => niveles.filter(x => x.id !== id));
+    });
+  }
 
   return (
     <IonPage className="fondo">
@@ -227,7 +245,7 @@ const Niveles: React.FC = () => {
                     <tbody className="fs-13 font-w500">
                       {load ? (
                         "Cargando..."
-                      ) : data.length === 0 ? (
+                      ) : niveles.length === 0 ? (
                         <IonCard className="m-0 mb-4 card-slide w-100">
                           <IonCardContent className="card-content-slide">
                             <div className="my-2 text-center">
@@ -236,7 +254,7 @@ const Niveles: React.FC = () => {
                           </IonCardContent>
                         </IonCard>
                       ) : (
-                        data.map((item: any, index: any) => (
+                        niveles.map((item: any, index: any) => (
                           <tr onClick={() => { handleDetail(item.id); }} className="cursor-pointer" key={item.id}>
                             <td>
                               {item.id}
@@ -246,16 +264,24 @@ const Niveles: React.FC = () => {
                             <td className="text-center">{item.estado}</td>
                             <td>
                               <div className="d-flex flex-row">
-                                <IonImg
-                                  src={"./images/editar.svg"}
-                                  className="mr-2 cursor-pointer"
-                                  style={{ width: "19px" }}
-                                />
-                                <IonImg
-                                  src={"./images/eliminar.svg"}
-                                  className="cursor-pointer"
-                                  style={{ width: "19px" }}
-                                />
+                                <Link to={`./${item.id}`} className="btn mr-1">
+                                  <IonImg
+                                    src={"./images/editar.svg"}
+                                    className="mr-2 cursor-pointer"
+                                    style={{ width: "19px" }}
+                                  />
+                                </Link>
+                                <button onClick={() => deleteNivel(item.id)} className="btn btn-delete-nivel" 
+                                  disabled={item.isDeleting}>
+                                    {item.isDeleting 
+                                        ? <span className="spinner-border spinner-border-sm"></span>
+                                        : <IonImg
+                                            src={"./images/eliminar.svg"}
+                                            className="cursor-pointer text-danger"
+                                            style={{ width: "19px" }}
+                                          />
+                                    }
+                                </button>
                               </div>
                             </td>
                           </tr>
