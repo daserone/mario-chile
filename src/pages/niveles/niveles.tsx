@@ -19,10 +19,8 @@ import {
 import { useHistory, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./niveles.css";
-import { Nav } from "../../components";
-import { getNiveles } from "../../servicios/servicios";
-import { useFetch } from "../../hook/useFetch";
-import { nivelService } from "../../servicios/niveles";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteNivel, getNiveles } from "../../api/nivelesApi";
 
 const Niveles: React.FC = () => {
   const history = useHistory();
@@ -30,7 +28,7 @@ const Niveles: React.FC = () => {
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
   };
-  const [niveles, setNiveles] = useState<any>([]);
+  //const [niveles, setNiveles] = useState<any>([]);
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
@@ -48,6 +46,7 @@ const Niveles: React.FC = () => {
     history.push(`./nivel/${id}`);
   };
 
+  {/*
   const [data, load] = useFetch(
     "/controller/nivelesback.php",
     "listadoNiveles",
@@ -56,7 +55,7 @@ const Niveles: React.FC = () => {
     ""
   );
 
-  useEffect(() => {
+ useEffect(() => {
     nivelService.getAll().then((x) => setNiveles(x.data));
   }, []);
 
@@ -73,7 +72,35 @@ const Niveles: React.FC = () => {
       console.log(id);
       setNiveles((niveles: any[]) => niveles.filter((x) => x.id !== id));
     });
+  }*/}
+
+  const {
+    isLoading,
+    data: niveles,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["niveles"],
+    queryFn: getNiveles,
+    //select: (data) => data.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id),
+  });
+  const queryClient = useQueryClient();
+
+  const deleteNivelMutation = useMutation({
+    mutationFn: deleteNivel,
+    onSuccess: () => {
+      setNotificacion({
+        msg: "Nivel eliminado exitosamente",
+        estado: true,
+      });
+      queryClient.invalidateQueries({ queryKey: ['niveles'] });
+    },
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
+  //else if (isError) return <div>{error.message}</div>;
 
   return (
     <IonPage className="fondo">
@@ -224,6 +251,20 @@ const Niveles: React.FC = () => {
                 <IonButton
                   className="btn-outline text-info fs-12"
                   fill="outline"
+                  onClick={() => {
+                    handleDetail('nuevo');
+                  }}
+                >
+                  <IonImg
+                    src={"./images/descargar.svg"}
+                    className="mr-2"
+                    style={{ width: "16px" }}
+                  />
+                  Nuevo
+                </IonButton>
+                <IonButton
+                  className="btn-outline text-info fs-12"
+                  fill="outline"
                 >
                   <IonImg
                     src={"./images/descargar.svg"}
@@ -268,9 +309,7 @@ const Niveles: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
-                      {load ? (
-                        "Cargando..."
-                      ) : niveles.length === 0 ? (
+                      {niveles.length === 0 ? (
                         <IonCard className="m-0 mb-4 card-slide w-100">
                           <IonCardContent className="card-content-slide">
                             <div className="my-2 text-center">
@@ -279,14 +318,8 @@ const Niveles: React.FC = () => {
                           </IonCardContent>
                         </IonCard>
                       ) : (
-                        niveles.map((item: any, index: any) => (
-                          <tr
-                            onClick={() => {
-                              handleDetail(item.id);
-                            }}
-                            className="cursor-pointer"
-                            key={item.id}
-                          >
+                        niveles.map((item: any) => (
+                          <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.nombre}</td>
                             <td>{item.descripcion}</td>
@@ -301,7 +334,9 @@ const Niveles: React.FC = () => {
                                   />
                                 </Link>
                                 <button
-                                  onClick={() => deleteNivel(item.id)}
+                                  onClick={() => {
+                                    deleteNivelMutation.mutate(item.id);
+                                  }}
                                   className="btn btn-delete-nivel"
                                   disabled={item.isDeleting}
                                 >

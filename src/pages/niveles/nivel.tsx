@@ -10,21 +10,25 @@ import {
   IonThumbnail,
   IonSearchbar,
   IonButton,
+  IonCard,
+  IonCardContent,
+  IonLabel,
+  IonItem,
 } from "@ionic/react";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./niveles.css";
-import { valNiveles } from "../../helpers/validacion";
-import { serviciosNiveles } from "../../servicios/servicios";
-import { nivelService } from "../../servicios/niveles";
 import MyTextInput from "../usuarios/MyTextInput";
 import MySelect from "../usuarios/MySelect";
 import { Formik, Form } from "formik";
 import { advancedSchema } from "../usuarios/validaciones.js";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createNivel, getNivelById, updateNivel } from "../../api/nivelesApi";
 
 const Nivel: React.FC = () => {
-  const history = useHistory();
   const { id }: any = useParams();
+  const history = useHistory();
+  
   const user = useSelector((state: any) => state.reducerAuth.user);
   const [state, setState] = useState({
     id: "",
@@ -40,14 +44,17 @@ const Nivel: React.FC = () => {
     estatus: state.estatus || "",
   };
 
+  const nivelCargar = useQuery(["nivel", { id }], (id) =>
+    getNivelById(id), {
+      onSuccess: (res) => {
+        setState(res.data); 
+    }
+  });
+
   useEffect(() => {
-    nivelService.getById(id).then((nivel) => {
-      /*const fields = ["nombre", "descripcion", "estatus"];
-        fields.forEach((field) =>
-          Formik.setFieldValue(field, nivel[field], false)
-        );*/
+    {/*nivelService.getById(id).then((nivel) => {
       setState(nivel);
-    });
+    });*/}
   }, []);
 
   const handelNotificaciones = () => {
@@ -70,48 +77,7 @@ const Nivel: React.FC = () => {
     history.push("/app/usuarios");
   };
 
-  const handleAdd = () => {
-    const { estado, msg } = valNiveles(nombre, descripcion);
-    if (estado) {
-      let formDa = new FormData();
-      formDa.append("op", "addNivel");
-      formDa.append("nombre", nombre);
-      formDa.append("descripcion", descripcion);
-      formDa.append("estatus", estatus);
-      serviciosNiveles(formDa)
-        .then(function (response: any) {
-          const { data, status } = response;
-          if (status === 200) {
-            if (data.rsp === 1) {
-              setNotificacion({
-                msg: data.msg,
-                estado: true,
-              });
-
-              const state: any = {
-                nombre: nombre,
-                descripcion: descripcion,
-                estado: estado,
-              };
-            } else {
-              setNotificacion({
-                msg: data.msg,
-                estado: true,
-              });
-            }
-          }
-        })
-        .catch(function (err) {
-          console.warn("Error:" + err);
-        });
-    } else {
-      setNotificacion({
-        msg: msg,
-        estado: true,
-      });
-    }
-  };
-  function createNivel(
+  {/*function createNivel(
     fields: any,
     setSubmitting: (arg0: boolean) => void,
     resetForm: Function
@@ -160,6 +126,53 @@ const Nivel: React.FC = () => {
   }
   console.log(state);
   console.log(initialValues);
+  */}
+
+  const addNivelMutation = useMutation({
+    mutationFn: createNivel,
+    onSuccess: () => {
+      setNotificacion({
+        msg: "Nivel agregado exitosamente",
+        estado: true,
+      });
+    },
+  });
+
+  const updateNivelMutation = useMutation({
+    mutationFn: updateNivel,
+    onSuccess: () => {
+      setNotificacion({
+        msg: "Nivel actualizado exitosamente",
+        estado: true,
+      });
+    },
+  });
+
+  const nivelAgregar = (
+    nivel: any,
+    setSubmitting: any,
+    resetForm: Function
+  ) => {
+    {/*e.preventDefault();
+      const formData = new FormData(e.target);
+      const nivel = Object.fromEntries(formData);
+    */}
+    addNivelMutation.mutate(nivel);
+    resetForm({});
+    setSubmitting(false);
+  };
+
+  const nivelActualizar = (
+    values: any,
+    setSubmitting: any
+  ) => {
+    updateNivelMutation.mutate({
+      ...values,
+      id: id,
+    });
+    setSubmitting(false);
+  };
+
   return (
     <IonPage className="fondo">
       <IonContent fullscreen className="bg-light">
@@ -219,7 +232,7 @@ const Nivel: React.FC = () => {
             </IonCol>
           </IonRow>
 
-          {/*<IonRow className="mt-0">
+          <IonRow className="mt-0">
             <IonCol size="2" className="pl-0 pr-3">
 
               <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
@@ -309,124 +322,63 @@ const Nivel: React.FC = () => {
               </div>
               <IonCard className="m-0 card-slide shadow-full">
                 <IonCardContent className="card-content-slide height-vh-con-table">
-                  <IonItem>
-                    <IonLabel position="stacked">
-                      Nombre <span className="text-danger">*</span>
-                    </IonLabel>
-                    <IonInput
-                      name="nombre"
-                      value={nombre}
-                      onIonChange={(e) => {
-                        setNombre(e.detail.value!);
-                      }}
-                    ></IonInput>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">
-                      Descripci&oacute;n <span className="text-danger">*</span>
-                    </IonLabel>
-                    <IonInput
-                      name="descripcion"
-                      value={descripcion}
-                      onIonChange={(e) => {
-                        setDescripcion(e.detail.value!);
-                      }}
-                    ></IonInput>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">
-                      Estado <span className="text-danger">*</span>
-                    </IonLabel>
-                    <IonSelect
-                      interface="action-sheet"
-                      placeholder="Seleccione"
-                      value={estatus}
-                      onIonChange={(e: any) => setEstatus(e.detail.value!)}
-                    >
-                      <IonSelectOption value="1">Activo</IonSelectOption>
-                      <IonSelectOption value="2">Inactivo</IonSelectOption>
-                    </IonSelect>
-                  </IonItem>
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={advancedSchema}
+                    onSubmit={(values, actions) => {
+                      if (isAddMode === "nuevo") {
+                        nivelAgregar(values, actions.setSubmitting, actions.resetForm);
+                      } else {
+                        nivelActualizar(values, actions.setSubmitting);
+                      }
+                      setTimeout(() => {
+                        actions.setSubmitting(false);
+                      }, 500);
+                    }}
+                    enableReinitialize
+                  >
+                    {({ isSubmitting }) => {
+                      return (
+                        <Form>
+                          <h2>
+                            {isAddMode === "nuevo" ? "Agregar Nivel" : "Editar Nivel"}
+                          </h2>
+                          <MyTextInput label="Nombre" name="nombre" type="text" />
 
-                  <div className="pt-2 text-center">
-                    <IonButton
-                      className="btn-outline text-info"
-                      fill="outline"
-                      onClick={handleAdd}
-                    >
-                      Guardar
-                    </IonButton>
-                    <IonButton
-                      color="danger"
-                      className="btn-outline d-none"
-                      fill="outline"
-                      onClick={handleNiveles}
-                    >
-                      Cancelar
-                    </IonButton>
-                  </div>
+                          <MyTextInput
+                            label="Descripción"
+                            name="descripcion"
+                            type="text"
+                          />
+
+                          <MySelect label="Estatus" name="estatus">
+                            <option value="">Seleccione</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                          </MySelect>
+
+                          <div className="w-100 text-center mt-3">
+                            <IonButton
+                              disabled={isSubmitting}
+                              className="btn-outline text-info"
+                              fill="outline"
+                              type="submit"
+                            >
+                              {isSubmitting && (
+                                <span className="spinner-border spinner-border-sm mr-1"></span>
+                              )}
+                              Guardar
+                            </IonButton>
+                          </div>
+                        </Form>
+                      );
+                    }}
+                  </Formik>
                 </IonCardContent>
               </IonCard>
             </IonCol>
-                    </IonRow>*/}
-          <Formik
-            initialValues={initialValues}
-            validationSchema={advancedSchema}
-            //onSubmit={onSubmit}
-            onSubmit={(values, actions) => {
-              if (isAddMode === "nuevo") {
-                createNivel(values, actions.setSubmitting, actions.resetForm);
-              } else {
-                updateNivel(
-                  id,
-                  values,
-                  actions.setSubmitting,
-                  actions.resetForm
-                );
-              }
-              setTimeout(() => {
-                actions.setSubmitting(false);
-              }, 500);
-            }}
-            enableReinitialize
-          >
-            {({ isSubmitting, setFieldValue }) => {
-              return (
-                <Form>
-                  <h2>
-                    {isAddMode === "nuevo" ? "Agregar Nivel" : "Editar Nivel"}
-                  </h2>
-                  <MyTextInput label="Nombre" name="nombre" type="text" />
-
-                  <MyTextInput
-                    label="Descripción"
-                    name="descripcion"
-                    type="text"
-                  />
-
-                  <MySelect label="Estatus" name="estatus">
-                    <option value="">Seleccione</option>
-                    <option value="1">Activo</option>
-                    <option value="0">Inactivo</option>
-                  </MySelect>
-
-                  <div className="w-100 text-center mt-3">
-                    <IonButton
-                      disabled={isSubmitting}
-                      className="btn-outline text-info"
-                      fill="outline"
-                      type="submit"
-                    >
-                      {isSubmitting && (
-                        <span className="spinner-border spinner-border-sm mr-1"></span>
-                      )}
-                      Guardar
-                    </IonButton>
-                  </div>
-                </Form>
-              );
-            }}
-          </Formik>
+          </IonRow>
+          
         </IonGrid>
         <IonToast
           isOpen={notificacion.estado}

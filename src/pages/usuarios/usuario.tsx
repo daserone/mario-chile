@@ -26,8 +26,15 @@ import { nivelService } from "../../servicios/niveles";
 
 const Usuario: React.FC = () => {
   const history = useHistory();
-  const [nivel, setNivel] = useState("");
   const user = useSelector((state: any) => state.reducerAuth.user);
+
+  const { id }: any = useParams();
+  const [state, setState] = useState({
+    id: "",
+    descripcion: "",
+    nombre: "",
+    estatus: "",
+  });
 
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
@@ -46,13 +53,12 @@ const Usuario: React.FC = () => {
     history.push("/app/usuarios");
   };
 
-  const { id }: any = useParams();
   let isAddMode = id;
 
   const initialValues = {
-    nombre: "",
-    descripcion: "",
-    estatus: "",
+    nombre: state.nombre || "",
+    descripcion: state.descripcion || "",
+    estatus: state.estatus || "",
   };
 
   function onSubmit(fields: any, { setStatus, setSubmitting, resetForm }: any) {
@@ -111,6 +117,12 @@ const Usuario: React.FC = () => {
         console.warn("Error:" + error);
       });
   }
+
+  useEffect(() => {
+    nivelService.getById(id).then((nivel) => {
+      setState(nivel);
+    });
+  }, []);
 
   return (
     <IonPage className="fondo">
@@ -265,6 +277,7 @@ const Usuario: React.FC = () => {
                   <Formik
                     initialValues={initialValues}
                     validationSchema={advancedSchema}
+                    enableReinitialize
                     //onSubmit={onSubmit}
                     onSubmit={(values, actions) => {
                       if (isAddMode === "nuevo") {
@@ -286,21 +299,7 @@ const Usuario: React.FC = () => {
                       }, 500);
                     }}
                   >
-                    {({ isSubmitting, setFieldValue }) => {
-                      {
-                        /*useEffect(() => {
-                          if (isAddMode !== 'nuevo') {
-                              // get nivel and set form fields
-                              nivelService.getById(id).then(nivel => {
-                                  const fields = ['nombre', 'descripcion', 'estatus'];
-                                  fields.forEach(field => setFieldValue(field, nivel[field], false));
-                                  //setNivel(nivel);
-                              });
-                              isAddMode = 'nuevo';
-                          }
-                        }, []);*/
-                      }
-
+                    {({ isSubmitting }) => {
                       return (
                         <Form>
                           <h2>
