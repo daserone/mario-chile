@@ -144,7 +144,7 @@ const Nivel: React.FC = () => {
       variables = {...variables, id: nivel.data.id};
       if(queryClient.getQueryData( ['niveles'])){
         queryClient.setQueryData( ['niveles'], (prevNiveles: any) => prevNiveles.concat(variables) );
-      }      
+      }
       setNotificacion({
         msg: "Nivel agregado exitosamente",
         estado: true,
@@ -155,6 +155,9 @@ const Nivel: React.FC = () => {
   const updateNivelMutation = useMutation({
     mutationFn: updateNivel,
     onSuccess: () => {
+      if(queryClient.getQueryData( ['niveles'])){
+        queryClient.invalidateQueries( ['niveles'] );
+      }      
       setNotificacion({
         msg: "Nivel actualizado exitosamente",
         estado: true,
