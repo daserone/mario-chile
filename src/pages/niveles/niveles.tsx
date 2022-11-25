@@ -75,10 +75,10 @@ const Niveles: React.FC = () => {
   }*/}
 
   const {
-    isLoading,
     data: niveles,
-    isError,
     error,
+    isLoading,
+    isFetching
   } = useQuery({
     queryKey: ["niveles"],
     queryFn: getNiveles,
@@ -93,14 +93,18 @@ const Niveles: React.FC = () => {
         msg: "Nivel eliminado exitosamente",
         estado: true,
       });
-      queryClient.invalidateQueries({ queryKey: ['niveles'] });
+      //queryClient.invalidateQueries({ queryKey: ['niveles'] });
+      queryClient.invalidateQueries( ['niveles'] );
     },
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <span className="spinner-border"></span>Cargando niveles...</div>
+    );
   }
-  //else if (isError) return <div>{error.message}</div>;
+  //if (error) return <div>{error.message}</div>;
 
   return (
     <IonPage className="fondo">
@@ -274,6 +278,8 @@ const Niveles: React.FC = () => {
                   Exportar (Excel)
                 </IonButton>
 
+                {isFetching && <span className="spinner-border"></span>}
+
                 <div className="float-right">
                   <IonButton
                     className="button-deg-gen fs-12 mr-2"
@@ -326,7 +332,7 @@ const Niveles: React.FC = () => {
                             <td className="text-center">{item.estado}</td>
                             <td>
                               <div className="d-flex flex-row">
-                                <Link to={`./${item.id}`} className="btn mr-1">
+                                <Link to={`./nivel/${item.id}`} className="btn mr-1">
                                   <IonImg
                                     src={"./images/editar.svg"}
                                     className="mr-2 cursor-pointer"

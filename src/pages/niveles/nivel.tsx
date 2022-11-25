@@ -22,7 +22,7 @@ import MyTextInput from "../usuarios/MyTextInput";
 import MySelect from "../usuarios/MySelect";
 import { Formik, Form } from "formik";
 import { advancedSchema } from "../usuarios/validaciones.js";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createNivel, getNivelById, updateNivel } from "../../api/nivelesApi";
 
 const Nivel: React.FC = () => {
@@ -44,12 +44,20 @@ const Nivel: React.FC = () => {
     estatus: state.estatus || "",
   };
 
-  const nivelCargar = useQuery(["nivel", { id }], (id) =>
+  const {
+    data: nivel
+  } = useQuery(["nivel", { id }], (id) =>
     getNivelById(id), {
       onSuccess: (res) => {
         setState(res.data); 
     }
   });
+
+  {/*const {
+    data: nivel,
+    error,
+    isLoading
+  } = useQuery(["nivel", { id }], () => getNivelById(id));*/}
 
   useEffect(() => {
     {/*nivelService.getById(id).then((nivel) => {
@@ -128,9 +136,15 @@ const Nivel: React.FC = () => {
   console.log(initialValues);
   */}
 
+  const queryClient = useQueryClient();
+
   const addNivelMutation = useMutation({
     mutationFn: createNivel,
-    onSuccess: () => {
+    onSuccess: (nivel, variables) => {
+      variables = {...variables, id: nivel.data.id};
+      if(queryClient.getQueryData( ['niveles'])){
+        queryClient.setQueryData( ['niveles'], (prevNiveles: any) => prevNiveles.concat(variables) );
+      }      
       setNotificacion({
         msg: "Nivel agregado exitosamente",
         estado: true,
@@ -157,9 +171,15 @@ const Nivel: React.FC = () => {
       const formData = new FormData(e.target);
       const nivel = Object.fromEntries(formData);
     */}
-    addNivelMutation.mutate(nivel);
-    resetForm({});
-    setSubmitting(false);
+    addNivelMutation.mutate(
+      nivel,
+      {
+        onSuccess: () => {
+          resetForm({});
+          setSubmitting(false);
+        }
+      }
+    );
   };
 
   const nivelActualizar = (
@@ -364,12 +384,21 @@ const Nivel: React.FC = () => {
                               fill="outline"
                               type="submit"
                             >
-                              {isSubmitting && (
-                                <span className="spinner-border spinner-border-sm mr-1"></span>
+                              {isSubmitting ? (
+                                <>
+                                  <span className="spinner-border spinner-border-sm"></span>{" "}
+                                  Creando nivel...
+                                </>
+                              ) : (
+                                "Guardar"
                               )}
-                              Guardar
                             </IonButton>
                           </div>
+
+                          {/*addNivelMutation.isSuccess && <div className="alert alert-success">
+                              El nivel fue guardado exitosamente
+                              <button onClick={addNivelMutation.reset} type="button" className="btn-close float-right text-body">x</button>
+                              </div>*/}
                         </Form>
                       );
                     }}
