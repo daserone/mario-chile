@@ -418,7 +418,7 @@ const Nivel: React.FC = () => {
             setNotificacion({ ...notificacion, estado: false })
           }
           message={notificacion.msg}
-          duration={500}
+          duration={600}
         />
       </IonContent>
     </IonPage>
