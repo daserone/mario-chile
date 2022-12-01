@@ -32,6 +32,8 @@ import { ProximasCitas } from "./proximasCitas";
 import { DetalleCita } from "./detalleCita";
 import { DetalleConsulta } from "./detalleConsulta";
 import { Soporte } from "./soporte";
+import { ValidacionIngresos } from "./validacionIngresos";
+
 export {
   Login,
   Cuentas,
@@ -73,4 +75,5 @@ export {
   Soporte,
   PerfilEnfermedades,
   MiMedicamentoDetail,
+  ValidacionIngresos
 };

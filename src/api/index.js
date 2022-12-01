@@ -1,2 +1,4 @@
 import { nivelesApi } from "./nivelesApi";
-export { nivelesApi };
+import { validacionesApi } from "./validacionesApi";
+import { afiliadosApi } from "./afiliadosApi";
+export { nivelesApi, validacionesApi, afiliadosApi };

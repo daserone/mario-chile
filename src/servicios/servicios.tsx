@@ -1,5 +1,6 @@
 import axio from "axios";
 
+export const BASEURL = "https://toolkit.maxialatam.com/bieni/";
 export const URLPERFIL =
   "https://toolkit.maxialatam.com/bieni/asset/perfiles/";
 

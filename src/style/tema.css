@@ -435,6 +435,7 @@ ion-item.item-interactive{
 }
 .height-vh-con-table{
   height:calc(100vh - 210px);
+  overflow: auto;
 }
 
 .scroll-y-detail{

@@ -15,27 +15,45 @@ import {
   IonLabel,
   IonButton,
   IonBadge,
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons
 } from "@ionic/react";
 import { useHistory, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "./afiliados.css";
+import "./validaciones.css";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteAfiliado, getAfiliados } from "../../api/afiliadosApi";
+import { deleteValidacion, aprobarValidacion, getValidaciones } from "../../api/validacionesApi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAddressCard,
+  faCircleUser,
+  faCircleCheck,
+  faCircleXmark
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  BASEURL,
+} from "../../servicios/servicios";
 
-const Afiliados: React.FC = () => {
+const ValidacionIngresos: React.FC = () => {
   const history = useHistory();
   const user = useSelector((state: any) => state.reducerAuth.user);
+  const [isModal, setIsModal] = useState(false);
+  const [imgDoc, setimgDoc] = useState("");
+  const [imgVer, setimgVer] = useState("");
+
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
   };
-  
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
   });
 
   const handleValidaciones = (event: any) => {
-    history.push("./validacion-ingresos");
+    history.push("./validaciones");
   };
 
   const handleAfiliados = (event: any) => {
@@ -51,37 +69,66 @@ const Afiliados: React.FC = () => {
   };
 
   const handleDetail = (id: any) => {
-    history.push(`./afiliado/${id}`);
+    history.push(`./validacion/${id}`);
   };
 
   const {
-    data: afiliados,
+    data: validaciones,
     error,
     isLoading,
     isFetching
   } = useQuery({
-    queryKey: ["afiliados"],
-    queryFn: getAfiliados,
+    queryKey: ["validaciones"],
+    queryFn: getValidaciones,
     //select: (data) => data.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id),
   });
   const queryClient = useQueryClient();
 
-  const deleteAfiliadoMutation = useMutation({
-    mutationFn: deleteAfiliado,
-    onSuccess: () => {
+  const actualizarValidacion = (
+    id: any,
+    estado: number
+  ) => {
+    aprobarValidacionMutation.mutate({
+      id: id,
+      estado: estado
+    });
+  };
+
+  const aprobarValidacionMutation = useMutation({
+    mutationFn: aprobarValidacion,
+    onSuccess: (data) => {
+      if(queryClient.getQueryData( ['validaciones'])){
+        queryClient.invalidateQueries( ['validaciones'] );
+      }      
       setNotificacion({
-        msg: "Afiliado eliminado exitosamente",
+        msg: data.data.msg,
         estado: true,
       });
-      //queryClient.invalidateQueries({ queryKey: ['afiliados'] });
-      queryClient.invalidateQueries( ['afiliados'] );
     },
   });
+
+  const deleteValidacionMutation = useMutation({
+    mutationFn: deleteValidacion,
+    onSuccess: () => {
+      setNotificacion({
+        msg: "Validación eliminada exitosamente",
+        estado: true,
+      });
+      //queryClient.invalidateQueries({ queryKey: ['validaciones'] });
+      queryClient.invalidateQueries( ['validaciones'] );
+    },
+  });
+
+  const verImagenDocumento = (idusuario: number, idpaciente: number, imagen_documento: string, imagen_verificacion: string) => {
+    setIsModal(true);
+    setimgDoc(`${BASEURL}/asset/perfiles/${idusuario}/reconocimientos/${idpaciente}/${imagen_documento}`);
+    setimgVer(`${BASEURL}/asset/perfiles/${idusuario}/reconocimientos/${idpaciente}/${imagen_verificacion}`);
+  };
 
   if (isLoading) {
     return (
       <div>
-        <span className="spinner-border"></span>Cargando afiliados...</div>
+        <span className="spinner-border"></span>Cargando validaciones...</div>
     );
   }
   //if (error) return <div>{error.message}</div>;
@@ -193,7 +240,7 @@ const Afiliados: React.FC = () => {
                   lines="none"
                   button
                   onClick={handleValidaciones}
-                  className="mb-3"
+                  className="mb-3 active"
                 >
                   <IonImg
                     src={"./images/configuracion.svg"}
@@ -206,7 +253,7 @@ const Afiliados: React.FC = () => {
                   lines="none"
                   button
                   onClick={handleAfiliados}
-                  className="mb-3 active"
+                  className="mb-3"
                 >
                   <IonImg
                     src={"./images/configuracion.svg"}
@@ -258,20 +305,7 @@ const Afiliados: React.FC = () => {
             </IonCol>
             <IonCol size="10" className="px-3">
               <div className="pb-2">
-                <IonButton
-                  className="btn-outline text-info fs-12"
-                  fill="outline"
-                  onClick={() => {
-                    handleDetail('nuevo');
-                  }}
-                >
-                  <IonImg
-                    src={"./images/descargar.svg"}
-                    className="mr-2"
-                    style={{ width: "16px" }}
-                  />
-                  Nuevo
-                </IonButton>
+                
                 <IonButton
                   className="btn-outline text-info fs-12"
                   fill="outline"
@@ -313,17 +347,16 @@ const Afiliados: React.FC = () => {
                   <table className="table table-striped">
                     <thead className="text-gray">
                       <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Descripci&oacute;n</th>
-                        <th scope="col">Dirección</th>
-                        <th scope="col">Teléfono</th>
-                        <th scope="col" className="text-center">Estado</th>
+                        <th scope="col">Paciente</th>
+                        <th scope="col" className="text-center">Documento</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Verificación</th>
+                        <th scope="col" className="text-center">Imágenes</th>
                         <th scope="col" className="text-center">Acciones</th>
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
-                      {afiliados.length === 0 ? (
+                      {validaciones.length === 0 ? (
                         <IonCard className="m-0 mb-4 card-slide w-100">
                           <IonCardContent className="card-content-slide">
                             <div className="my-2 text-center">
@@ -332,38 +365,62 @@ const Afiliados: React.FC = () => {
                           </IonCardContent>
                         </IonCard>
                       ) : (
-                        afiliados.map((item: any) => (
+                        validaciones.map((item: any) => (
                           <tr key={item.id}>
-                            <td>{item.id}</td>
                             <td>{item.nombre}</td>
-                            <td>{item.descripcion}</td>
-                            <td>{item.direccion}</td>
-                            <td>{item.telefono}</td>
-                            <td className="text-center">{item.estado}</td>
+                            <td className="text-center">
+                              {item.documento}
+                              <span className="fs-12 text-info d-block">{item.tipodocumento}</span>
+                            </td>
+                            <td>
+                              <span className={`${item.estadoverificacion !== 'Aprobado' ? "text-danger" : ""}`}>{item.estadoverificacion}</span>
+                            </td>
+                            <td>{item.tipoverificacion}</td>
                             <td>
                               <div className="d-flex justify-content-center">
-                                <Link to={`./afiliado/${item.id}`} className="">
-                                  <IonImg
-                                    src={"./images/editar.svg"}
-                                    className="mr-2 cursor-pointer"
-                                    style={{ width: "19px" }}
-                                  />
-                                </Link>
+                                {(item.imagen_documento !== '' && item.imagen_verificacion !== '') &&
+                                  (<button
+                                    onClick={() => {
+                                      verImagenDocumento(item.idusuario, item.idpaciente, item.imagen_documento, item.imagen_verificacion);
+                                    }}
+                                    className="btn btn-delete-validacion p-0 mr-2"
+                                    disabled={item.isDeleting}
+                                  >
+                                    {item.isDeleting ? (
+                                      <span className="spinner-border spinner-border-sm"></span>
+                                    ) : (
+                                      <FontAwesomeIcon icon={faAddressCard} className="float-right fs-18 text-info cursor-pointer" />
+                                    )}
+                                  </button>)
+                                }
+                              </div>
+                            </td>
+                            <td>
+                              <div className="d-flex justify-content-center">
                                 <button
                                   onClick={() => {
-                                    deleteAfiliadoMutation.mutate(item.id);
+                                    actualizarValidacion(item.id,1);
                                   }}
-                                  className="btn btn-delete-afiliado p-0"
+                                  className="btn btn-delete-validacion p-0 mr-2"
                                   disabled={item.isDeleting}
                                 >
                                   {item.isDeleting ? (
                                     <span className="spinner-border spinner-border-sm"></span>
                                   ) : (
-                                    <IonImg
-                                      src={"./images/eliminar.svg"}
-                                      className="cursor-pointer text-danger"
-                                      style={{ width: "19px" }}
-                                    />
+                                    <FontAwesomeIcon icon={faCircleCheck} className="float-right fs-18 text-success cursor-pointer" />
+                                  )}
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    actualizarValidacion(item.id,2);
+                                  }}
+                                  className="btn btn-delete-validacion p-0"
+                                  disabled={item.isDeleting}
+                                >
+                                  {item.isDeleting ? (
+                                    <span className="spinner-border spinner-border-sm"></span>
+                                  ) : (
+                                    <FontAwesomeIcon icon={faCircleXmark} className="float-right fs-18 text-danger cursor-pointer" />
                                   )}
                                 </button>
                               </div>
@@ -373,6 +430,33 @@ const Afiliados: React.FC = () => {
                       )}
                     </tbody>
                   </table>
+
+                  <IonModal isOpen={isModal}>
+                    <IonHeader>
+                      <IonToolbar>
+                        <IonTitle className="p-3">Documento de identidad</IonTitle>
+                        <IonButtons slot="end">
+                          {/*<IonButton onClick={() => handleCanvaSave()}>Cerrar</IonButton>*/}
+                        </IonButtons>
+                      </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="text-center">
+                      <div className="px-3 d-flex flex-column align-items-center">
+                        <img
+                          src={imgDoc}
+                          alt="Documento de identidad"
+                          className="rounded mb-3"
+                          width="60%"
+                        />
+                        <img
+                          src={imgVer}
+                          alt="Documento de identidad"
+                          className="rounded mb-3"
+                          width="60%"
+                        />
+                      </div>
+                    </IonContent>
+                  </IonModal>
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -391,4 +475,4 @@ const Afiliados: React.FC = () => {
   );
 };
 
-export default Afiliados;
+export default ValidacionIngresos;

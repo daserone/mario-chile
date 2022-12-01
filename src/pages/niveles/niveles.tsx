@@ -34,6 +34,14 @@ const Niveles: React.FC = () => {
     estado: false,
   });
 
+  const handleValidaciones = (event: any) => {
+    history.push("./validacion-ingresos");
+  };
+
+  const handleAfiliados = (event: any) => {
+    history.push("./afiliados");
+  };
+
   const handleNiveles = (event: any) => {
     history.push("./niveles");
   };
@@ -212,6 +220,32 @@ const Niveles: React.FC = () => {
                 <IonItem
                   lines="none"
                   button
+                  onClick={handleValidaciones}
+                  className="mb-3"
+                >
+                  <IonImg
+                    src={"./images/configuracion.svg"}
+                    className="mr-2"
+                    style={{ width: "26px" }}
+                  />
+                  <IonLabel>Validaciones</IonLabel>
+                </IonItem>
+                <IonItem
+                  lines="none"
+                  button
+                  onClick={handleAfiliados}
+                  className="mb-3"
+                >
+                  <IonImg
+                    src={"./images/configuracion.svg"}
+                    className="mr-2"
+                    style={{ width: "26px" }}
+                  />
+                  <IonLabel>Afiliados</IonLabel>
+                </IonItem>
+                <IonItem
+                  lines="none"
+                  button
                   onClick={handleNiveles}
                   className="mb-3 active"
                 >
@@ -310,8 +344,8 @@ const Niveles: React.FC = () => {
                         <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Descripci&oacute;n</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col" className="text-center">Estado</th>
+                        <th scope="col" className="text-center">Acciones</th>
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
@@ -331,8 +365,8 @@ const Niveles: React.FC = () => {
                             <td>{item.descripcion}</td>
                             <td className="text-center">{item.estado}</td>
                             <td>
-                              <div className="d-flex flex-row">
-                                <Link to={`./nivel/${item.id}`} className="btn mr-1">
+                              <div className="d-flex justify-content-center">
+                                <Link to={`./nivel/${item.id}`} className="">
                                   <IonImg
                                     src={"./images/editar.svg"}
                                     className="mr-2 cursor-pointer"
@@ -343,7 +377,7 @@ const Niveles: React.FC = () => {
                                   onClick={() => {
                                     deleteNivelMutation.mutate(item.id);
                                   }}
-                                  className="btn btn-delete-nivel"
+                                  className="btn btn-delete-nivel p-0"
                                   disabled={item.isDeleting}
                                 >
                                   {item.isDeleting ? (

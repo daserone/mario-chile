@@ -45,6 +45,7 @@ import {
   DetalleCita,
   DetalleConsulta,
   Soporte,
+  ValidacionIngresos
 } from "../pages";
 import { tabActive, NOTAB } from "../helpers";
 import "../style/tema.css";
@@ -175,6 +176,9 @@ const RutasPrivadas: React.FC = () => {
           </Route>
           <Route exact path="/app">
             <Redirect to="/app/cuentas" />
+          </Route>
+          <Route exact path="/app/validacion-ingresos">
+            <ValidacionIngresos />
           </Route>
         </IonRouterOutlet>
         <IonTabBar
