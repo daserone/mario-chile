@@ -1,6 +1,6 @@
 import { IonImg } from "@ionic/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import { compartir } from "../../helpers";
 const BoxfullGeneral: React.FC<{
@@ -110,7 +110,10 @@ const BoxfullGeneral: React.FC<{
         <div>
           <p className="mb-0 mt-1 fs-12 d-flex">
             {iconTextoUno !== "" && (
-              <IonImg src={`images/${iconTextoUno}.svg`} className="icon-box-details mr-2"  />
+              <IonImg
+                src={`images/${iconTextoUno}.svg`}
+                className="icon-box-details mr-2"
+              />
             )}
             <span className="mr-2">{textoUno}</span>
           </p>
@@ -120,7 +123,10 @@ const BoxfullGeneral: React.FC<{
           <div>
             <p className="mb-0 mt-1 fs-12 d-flex">
               {iconTextoDos !== "" && (
-                <IonImg src={`images/${iconTextoDos}.svg`} className="icon-box-details mr-2" />
+                <IonImg
+                  src={`images/${iconTextoDos}.svg`}
+                  className="icon-box-details mr-2"
+                />
               )}
               <span className="mr-2">{textoDos}</span>
             </p>
@@ -131,7 +137,10 @@ const BoxfullGeneral: React.FC<{
           <div>
             <p className="mb-0 mt-1 fs-12 d-flex">
               {iconTextoTres !== "" && (
-                <IonImg src={`images/${iconTextoTres}.svg`} className="icon-box-details mr-2"  />
+                <IonImg
+                  src={`images/${iconTextoTres}.svg`}
+                  className="icon-box-details mr-2"
+                />
               )}
               <span className="mr-2">{textoTres}</span>
             </p>
@@ -142,7 +151,10 @@ const BoxfullGeneral: React.FC<{
           <div>
             <p className="mb-0 mt-1 fs-12 d-flex">
               {iconTextoCuatro !== "" && (
-                <IonImg src={`images/${iconTextoCuatro}.svg`} className="icon-box-details mr-2"  />
+                <IonImg
+                  src={`images/${iconTextoCuatro}.svg`}
+                  className="icon-box-details mr-2"
+                />
               )}
               <span className="mr-2">{textoCuatro}</span>
             </p>
@@ -171,7 +183,10 @@ const BoxfullGeneral: React.FC<{
                   >
                     {textLinkBottomRight}
                     {textLinkBottomRight === "Compartir" && (
-                      <IonImg src={`images/compartir-light.svg`} className="icon-box-details ml-1" />
+                      <IonImg
+                        src={`images/compartir-light.svg`}
+                        className="icon-box-details ml-1"
+                      />
                     )}
                   </Link>
                 ) : (
@@ -181,7 +196,10 @@ const BoxfullGeneral: React.FC<{
                   >
                     {textLinkBottomRight}
                     {textLinkBottomRight === "Compartir" && (
-                      <IonImg src={`images/compartir-light.svg`} className="icon-box-details ml-1" />
+                      <IonImg
+                        src={`images/compartir-light.svg`}
+                        className="icon-box-details ml-1"
+                      />
                     )}
                   </Link>
                 )}

@@ -1,14 +1,14 @@
-import { Nav } from "./nav";
-import { Header, HeaderEstudios, HeaderPerfil } from "./header";
+import { HeaderInterior, Header, NavLateral } from "./layout";
 import { Boxfull, BoxAfiliado, BoxfullGeneral } from "./boxfull";
 import { Action } from "./button";
-import { CustomField, CustomFieldOnblur } from "./field";
+import { CustomField } from "./field";
 import { Info, InfoDoctor, InfoPaciente, InfoConsulta } from "./info";
+import { Loading } from "./loading";
+
 export {
-  Nav,
+  HeaderInterior,
   Header,
-  HeaderEstudios,
-  HeaderPerfil,
+  NavLateral,
   Boxfull,
   BoxAfiliado,
   BoxfullGeneral,
@@ -18,5 +18,5 @@ export {
   InfoDoctor,
   InfoPaciente,
   CustomField,
-  CustomFieldOnblur,
+  Loading,
 };

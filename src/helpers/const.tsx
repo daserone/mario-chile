@@ -34,10 +34,16 @@ export const FORMTRATAMIENTOS = {
 export const FORMNIVELES = {
   nombre: "",
   descripcion: "",
-  estatus: 1
+  estatus: 1,
 };
 
-export const NOTAB = ["/app/home", "/app/soporte", "/app/cuentas", "/app/imagenologia", "/app/perfil-crear"];
+export const NOTAB = [
+  "/app/home",
+  "/app/soporte",
+  "/app/cuentas",
+  "/app/imagenologia",
+  "/app/perfil-crear",
+];
 
 export const INITIALIMAGENOLOGIA = {
   id: "",
@@ -79,11 +85,6 @@ export const INITIALCONSULTA = {
   hora: "",
 };
 /*-CONFIGURACION---------*/
-export const SLIDEOPTS = {
-  initialSlide: 0,
-  speed: 200,
-  slidesPerView: 1.7,
-  spaceBetween: 20,
-  //autoplay:true,
-  //loop: true
+export const CONFIGNOTIFICACION = {
+  duration: 4000,
 };

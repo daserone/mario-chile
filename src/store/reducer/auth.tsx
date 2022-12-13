@@ -1,6 +1,7 @@
-import { CERRAR_S, STORE_SAVE, getStoreSesion } from "../action/aut";
+import { STORE_REMOVE, STORE_SAVE, storeGet } from "../action/aut";
 
-let initial = getStoreSesion();
+let initial = storeGet();
+
 const reducerAuth = (state = initial, actions: any) => {
   switch (actions.type) {
     case STORE_SAVE:
@@ -9,7 +10,7 @@ const reducerAuth = (state = initial, actions: any) => {
         user: actions.payload.data,
         stdAuth: actions.payload.stdAuth,
       };
-    case CERRAR_S:
+    case STORE_REMOVE:
       let logout = {
         ...state,
         user: {},

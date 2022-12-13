@@ -12,46 +12,53 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { Action, CustomField } from "../../components";
-import { storeLocal } from "../../store/action/aut";
+import { doLogin } from "../../store/action";
 import { authentication } from "../../servicios/servicios";
+import { CONFIGNOTIFICACION } from "../../helpers";
 import "./login.css";
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [usuario, setUsuario] = useState<string>("");
-  const [cedula, setCedula] = useState<string>("");
-  const [toast, setToast] = useState(false);
-  const [notificacion, setNotificacion] = useState(false);
+  const [usuario, setUsuario] = useState<string>("lismary.18@gmail.com");
+  const [cedula, setCedula] = useState<string>("1787636257");
+  const [notificacion, setNotificacion] = useState({
+    msg: "",
+    estado: false,
+  });
 
   const handleLogin = (event: any) => {
     event.preventDefault();
-    if (usuario !== "" && cedula !== "") {
-      let formDa = new FormData();
-      formDa.append("op", "dologinWithCredencial");
-      formDa.append("correo", usuario);
-      formDa.append("cedula", cedula);
-      authentication(formDa)
-        .then(function (response) {
-          const { data, status } = response;
-          if (status === 200) {
-            if (data.rsp === 1) {
-              dispatch(storeLocal(data.data));
-              history.push("/app");
-              setUsuario("");
-              setCedula("");
-            } else {
-              setToast(true);
-              setUsuario("");
-              setCedula("");
-            }
-          }
-        })
-        .catch(function (err) {
-          console.warn("Error:" + err);
-        });
-    } else {
-      setNotificacion(true);
+    if (usuario === "" && cedula === "") {
+      setNotificacion({
+        msg: "Por favor agregue el usuario o documento",
+        estado: true,
+      });
+      return;
     }
+    let formDa = new FormData();
+    formDa.append("op", "dologinWithCredencial");
+    formDa.append("correo", usuario);
+    formDa.append("cedula", cedula);
+    authentication(formDa)
+      .then(function (response) {
+        const { data, status } = response;
+        if (status === 200) {
+          if (data.rsp === 1) {
+            setUsuario("");
+            setCedula("");
+            dispatch(doLogin(data.data));
+            history.push("/app");
+          } else {
+            setNotificacion({
+              msg: data.msg,
+              estado: true,
+            });
+          }
+        }
+      })
+      .catch(function (err) {
+        console.warn("Error:" + err);
+      });
   };
 
   return (
@@ -87,7 +94,7 @@ const Login: React.FC = () => {
                   tipo="text"
                 />
                 <CustomField
-                  label="Cedula"
+                  label="Documento"
                   name={cedula}
                   setName={setCedula}
                   placeholder="********"
@@ -111,7 +118,6 @@ const Login: React.FC = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-
       <IonFooter>
         <IonGrid className="ion-no-margin ion-no-padding">
           <Action
@@ -122,16 +128,10 @@ const Login: React.FC = () => {
         </IonGrid>
       </IonFooter>
       <IonToast
-        isOpen={toast}
-        onDidDismiss={() => setToast(false)}
-        message="Usuario o clave incorrecta"
-        duration={200}
-      />
-      <IonToast
-        isOpen={notificacion}
-        onDidDismiss={() => setNotificacion(false)}
-        message="Por favor ingrese los valores usuario o clave"
-        duration={200}
+        isOpen={notificacion.estado}
+        onDidDismiss={() => setNotificacion({ ...notificacion, estado: false })}
+        message={notificacion.msg}
+        duration={CONFIGNOTIFICACION.duration}
       />
     </IonPage>
   );

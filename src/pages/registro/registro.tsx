@@ -22,7 +22,7 @@ import { Action, CustomField, Header } from "../../components";
 import { serviciosPaciente } from "../../servicios";
 import { grupoSanguineos, calcularEdad } from "../../helpers";
 import { useForm } from "../../hook";
-import { storeLocal } from "../../store/action/aut";
+import { doLogin } from "../../store/action/aut";
 import "./registro.css";
 const Registro = () => {
   const dispatch = useDispatch();
@@ -93,7 +93,7 @@ const Registro = () => {
               };
               setLoad(true);
               let nueva = Object.assign({}, sesion, clone);
-              dispatch(storeLocal(nueva));
+              dispatch(doLogin(nueva));
               history.replace("/app/home");
               resetForm();
             } else {

@@ -1,7 +1,8 @@
 import axios from "axios";
+import { ENTORNO } from "./config";
 
 const nivelesApi = axios.create({
-  baseURL: "https://toolkit.maxialatam.com/bieni/controller/nivelesback",
+  baseURL: `${ENTORNO}/controller/nivelesback`,
 });
 
 export const getNiveles = async () => {
@@ -18,11 +19,12 @@ export const getNivelById = ({ queryKey }) => {
   return response;
 };
 
-export const createNivel = (Nivel) => nivelesApi.post("?op=addNivel", Nivel);
+export const createNivel = (params) => nivelesApi.post("?op=addNivel", params);
 
-export const updateNivel = (Nivel) =>
-  nivelesApi.put(`?op=editNivel&id=${Nivel.id}`, Nivel);
+export const updateNivel = (params) =>
+  nivelesApi.put(`?op=editNivel&id=${params.id}`, params);
 
-export const deleteNivel = (id) => nivelesApi.delete(`?op=deleteNivel&id=${id}`);
+export const deleteNivel = (id) =>
+  nivelesApi.delete(`?op=deleteNivel&id=${id}`);
 
 export default nivelesApi;

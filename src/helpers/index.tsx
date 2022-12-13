@@ -24,15 +24,15 @@ import {
   grupodiscapacidad,
 } from "./tablasHash";
 import {
-  INITIALPERFIL,
-  SLIDEOPTS,
-  INITIALCREARPERFIL,
   NOTAB,
-  FORMTRATAMIENTOS,
-  FORMNIVELES,
+  INITIALPERFIL,
+  INITIALCREARPERFIL,
   INITIALIMAGENOLOGIA,
   INITIALLABORATORIO,
   INITIALCONSULTA,
+  FORMTRATAMIENTOS,
+  FORMNIVELES,
+  CONFIGNOTIFICACION,
 } from "./const";
 import { valEnfermedad, valTratamiento } from "./validacion";
 import { fetchWrapper } from "./fetchWrapper";
@@ -60,9 +60,9 @@ export {
   tablaFrecuencia,
   grupoSanguineos,
   grupodiscapacidad,
+
   /*-CONSTANTES-----------------*/
   INITIALPERFIL,
-  SLIDEOPTS,
   INITIALCREARPERFIL,
   NOTAB,
   FORMTRATAMIENTOS,
@@ -70,9 +70,10 @@ export {
   INITIALIMAGENOLOGIA,
   INITIALLABORATORIO,
   INITIALCONSULTA,
+  CONFIGNOTIFICACION,
   /*-VALIDACIONES---------------*/
   valEnfermedad,
   valTratamiento,
   /*-BACK---------------*/
-  fetchWrapper
+  fetchWrapper,
 };

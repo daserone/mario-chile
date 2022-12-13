@@ -1,2 +1,2 @@
-import { storeLocal, getStoreSesion, logout } from "./action";
-export { storeLocal, getStoreSesion, logout };
+import { doLogin, logout } from "./action";
+export { doLogin, logout };

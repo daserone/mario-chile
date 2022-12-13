@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   IonGrid,
   IonRow,
@@ -9,24 +9,15 @@ import {
   IonPage,
   IonImg,
   IonToast,
-  IonThumbnail,
-  IonSearchbar,
-  IonItem,
-  IonLabel,
   IonButton,
   IonBadge,
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { NavLateral, HeaderInterior } from "../../components";
 import "./usuarios.css";
 
 const Usuarios: React.FC = () => {
   const history = useHistory();
-  const user = useSelector((state: any) => state.reducerAuth.user);
-
-  const handelNotificaciones = () => {
-    history.push("/app/notificaciones");
-  };
 
   const [notificacion, setNotificacion] = useState({
     msg: "",
@@ -41,158 +32,13 @@ const Usuarios: React.FC = () => {
     history.push("./usuario/nuevo");
   };
 
-  const handleNiveles = (event: any) => {
-    history.push("./niveles");
-  };
-
-  const handleUsuarios = (event: any) => {
-    history.push("./usuarios");
-  };
-
   return (
     <IonPage className="fondo">
       <IonContent fullscreen className="bg-light">
         <IonGrid className="bg-light">
-          <IonRow className="pt-4 pb-4 mb-2">
-            <IonCol size="2" className="px-3 fs-14 text-white">
-              <div className="d-inline">
-                <img
-                  src="./images/logo-bieni.svg"
-                  alt="imagen"
-                  className="d-inline"
-                  width={25}
-                />
-                <p className="ml-3 fs-20 font-w600 text-info d-inline">Bieni</p>
-              </div>
-            </IonCol>
-            <IonCol size="7" className="px-3 fs-14 text-white">
-              <div
-                className="searchContainer d-inline-block"
-                style={{ width: "60%" }}
-              >
-                <form action="">
-                  <IonSearchbar
-                    placeholder="Buscar..."
-                    slot="end"
-                    class="px-0 py-0"
-                  />
-                  <input type="submit" style={{ display: "none" }} />
-                </form>
-              </div>
-            </IonCol>
-            <IonCol size="3" className="px-3">
-              <div
-                className="float-right fs-14 d-flex flex-row"
-                onClick={handelNotificaciones}
-                style={{ cursor: "pointer" }}
-              >
-                <div className="align-self-center">
-                  <IonImg
-                    src={"./images/notificaciones.svg"}
-                    className="w-24-p"
-                  />
-                </div>
-                <div className="ml-5 p-perfil-sub">
-                  <IonThumbnail slot="start" class="">
-                    <img src="./images/sandra.jpg" alt="Laura" />
-                  </IonThumbnail>
-                </div>
-                <div className="ml-3 mr-2">
-                  <span className="fs-15 font-w700 text-info d-block">
-                    Dra. {}
-                    {user.nombre}
-                  </span>
-                  <span className="text-info font-w600">Ginecología</span>
-                </div>
-              </div>
-            </IonCol>
-          </IonRow>
-
+          <HeaderInterior />
           <IonRow className="mt-0">
-            <IonCol size="2" className="pl-0 pr-3">
-              {/*<Nav/>*/}
-
-              <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3 active"
-                >
-                  <IonImg
-                    src={"./images/afiliados-light.svg"}
-                    className="mr-3"
-                    style={{ width: "20px" }}
-                  />
-                  <IonLabel>Mis pacientes</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/doctor-light.svg"}
-                    className="mr-3"
-                    style={{ width: "20px" }}
-                  />
-                  <IonLabel>Perfil</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Soporte</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={handleNiveles}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Niveles</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={handleUsuarios}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Usuarios</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/cerrar-sesion.svg"}
-                    className="mr-3"
-                    style={{ width: "20px" }}
-                  />
-                  <IonLabel>Cerrar sesi&oacute;n</IonLabel>
-                </IonItem>
-              </div>
-            </IonCol>
+            <NavLateral />
             <IonCol size="10" className="px-3">
               <div className="pb-2">
                 <IonButton

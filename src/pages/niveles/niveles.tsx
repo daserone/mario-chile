@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   IonGrid,
   IonRow,
@@ -9,90 +9,36 @@ import {
   IonPage,
   IonImg,
   IonToast,
-  IonThumbnail,
-  IonSearchbar,
-  IonItem,
-  IonLabel,
   IonButton,
-  IonBadge,
 } from "@ionic/react";
 import { useHistory, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import "./niveles.css";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { NavLateral, HeaderInterior } from "../../components";
 import { deleteNivel, getNiveles } from "../../api/nivelesApi";
-
+import "./niveles.css";
 const Niveles: React.FC = () => {
   const history = useHistory();
-  const user = useSelector((state: any) => state.reducerAuth.user);
-  const handelNotificaciones = () => {
-    history.push("/app/notificaciones");
-  };
-  //const [niveles, setNiveles] = useState<any>([]);
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
   });
 
-  const handleValidaciones = (event: any) => {
-    history.push("./validacion-ingresos");
-  };
-
-  const handleAfiliados = (event: any) => {
-    history.push("./afiliados");
-  };
-
-  const handleNiveles = (event: any) => {
-    history.push("./niveles");
-  };
-
-  const handleUsuarios = (event: any) => {
-    history.push("./usuarios");
-  };
-
   const handleDetail = (id: any) => {
     history.push(`./nivel/${id}`);
   };
 
-  {/*
-  const [data, load] = useFetch(
-    "/controller/nivelesback.php",
-    "listadoNiveles",
-    "1",
-    "1",
-    ""
-  );
-
- useEffect(() => {
-    nivelService.getAll().then((x) => setNiveles(x.data));
-  }, []);
-
-  function deleteNivel(id: any) {
-    setNiveles(
-      niveles.map((x: any) => {
-        if (x.id === id) {
-          x.isDeleting = true;
-        }
-        return x;
-      })
-    );
-    nivelService.delete(id).then(() => {
-      console.log(id);
-      setNiveles((niveles: any[]) => niveles.filter((x) => x.id !== id));
-    });
-  }*/}
+  const queryClient = useQueryClient();
 
   const {
     data: niveles,
     error,
     isLoading,
-    isFetching
+    isFetching,
   } = useQuery({
     queryKey: ["niveles"],
     queryFn: getNiveles,
     //select: (data) => data.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id),
   });
-  const queryClient = useQueryClient();
 
   const deleteNivelMutation = useMutation({
     mutationFn: deleteNivel,
@@ -102,14 +48,35 @@ const Niveles: React.FC = () => {
         estado: true,
       });
       //queryClient.invalidateQueries({ queryKey: ['niveles'] });
-      queryClient.invalidateQueries( ['niveles'] );
+      queryClient.invalidateQueries(["niveles"]);
     },
   });
 
   if (isLoading) {
     return (
-      <div>
-        <span className="spinner-border"></span>Cargando niveles...</div>
+      <IonPage className="fondo">
+        <IonContent fullscreen className="bg-light">
+          <IonGrid className="bg-light">
+            <IonRow
+              className="pt-4 pb-4 mb-2 ion-justify-content-center"
+              style={{
+                height: "100vh",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <span className="spinner-border mb-4"></span>
+                <h1>Cargando....</h1>
+              </div>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </IonPage>
     );
   }
   //if (error) return <div>{error.message}</div>;
@@ -118,179 +85,16 @@ const Niveles: React.FC = () => {
     <IonPage className="fondo">
       <IonContent fullscreen className="bg-light">
         <IonGrid className="bg-light">
-          <IonRow className="pt-4 pb-4 mb-2">
-            <IonCol size="2" className="px-3 fs-14 text-white">
-              <div className="d-inline">
-                <img
-                  src="./images/logo-bieni.svg"
-                  alt="imagen"
-                  className="d-inline"
-                  width={25}
-                />
-                <p className="ml-3 fs-20 font-w600 text-info d-inline">Bieni</p>
-              </div>
-            </IonCol>
-            <IonCol size="7" className="px-3 fs-14 text-white">
-              <div
-                className="searchContainer d-inline-block"
-                style={{ width: "60%" }}
-              >
-                <form action="">
-                  <IonSearchbar
-                    placeholder="Buscar..."
-                    slot="end"
-                    class="px-0 py-0"
-                  />
-                  <input type="submit" style={{ display: "none" }} />
-                </form>
-              </div>
-            </IonCol>
-            <IonCol size="3" className="px-3">
-              <div
-                className="float-right fs-14 d-flex flex-row"
-                onClick={handelNotificaciones}
-                style={{ cursor: "pointer" }}
-              >
-                <div className="align-self-center">
-                  <IonImg
-                    src={"./images/notificaciones.svg"}
-                    className="w-24-p"
-                  />
-                </div>
-                <div className="ml-5 p-perfil-sub">
-                  <IonThumbnail slot="start" class="">
-                    <img src="./images/sandra.jpg" alt="Laura" />
-                  </IonThumbnail>
-                </div>
-                <div className="ml-3 mr-2">
-                  <span className="fs-15 font-w700 text-info d-block">
-                    Dra. {}
-                    {user.nombre}
-                  </span>
-                  <span className="text-info font-w600">Ginecología</span>
-                </div>
-              </div>
-            </IonCol>
-          </IonRow>
-
+          <HeaderInterior />
           <IonRow className="mt-0">
-            <IonCol size="2" className="pl-0 pr-3">
-              {/*<Nav/>*/}
-
-              <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/afiliados-light.svg"}
-                    className="mr-3"
-                    style={{ width: "20px" }}
-                  />
-                  <IonLabel>Mis pacientes</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/doctor-light.svg"}
-                    className="mr-3"
-                    style={{ width: "20px" }}
-                  />
-                  <IonLabel>Perfil</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Soporte</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={handleValidaciones}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Validaciones</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={handleAfiliados}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Afiliados</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={handleNiveles}
-                  className="mb-3 active"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Niveles</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={handleUsuarios}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/configuracion.svg"}
-                    className="mr-2"
-                    style={{ width: "26px" }}
-                  />
-                  <IonLabel>Usuarios</IonLabel>
-                </IonItem>
-                <IonItem
-                  lines="none"
-                  button
-                  onClick={() => {}}
-                  className="mb-3"
-                >
-                  <IonImg
-                    src={"./images/cerrar-sesion.svg"}
-                    className="mr-3"
-                    style={{ width: "20px" }}
-                  />
-                  <IonLabel>Cerrar sesi&oacute;n</IonLabel>
-                </IonItem>
-              </div>
-            </IonCol>
+            <NavLateral />
             <IonCol size="10" className="px-3">
               <div className="pb-2">
                 <IonButton
                   className="btn-outline text-info fs-12"
                   fill="outline"
                   onClick={() => {
-                    handleDetail('nuevo');
+                    handleDetail("nuevo");
                   }}
                 >
                   <IonImg
@@ -344,8 +148,12 @@ const Niveles: React.FC = () => {
                         <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Descripci&oacute;n</th>
-                        <th scope="col" className="text-center">Estado</th>
-                        <th scope="col" className="text-center">Acciones</th>
+                        <th scope="col" className="text-center">
+                          Estado
+                        </th>
+                        <th scope="col" className="text-center">
+                          Acciones
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
@@ -411,8 +219,31 @@ const Niveles: React.FC = () => {
           duration={500}
         />
       </IonContent>
+
+      {/*<Loading text="Cargando" show={true} />*/}
     </IonPage>
   );
 };
 
 export default Niveles;
+
+/*
+
+ useEffect(() => {
+    nivelService.getAll().then((x) => setNiveles(x.data));
+  }, []);
+
+  function deleteNivel(id: any) {
+    setNiveles(
+      niveles.map((x: any) => {
+        if (x.id === id) {
+          x.isDeleting = true;
+        }
+        return x;
+      })
+    );
+    nivelService.delete(id).then(() => {
+      console.log(id);
+      setNiveles((niveles: any[]) => niveles.filter((x) => x.id !== id));
+    });
+  }*/
