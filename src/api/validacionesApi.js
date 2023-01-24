@@ -9,7 +9,8 @@ export const getValidaciones = async () => {
   return res.data;
 };
 
-export const getValidacionById0 = (id) => validacionesApi.get(`?op=getValidacionId&id=${id}`);
+export const getValidacionById0 = (id) =>
+  validacionesApi.get(`?op=getValidacionId&id=${id}`);
 
 export const getValidacionById = ({ queryKey }) => {
   const [_key, { id }] = queryKey;
@@ -18,12 +19,16 @@ export const getValidacionById = ({ queryKey }) => {
   return response;
 };
 
-export const createValidacion = (Validacion) => validacionesApi.post("?op=addValidacion", Validacion);
+export const createValidacion = (params) =>
+  validacionesApi.post("?op=addValidacion", params);
 
-export const updateValidacion = (Validacion) => validacionesApi.put(`?op=editValidacion&id=${Validacion.id}`, Validacion);
+export const updateValidacion = (params) =>
+  validacionesApi.put(`?op=editValidacion&id=${params.id}`, params);
 
-export const aprobarValidacion = (Validacion) => validacionesApi.put(`?op=aprobarValidacion&id=${Validacion.id}`, Validacion);
+export const aprobarValidacion = (params) =>
+  validacionesApi.put(`?op=aprobarValidacion&id=${params.id}`, params);
 
-export const deleteValidacion = (id) => validacionesApi.delete(`?op=deleteValidacion&id=${id}`);
+export const deleteValidacion = (id) =>
+  validacionesApi.delete(`?op=deleteValidacion&id=${id}`);
 
 export default validacionesApi;

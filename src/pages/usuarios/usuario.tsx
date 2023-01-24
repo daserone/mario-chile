@@ -11,11 +11,10 @@ import {
   IonButton,
 } from "@ionic/react";
 import { Formik, Form } from "formik";
-import MyTextInput from "./MyTextInput.js";
-import MySelect from "./MySelect.js";
 import { useParams } from "react-router-dom";
 import { advancedSchema } from "./validaciones.js";
 import { nivelService } from "../../servicios/niveles";
+import { FieldSelect, FieldText } from "../../components";
 import { NavLateral, HeaderInterior } from "../../components";
 import "./usuarios.css";
 const Usuario: React.FC = () => {
@@ -150,23 +149,19 @@ const Usuario: React.FC = () => {
                               ? "Agregar Nivel"
                               : "Editar Nivel"}
                           </h2>
-                          <MyTextInput
-                            label="Nombre"
-                            name="nombre"
-                            type="text"
-                          />
+                          <FieldText label="Nombre" name="nombre" type="text" />
 
-                          <MyTextInput
+                          <FieldText
                             label="Descripción"
                             name="descripcion"
                             type="text"
                           />
 
-                          <MySelect label="Estatus" name="estatus">
+                          <FieldSelect label="Estatus" name="estatus">
                             <option value="">Seleccione</option>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
-                          </MySelect>
+                          </FieldSelect>
 
                           <div className="w-100 text-center mt-3">
                             <IonButton

@@ -1,7 +1,7 @@
 import { HeaderInterior, Header, NavLateral } from "./layout";
 import { Boxfull, BoxAfiliado, BoxfullGeneral } from "./boxfull";
 import { Action } from "./button";
-import { CustomField } from "./field";
+import { CustomField, FieldSelect, FieldCheckbox, FieldText } from "./field";
 import { Info, InfoDoctor, InfoPaciente, InfoConsulta } from "./info";
 import { Loading } from "./loading";
 
@@ -17,6 +17,10 @@ export {
   InfoConsulta,
   InfoDoctor,
   InfoPaciente,
-  CustomField,
   Loading,
+  //FIELD
+  CustomField,
+  FieldSelect,
+  FieldCheckbox,
+  FieldText,
 };

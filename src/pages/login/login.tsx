@@ -12,15 +12,15 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { Action, CustomField } from "../../components";
-import { doLogin } from "../../store/action";
-import { authentication } from "../../servicios/servicios";
+import { postAuthentication } from "../../servicios/autenticacion";
 import { CONFIGNOTIFICACION } from "../../helpers";
+import { doLogin } from "../../store/action";
 import "./login.css";
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [usuario, setUsuario] = useState<string>("lismary.18@gmail.com");
-  const [cedula, setCedula] = useState<string>("1787636257");
+  const [usuario, setUsuario] = useState<string>("");
+  const [clave, setClave] = useState<string>("");
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
@@ -28,7 +28,7 @@ const Login: React.FC = () => {
 
   const handleLogin = (event: any) => {
     event.preventDefault();
-    if (usuario === "" && cedula === "") {
+    if (usuario === "" && clave === "") {
       setNotificacion({
         msg: "Por favor agregue el usuario o documento",
         estado: true,
@@ -38,15 +38,15 @@ const Login: React.FC = () => {
     let formDa = new FormData();
     formDa.append("op", "dologinWithCredencial");
     formDa.append("correo", usuario);
-    formDa.append("cedula", cedula);
-    authentication(formDa)
+    formDa.append("clave", clave);
+    postAuthentication(formDa)
       .then(function (response) {
         const { data, status } = response;
         if (status === 200) {
           if (data.rsp === 1) {
             setUsuario("");
-            setCedula("");
-            dispatch(doLogin(data.data));
+            setClave("");
+            dispatch(doLogin(data.item));
             history.push("/app");
           } else {
             setNotificacion({
@@ -95,8 +95,8 @@ const Login: React.FC = () => {
                 />
                 <CustomField
                   label="Documento"
-                  name={cedula}
-                  setName={setCedula}
+                  name={clave}
+                  setName={setClave}
                   placeholder="********"
                   tipo="password"
                 />

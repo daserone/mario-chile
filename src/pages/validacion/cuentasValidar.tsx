@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   IonGrid,
   IonRow,
@@ -8,13 +8,8 @@ import {
   IonContent,
   IonPage,
   IonImg,
-  IonToast,
   IonButton,
-  IonModal,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
+  IonToast,
 } from "@ionic/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -22,40 +17,40 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  getValidaciones,
-  deleteValidacion,
-  aprobarValidacion,
-} from "../../api/validacionesApi";
 import { NavLateral, HeaderInterior } from "../../components";
-import { BASEURL } from "../../servicios/servicios";
-import "./validaciones.css";
-const ValidacionIngresos: React.FC = () => {
+import {
+  getCuentas,
+  putCuentaAprobar,
+  putCuentaRechazar,
+} from "../../api/cuentas";
+import { getValidacionesCuenta } from "../../servicios/validaciones";
+import { URLPERFIL } from "../../servicios";
+const CuentasValidar = () => {
+  const user = useSelector((state: any) => state.reducerAuth.user);
   const [modal, setModal] = useState<boolean>(false);
-  const [img, setImg] = useState({ foto: "", documento: "" });
+  const [img, setImg] = useState<any>({
+    foto: "",
+    documento: "",
+  });
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
   });
 
   const queryClient = useQueryClient();
-  const {
-    data: validaciones,
-    error,
-    isLoading,
-    isFetching,
-  } = useQuery({
-    queryKey: ["validaciones"],
-    queryFn: getValidaciones,
-    //select: (data) => data.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id),
+
+  const { data, error, isLoading, isFetching } = useQuery({
+    queryKey: ["validacion-cuentas"],
+    queryFn: getValidacionesCuenta,
   });
 
-  const aprobarValidacionMutation = useMutation({
-    mutationFn: aprobarValidacion,
+  const cuentaAprobarMutation = useMutation({
+    mutationFn: putCuentaAprobar,
     onSuccess: (data) => {
-      if (queryClient.getQueryData(["validaciones"])) {
-        queryClient.invalidateQueries(["validaciones"]);
+      if (queryClient.getQueryData(["validacion-cuentas"])) {
+        queryClient.invalidateQueries(["validacion-cuentas"]);
       }
       setNotificacion({
         msg: data.data.msg,
@@ -64,26 +59,44 @@ const ValidacionIngresos: React.FC = () => {
     },
   });
 
-  const actualizarValidacion = (id: any, estado: number) => {
-    /*aprobarValidacionMutation.mutate({
-      id: id,
-      estado: estado,
-    });*/
-  };
-
-  const deleteValidacionMutation = useMutation({
-    mutationFn: deleteValidacion,
-    onSuccess: () => {
+  const cuentaRechazarMutation = useMutation({
+    mutationFn: putCuentaRechazar,
+    onSuccess: (data) => {
+      if (queryClient.getQueryData(["validacion-cuentas"])) {
+        queryClient.invalidateQueries(["validacion-cuentas"]);
+      }
       setNotificacion({
-        msg: "Validación eliminada exitosamente",
+        msg: data.data.msg,
         estado: true,
       });
-      //queryClient.invalidateQueries({ queryKey: ['validaciones'] });
-      queryClient.invalidateQueries(["validaciones"]);
     },
   });
 
-  const verImagenDocumento = (
+  const handleAprobar = (
+    iddocumento: string,
+    idpaciente: string,
+    idusuario: string
+  ) => {
+    cuentaAprobarMutation.mutate({
+      iddocumento,
+      idpaciente,
+      idusuario,
+    });
+  };
+
+  const handleRechazar = (
+    iddocumento: string,
+    idpaciente: string,
+    idusuario: string
+  ) => {
+    cuentaRechazarMutation.mutate({
+      iddocumento,
+      idpaciente,
+      idusuario,
+    });
+  };
+
+  const handleVerImagen = (
     idusuario: number,
     idpaciente: number,
     imagenDocumento: string,
@@ -91,7 +104,7 @@ const ValidacionIngresos: React.FC = () => {
   ) => {
     setModal(!modal);
 
-    let URL = `${BASEURL}asset/perfiles/${idusuario}/reconocimientos/${idpaciente}`;
+    let URL = `${URLPERFIL}${idusuario}/reconocimientos/${idpaciente}`;
 
     let foto = `${URL}/${imagenDocumento}`;
     let documento = `${URL}/${imagenVerificacion}`;
@@ -99,6 +112,8 @@ const ValidacionIngresos: React.FC = () => {
     setImg({ foto: foto, documento: documento });
     console.log({ foto, documento });
   };
+
+  console.log(data);
 
   if (isLoading) {
     return (
@@ -158,7 +173,7 @@ const ValidacionIngresos: React.FC = () => {
 
   return (
     <IonPage className="fondo">
-      <IonContent fullscreen className="bg-light">
+      <IonContent fullscreen>
         <IonGrid className="bg-light">
           <HeaderInterior />
           <IonRow className="mt-0">
@@ -177,7 +192,9 @@ const ValidacionIngresos: React.FC = () => {
                   Exportar (Excel)
                 </IonButton>
 
-                {isFetching && <span className="spinner-border"></span>}
+                {isFetching && (
+                  <span className="spinner-border ml-2 mt-2"></span>
+                )}
 
                 <div className="float-right">
                   <IonButton
@@ -221,17 +238,13 @@ const ValidacionIngresos: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
-                      {validaciones.length === 0 ? (
-                        <IonCard className="m-0 mb-4 card-slide w-100">
-                          <IonCardContent className="card-content-slide">
-                            <div className="my-2 text-center">
-                              Sin resultados
-                            </div>
-                          </IonCardContent>
-                        </IonCard>
+                      {data.length === 0 ? (
+                        <tr>
+                          <td colSpan={6}>Sin registro para mostrar</td>
+                        </tr>
                       ) : (
-                        validaciones.map((item: any) => (
-                          <tr key={item.id}>
+                        data.map((item: any) => (
+                          <tr key={item.idusuario}>
                             <td>{item.nombre}</td>
                             <td className="text-center">
                               {item.documento}
@@ -242,12 +255,12 @@ const ValidacionIngresos: React.FC = () => {
                             <td>
                               <span
                                 className={`${
-                                  item.estadoverificacion !== "Aprobado"
+                                  item.estado !== "Aprobado"
                                     ? "text-danger"
                                     : ""
                                 }`}
                               >
-                                {item.estadoverificacion}
+                                {item.estado}
                               </span>
                             </td>
                             <td>{item.tipoverificacion}</td>
@@ -257,7 +270,7 @@ const ValidacionIngresos: React.FC = () => {
                                   item.imagen_verificacion !== "" && (
                                     <button
                                       onClick={() => {
-                                        verImagenDocumento(
+                                        handleVerImagen(
                                           item.idusuario,
                                           item.idpaciente,
                                           item.imagen_documento,
@@ -283,35 +296,33 @@ const ValidacionIngresos: React.FC = () => {
                               <div className="d-flex justify-content-center">
                                 <button
                                   onClick={() => {
-                                    actualizarValidacion(item.id, 1);
+                                    handleAprobar(
+                                      item.iddocumento,
+                                      item.idpaciente,
+                                      item.idusuario
+                                    );
                                   }}
                                   className="btn btn-delete-validacion p-0 mr-2"
-                                  disabled={item.isDeleting}
                                 >
-                                  {item.isDeleting ? (
-                                    <span className="spinner-border spinner-border-sm"></span>
-                                  ) : (
-                                    <FontAwesomeIcon
-                                      icon={faCircleCheck}
-                                      className="float-right fs-18 text-success cursor-pointer"
-                                    />
-                                  )}
+                                  <FontAwesomeIcon
+                                    icon={faCircleCheck}
+                                    className="float-right fs-18 text-success cursor-pointer"
+                                  />
                                 </button>
                                 <button
                                   onClick={() => {
-                                    actualizarValidacion(item.id, 2);
+                                    handleRechazar(
+                                      item.iddocumento,
+                                      item.idpaciente,
+                                      item.idusuario
+                                    );
                                   }}
                                   className="btn btn-delete-validacion p-0"
-                                  disabled={item.isDeleting}
                                 >
-                                  {item.isDeleting ? (
-                                    <span className="spinner-border spinner-border-sm"></span>
-                                  ) : (
-                                    <FontAwesomeIcon
-                                      icon={faCircleXmark}
-                                      className="float-right fs-18 text-danger cursor-pointer"
-                                    />
-                                  )}
+                                  <FontAwesomeIcon
+                                    icon={faCircleXmark}
+                                    className="float-right fs-18 text-danger cursor-pointer"
+                                  />
                                 </button>
                               </div>
                             </td>
@@ -325,47 +336,15 @@ const ValidacionIngresos: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
-        <IonModal isOpen={modal}>
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle className="p-3">Documento de identidad</IonTitle>
-              <IonButtons slot="end">
-                <IonButton onClick={() => setModal(!modal)}>Cerrar</IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="text-center">
-            <IonRow>
-              <IonCol size="5" className="px-3">
-                <img
-                  src={img.foto}
-                  alt="Documento de identidad"
-                  className="rounded mb-3"
-                  width="200px"
-                />
-              </IonCol>
-              <IonCol size="5" className="px-3">
-                <img
-                  src={img.documento}
-                  alt="Documento de identidad"
-                  className="rounded mb-3"
-                  width="200px"
-                />
-              </IonCol>
-            </IonRow>
-          </IonContent>
-        </IonModal>
-        <IonToast
-          isOpen={notificacion.estado}
-          onDidDismiss={() =>
-            setNotificacion({ ...notificacion, estado: false })
-          }
-          message={notificacion.msg}
-          duration={500}
-        />
       </IonContent>
+      <IonToast
+        isOpen={notificacion.estado}
+        onDidDismiss={() => setNotificacion({ ...notificacion, estado: false })}
+        message={notificacion.msg}
+        duration={500}
+      />
     </IonPage>
   );
 };
 
-export default ValidacionIngresos;
+export default CuentasValidar;

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   IonContent,
   IonPage,
@@ -5,19 +6,24 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonToast,
 } from "@ionic/react";
-import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider, signOutWithGoogle } from "../../firebase";
-import { authentication } from "../../servicios";
+import { auth, provider } from "../../firebase";
+import { postAuthentication } from "../../servicios/autenticacion";
+import { CONFIGNOTIFICACION } from "../../helpers";
 import { doLogin } from "../../store/action/aut";
 import "./registros.css";
 
 const Registros: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [notificacion, setNotificacion] = useState({
+    msg: "",
+    estado: false,
+  });
 
   const handleLogin = (event: any) => {
     history.push("./login");
@@ -30,25 +36,17 @@ const Registros: React.FC = () => {
         let correo: any = result.user.email;
         formDa.append("op", "doLoginWithGoogle");
         formDa.append("correo", correo);
-        authentication(formDa).then(function (response) {
+        postAuthentication(formDa).then(function (response) {
           const { data, status } = response;
           if (status === 200) {
             if (data.rsp === 1) {
-              let sesionGoogle = {
-                nombre: result.user.displayName,
-                correo: result.user.email,
-                imagen: result.user.photoURL,
-              };
-              if (data.condiciones === "no") {
-                const sesionServer = data.data;
-                const conector = { ...sesionGoogle, ...sesionServer };
-                dispatch(doLogin(conector));
-                history.push("/registro");
-              } else {
-                dispatch(doLogin(data.data));
-                history.push("/app");
-                console.log("ingresa");
-              }
+              dispatch(doLogin(data.item));
+              history.push("/app");
+            } else {
+              setNotificacion({
+                msg: data.msg,
+                estado: false,
+              });
             }
           }
         });
@@ -62,10 +60,6 @@ const Registros: React.FC = () => {
         // El tipo AuthCredential que se utilizó.
         console.warn({ errorCode, errorMessage, email });
       });
-  };
-
-  const handleSignInWithPhone = () => {
-    signOutWithGoogle();
   };
 
   return (
@@ -131,21 +125,7 @@ const Registros: React.FC = () => {
                       width={26}
                     />
                   </IonButton>
-                  <IonButton
-                    className="button-central-deg fs-14 font-w100"
-                    expand="block"
-                    type="submit"
-                    fill="clear"
-                    onClick={handleSignInWithPhone}
-                  >
-                    Ingresa con tu n&uacute;mero tel&eacute;fonico
-                    <img
-                      src="./images/telefono-login.svg"
-                      alt="imagen"
-                      className="ml-2"
-                      width={26}
-                    />
-                  </IonButton>
+
                   <p
                     className="mt-4 fs-14 text-info cursor-pointer"
                     onClick={handleLogin}
@@ -158,6 +138,12 @@ const Registros: React.FC = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
+      <IonToast
+        isOpen={notificacion.estado}
+        onDidDismiss={() => setNotificacion({ ...notificacion, estado: false })}
+        message={notificacion.msg}
+        duration={CONFIGNOTIFICACION.duration}
+      />
     </IonPage>
   );
 };

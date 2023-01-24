@@ -1,18 +1,9 @@
 import { useField } from "formik";
-import styled from "@emotion/styled";
-import Select from 'react-select';
 
-// Styled components ....
-const StyledSelect = styled.select`
-  color: var(--blue);
-`;
-
-
-const MySelect = ({ label, ...props }) => {
+export const FieldSelect = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input> and alse replace ErrorMessage entirely.
-  const [field, meta] = useField(props);
-  
   return (
     <>
       <label htmlFor={props.name}>{label}</label>
@@ -28,4 +19,3 @@ const MySelect = ({ label, ...props }) => {
     </>
   );
 };
-export default MySelect;

@@ -2,13 +2,13 @@ import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonRouterOutlet, IonTabBar, IonTabs } from "@ionic/react";
 import {
-  Cuentas,
   Home,
   Niveles,
   Nivel,
   Usuarios,
-  Usuario,
-  ValidacionIngresos,
+  Usuari,
+  Afiliados,
+  CuentasValidar,
 } from "../pages";
 import "../style/tema.css";
 
@@ -17,8 +17,8 @@ const RutasPrivadas: React.FC = () => {
     <>
       <IonTabs>
         <IonRouterOutlet id="navApp">
-          <Route exact path="/app/cuentas">
-            <Cuentas />
+          <Route exact path="/app/validacion-cuentas">
+            <CuentasValidar />
           </Route>
           <Route exact path="/app/home">
             <Home />
@@ -33,13 +33,13 @@ const RutasPrivadas: React.FC = () => {
             <Usuarios />
           </Route>
           <Route exact path="/app/usuario/:id">
-            <Usuario />
+            <Usuari />
           </Route>
-          <Route exact path="/app/validacion-ingresos">
-            <ValidacionIngresos />
+          <Route exact path="/app/afiliados">
+            <Afiliados />
           </Route>
           <Route exact path="/app">
-            <Redirect to="/app/cuentas" />
+            <Redirect to="/app/home" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom" className="d-none"></IonTabBar>

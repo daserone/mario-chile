@@ -17,18 +17,20 @@ import {
 } from "@ionic/react";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "./afiliados.css";
-import MyTextInput from "../usuarios/MyTextInput";
-import MySelect from "../usuarios/MySelect";
 import { Formik, Form } from "formik";
-import { advancedSchema } from "../usuarios/validaciones.js";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createAfiliado, getAfiliadoById, updateAfiliado } from "../../api/afiliadosApi";
-
+import { advancedSchema } from "../usuarios/validaciones.js";
+import {
+  createAfiliado,
+  getAfiliadoById,
+  updateAfiliado,
+} from "../../api/afiliadosApi";
+import { FieldSelect, FieldCheckbox, FieldText } from "../../components";
+import "./afiliados.css";
 const Afiliado: React.FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
-  
+
   const user = useSelector((state: any) => state.reducerAuth.user);
   const [state, setState] = useState({
     id: "",
@@ -44,14 +46,15 @@ const Afiliado: React.FC = () => {
     estatus: state.estatus || "",
   };
 
-  const {
-    data: afiliado
-  } = useQuery(["afiliado", { id }], (id) =>
-    getAfiliadoById(id), {
+  const { data: afiliado } = useQuery(
+    ["afiliado", { id }],
+    (id) => getAfiliadoById(id),
+    {
       onSuccess: (res) => {
-        setState(res.data); 
+        setState(res.data);
+      },
     }
-  });
+  );
 
   const handelNotificaciones = () => {
     history.push("/app/notificaciones");
@@ -78,9 +81,11 @@ const Afiliado: React.FC = () => {
   const addAfiliadoMutation = useMutation({
     mutationFn: createAfiliado,
     onSuccess: (afiliado, variables) => {
-      variables = {...variables, id: afiliado.data.id};
-      if(queryClient.getQueryData( ['afiliados'])){
-        queryClient.setQueryData( ['afiliados'], (prevAfiliados: any) => prevAfiliados.concat(variables) );
+      variables = { ...variables, id: afiliado.data.id };
+      if (queryClient.getQueryData(["afiliados"])) {
+        queryClient.setQueryData(["afiliados"], (prevAfiliados: any) =>
+          prevAfiliados.concat(variables)
+        );
       }
       setNotificacion({
         msg: "Afiliado agregado exitosamente",
@@ -92,9 +97,9 @@ const Afiliado: React.FC = () => {
   const updateAfiliadoMutation = useMutation({
     mutationFn: updateAfiliado,
     onSuccess: () => {
-      if(queryClient.getQueryData( ['afiliados'])){
-        queryClient.invalidateQueries( ['afiliados'] );
-      }      
+      if (queryClient.getQueryData(["afiliados"])) {
+        queryClient.invalidateQueries(["afiliados"]);
+      }
       setNotificacion({
         msg: "Afiliado actualizado exitosamente",
         estado: true,
@@ -107,25 +112,21 @@ const Afiliado: React.FC = () => {
     setSubmitting: any,
     resetForm: Function
   ) => {
-    {/*e.preventDefault();
+    {
+      /*e.preventDefault();
       const formData = new FormData(e.target);
       const afiliado = Object.fromEntries(formData);
-    */}
-    addAfiliadoMutation.mutate(
-      afiliado,
-      {
-        onSuccess: () => {
-          resetForm({});
-          setSubmitting(false);
-        }
-      }
-    );
+    */
+    }
+    addAfiliadoMutation.mutate(afiliado, {
+      onSuccess: () => {
+        resetForm({});
+        setSubmitting(false);
+      },
+    });
   };
 
-  const afiliadoActualizar = (
-    values: any,
-    setSubmitting: any
-  ) => {
+  const afiliadoActualizar = (values: any, setSubmitting: any) => {
     updateAfiliadoMutation.mutate({
       ...values,
       id: id,
@@ -194,7 +195,6 @@ const Afiliado: React.FC = () => {
 
           <IonRow className="mt-0">
             <IonCol size="2" className="pl-0 pr-3">
-
               <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
                 <IonItem
                   lines="none"
@@ -287,7 +287,11 @@ const Afiliado: React.FC = () => {
                     validationSchema={advancedSchema}
                     onSubmit={(values, actions) => {
                       if (isAddMode === "nuevo") {
-                        afiliadoAgregar(values, actions.setSubmitting, actions.resetForm);
+                        afiliadoAgregar(
+                          values,
+                          actions.setSubmitting,
+                          actions.resetForm
+                        );
                       } else {
                         afiliadoActualizar(values, actions.setSubmitting);
                       }
@@ -301,21 +305,23 @@ const Afiliado: React.FC = () => {
                       return (
                         <Form>
                           <h2>
-                            {isAddMode === "nuevo" ? "Agregar Afiliado" : "Editar Afiliado"}
+                            {isAddMode === "nuevo"
+                              ? "Agregar Afiliado"
+                              : "Editar Afiliado"}
                           </h2>
-                          <MyTextInput label="Nombre" name="nombre" type="text" />
+                          <FieldText label="Nombre" name="nombre" type="text" />
 
-                          <MyTextInput
+                          <FieldText
                             label="Descripción"
                             name="descripcion"
                             type="text"
                           />
 
-                          <MySelect label="Estatus" name="estatus">
+                          <FieldSelect label="Estatus" name="estatus">
                             <option value="">Seleccione</option>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
-                          </MySelect>
+                          </FieldSelect>
 
                           <div className="w-100 text-center mt-3">
                             <IonButton
@@ -347,7 +353,6 @@ const Afiliado: React.FC = () => {
               </IonCard>
             </IonCol>
           </IonRow>
-          
         </IonGrid>
         <IonToast
           isOpen={notificacion.estado}

@@ -23,15 +23,7 @@ export const NavLateral: React.FC = () => {
   };
 
   const handleLink = (url: string) => {
-    if (url === "/app/validacion-ingresos") {
-      history.push("/app/validacion-ingresos");
-    }
-    if (url === "/app/niveles") {
-      history.push("/app/niveles");
-    }
-    if (url === "/app/usuarios") {
-      history.push("/app/usuarios");
-    }
+    history.push(url);
   };
 
   let rutas = [
@@ -64,6 +56,11 @@ export const NavLateral: React.FC = () => {
       img: "./images/configuracion.svg",
       nombre: "Usuarios",
       ruta: "/app/usuarios",
+    },
+    {
+      img: "./images/configuracion.svg",
+      nombre: "Validacion cuentas",
+      ruta: "/app/validacion-cuentas",
     },
   ];
 

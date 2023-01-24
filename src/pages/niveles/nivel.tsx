@@ -15,8 +15,7 @@ import { Formik, Form } from "formik";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { NavLateral, HeaderInterior } from "../../components";
 import { advancedSchema } from "../usuarios/validaciones.js";
-import MyTextInput from "../usuarios/MyTextInput";
-import MySelect from "../usuarios/MySelect";
+import { FieldSelect, FieldText } from "../../components";
 import { createNivel, getNivelById, updateNivel } from "../../api/nivelesApi";
 import "./niveles.css";
 const Nivel: React.FC = () => {
@@ -135,23 +134,19 @@ const Nivel: React.FC = () => {
                           <h2>
                             {id === "nuevo" ? "Agregar Nivel" : "Editar Nivel"}
                           </h2>
-                          <MyTextInput
-                            label="Nombre"
-                            name="nombre"
-                            type="text"
-                          />
+                          <FieldText label="Nombre" name="nombre" type="text" />
 
-                          <MyTextInput
+                          <FieldText
                             label="Descripción"
                             name="descripcion"
                             type="text"
                           />
 
-                          <MySelect label="Estatus" name="estatus">
+                          <FieldSelect label="Estatus" name="estatus">
                             <option value="">Seleccione</option>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
-                          </MySelect>
+                          </FieldSelect>
 
                           <div className="w-100 text-center mt-3">
                             <IonButton
