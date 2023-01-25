@@ -10,11 +10,6 @@ import {
   IonImg,
   IonButton,
   IonToast,
-  IonModal,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
 } from "@ionic/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -25,12 +20,12 @@ import {
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { NavLateral, HeaderInterior } from "../../components";
 import {
-  getValidacionesCuenta,
-  updateValidacionCuentaAprobar,
-  updateValidacionCuentaRechazar,
-} from "../../servicios/validaciones";
+  getValidacionesDependiente,
+  updateValidacionDependienteAprobar,
+  updateValidacionDependienteRechazar,
+} from "../../servicios/dependientes";
 import { URLPERFIL } from "../../servicios";
-const CuentasValidar = () => {
+const DependientesValidar = () => {
   const [modal, setModal] = useState<boolean>(false);
   const [img, setImg] = useState<any>({
     foto: "",
@@ -44,15 +39,15 @@ const CuentasValidar = () => {
   const queryClient = useQueryClient();
 
   const { data, error, isLoading, isFetching } = useQuery({
-    queryKey: ["validacion-cuentas"],
-    queryFn: getValidacionesCuenta,
+    queryKey: ["validacion-dependientes"],
+    queryFn: getValidacionesDependiente,
   });
 
   const cuentaAprobarMutation = useMutation({
-    mutationFn: updateValidacionCuentaAprobar,
+    mutationFn: updateValidacionDependienteAprobar,
     onSuccess: (data) => {
-      if (queryClient.getQueryData(["validacion-cuentas"])) {
-        queryClient.invalidateQueries(["validacion-cuentas"]);
+      if (queryClient.getQueryData(["validacion-dependientes"])) {
+        queryClient.invalidateQueries(["validacion-dependientes"]);
       }
       setNotificacion({
         msg: data.data.msg,
@@ -62,10 +57,10 @@ const CuentasValidar = () => {
   });
 
   const cuentaRechazarMutation = useMutation({
-    mutationFn: updateValidacionCuentaRechazar,
+    mutationFn: updateValidacionDependienteRechazar,
     onSuccess: (data) => {
-      if (queryClient.getQueryData(["validacion-cuentas"])) {
-        queryClient.invalidateQueries(["validacion-cuentas"]);
+      if (queryClient.getQueryData(["validacion-dependientes"])) {
+        queryClient.invalidateQueries(["validacion-dependientes"]);
       }
       setNotificacion({
         msg: data.data.msg,
@@ -77,26 +72,27 @@ const CuentasValidar = () => {
   const handleAprobar = (
     iddocumento: string,
     idpaciente: string,
-    idusuario: string
+    idfamiliar: string
   ) => {
     const formData = new FormData();
-    formData.append("op", "cuentaAprobar");
+    formData.append("op", "dependienteAprobar");
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
-    formData.append("idusuario", idusuario);
+    formData.append("idfamiliar", idfamiliar);
+    console.log({ iddocumento, idpaciente, idfamiliar });
     cuentaAprobarMutation.mutate(formData);
   };
 
   const handleRechazar = (
     iddocumento: string,
     idpaciente: string,
-    idusuario: string
+    idfamiliar: string
   ) => {
     const formData = new FormData();
-    formData.append("op", "cuentaRechazar");
+    formData.append("op", "dependienteRechazar");
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
-    formData.append("idusuario", idusuario);
+    formData.append("idfamiliar", idfamiliar);
     cuentaRechazarMutation.mutate(formData);
   };
 
@@ -114,6 +110,7 @@ const CuentasValidar = () => {
     let documento = `${URL}/${imagenVerificacion}`;
 
     setImg({ foto: foto, documento: documento });
+    console.log({ foto, documento });
   };
 
   if (isLoading) {
@@ -172,6 +169,24 @@ const CuentasValidar = () => {
     );
   }
 
+  /*
+
+nombre
+tipodocumento
+documento
+parentesco
+principal
+
+estadodocumento
+estadofamiliar
+tipoverificacion
+
+iddocumento
+idfamiliar
+idpaciente
+
+*/
+
   return (
     <IonPage className="fondo">
       <IonContent fullscreen>
@@ -228,7 +243,10 @@ const CuentasValidar = () => {
                         <th scope="col" className="text-center">
                           Documento
                         </th>
-                        <th scope="col">Estado</th>
+                        <th scope="col">Parentesco</th>
+                        <th scope="col">Principal</th>
+                        <th scope="col">Estado documento</th>
+                        <th scope="col">Estado familiar</th>
                         <th scope="col">Verificación</th>
                         <th scope="col" className="text-center">
                           Imágenes
@@ -245,7 +263,7 @@ const CuentasValidar = () => {
                         </tr>
                       ) : (
                         data.map((item: any) => (
-                          <tr key={item.idusuario}>
+                          <tr key={item.idpaciente}>
                             <td>{item.nombre}</td>
                             <td className="text-center">
                               {item.documento}
@@ -253,15 +271,28 @@ const CuentasValidar = () => {
                                 {item.tipodocumento}
                               </span>
                             </td>
+                            <td>{item.parentesco}</td>
+                            <td>{item.principal}</td>
                             <td>
                               <span
                                 className={`${
-                                  item.estado !== "Aprobado"
+                                  item.estadodocumento !== "Aprobado"
                                     ? "text-danger"
                                     : ""
                                 }`}
                               >
-                                {item.estado}
+                                {item.estadodocumento}
+                              </span>
+                            </td>
+                            <td>
+                              <span
+                                className={`${
+                                  item.estadofamiliar !== "Aprobado"
+                                    ? "text-danger"
+                                    : ""
+                                }`}
+                              >
+                                {item.estadofamiliar}
                               </span>
                             </td>
                             <td>{item.tipoverificacion}</td>
@@ -300,7 +331,7 @@ const CuentasValidar = () => {
                                     handleAprobar(
                                       item.iddocumento,
                                       item.idpaciente,
-                                      item.idusuario
+                                      item.idfamiliar
                                     );
                                   }}
                                   className="btn btn-delete-validacion p-0 mr-2"
@@ -315,7 +346,7 @@ const CuentasValidar = () => {
                                     handleRechazar(
                                       item.iddocumento,
                                       item.idpaciente,
-                                      item.idusuario
+                                      item.idfamiliar
                                     );
                                   }}
                                   className="btn btn-delete-validacion p-0"
@@ -338,36 +369,6 @@ const CuentasValidar = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-      <IonModal isOpen={modal}>
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle className="p-3">Documento de identidad</IonTitle>
-            <IonButtons slot="end">
-              <IonButton onClick={() => setModal(!modal)}>Cerrar</IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent className="text-center">
-          <IonRow>
-            <IonCol size="5" className="px-3">
-              <img
-                src={img.foto}
-                alt="Documento de identidad"
-                className="rounded mb-3"
-                width="300px"
-              />
-            </IonCol>
-            <IonCol size="5" className="px-3">
-              <img
-                src={img.documento}
-                alt="Documento de identidad"
-                className="rounded mb-3"
-                width="300px"
-              />
-            </IonCol>
-          </IonRow>
-        </IonContent>
-      </IonModal>
       <IonToast
         isOpen={notificacion.estado}
         onDidDismiss={() => setNotificacion({ ...notificacion, estado: false })}
@@ -378,4 +379,4 @@ const CuentasValidar = () => {
   );
 };
 
-export default CuentasValidar;
+export default DependientesValidar;

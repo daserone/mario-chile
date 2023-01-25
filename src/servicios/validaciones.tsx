@@ -8,20 +8,21 @@ export const getValidacionesCuenta = async () => {
 };
 
 export const getValidacionesCuentaId = async (id: any) => {
-  const res = await URLBASE.get(`controller/validaciones?op=cuentaId&id=${id}`);
+  const res = await URLBASE.get(
+    `controller/validaciones?op=cuentaId&id=${id},`,
+    {
+      responseType: "json",
+    }
+  );
   return res.data;
 };
 
-export const createValidacion = (params: any) =>
-  URLBASE.post("?op=addValidacion", params);
+export const updateValidacionCuentaAprobar = (params: any) =>
+  URLBASE.post("/controller/validaciones", params, {
+    responseType: "json",
+  });
 
-export const updateValidacion = (params: any) =>
-  URLBASE.put(`?op=editValidacion&id=${params.id}`, params);
-
-export const aprobarValidacion = (params: any) =>
-  URLBASE.put(`?op=aprobarValidacion&id=${params.id}`, params);
-
-export const deleteValidacion = (id: any) =>
-  URLBASE.delete(`?op=deleteValidacion&id=${id}`);
-
-export default URLBASE;
+export const updateValidacionCuentaRechazar = (params: any) =>
+  URLBASE.post("/controller/validaciones", params, {
+    responseType: "json",
+  });

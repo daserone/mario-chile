@@ -1,2 +1,3 @@
 import CuentasValidar from "./cuentasValidar";
-export { CuentasValidar };
+import DependientesValidar from "./dependientesValidar";
+export { CuentasValidar, DependientesValidar };

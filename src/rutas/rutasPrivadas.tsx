@@ -9,6 +9,7 @@ import {
   Usuari,
   Afiliados,
   CuentasValidar,
+  DependientesValidar,
 } from "../pages";
 import "../style/tema.css";
 
@@ -17,11 +18,14 @@ const RutasPrivadas: React.FC = () => {
     <>
       <IonTabs>
         <IonRouterOutlet id="navApp">
+          <Route exact path="/app/home">
+            <Home />
+          </Route>
           <Route exact path="/app/validacion-cuentas">
             <CuentasValidar />
           </Route>
-          <Route exact path="/app/home">
-            <Home />
+          <Route exact path="/app/validacion-dependientes">
+            <DependientesValidar />
           </Route>
           <Route exact path="/app/niveles">
             <Niveles />

@@ -31,56 +31,75 @@ export const NavLateral: React.FC = () => {
       img: "./images/afiliados-light.svg",
       nombre: "Mis pacientes",
       ruta: "/app/mis-pacientes",
+      estado: "inactivo",
     },
     {
       img: "./images/doctor-light.svg",
       nombre: "Perfil",
       ruta: "/app/perfil",
+      estado: "inactivo",
     },
     {
       img: "./images/configuracion.svg",
       nombre: "Validaciones",
       ruta: "/app/validacion-ingresos",
+      estado: "inactivo",
     },
     {
       img: "./images/configuracion.svg",
       nombre: "Soporte",
       ruta: "/app/soporte",
+      estado: "inactivo",
     },
     {
       img: "./images/configuracion.svg",
       nombre: "Niveles",
       ruta: "/app/niveles",
+      estado: "activo",
     },
     {
-      img: "./images/configuracion.svg",
+      img: "./images/cuenta-light.svg",
       nombre: "Usuarios",
       ruta: "/app/usuarios",
+      estado: "activo",
     },
     {
-      img: "./images/configuracion.svg",
-      nombre: "Validacion cuentas",
+      img: "./images/cuenta-light.svg",
+      nombre: "Cuentas",
       ruta: "/app/validacion-cuentas",
+      estado: "activo",
+    },
+    {
+      img: "./images/cuenta-light.svg",
+      nombre: "Dependientes",
+      ruta: "/app/validacion-dependientes",
+      estado: "activo",
     },
   ];
 
   return (
     <IonCol size="2" className="pl-0 pr-3">
       <div className="px-3 py-5 bg-info-alt border-menu menu-principal height-vh-content">
-        {rutas.map((item: any, index: number) => (
-          <IonItem
-            lines="none"
-            button
-            onClick={() => {
-              handleLink(item.ruta);
-            }}
-            className={`mb-3 ${item.ruta === pathname ? "active" : ""}`}
-            key={index}
-          >
-            <IonImg src={item.img} className="mr-2" style={{ width: "26px" }} />
-            <IonLabel>{item.nombre}</IonLabel>
-          </IonItem>
-        ))}
+        {rutas
+          .filter((item: any) => item.estado === "activo")
+          .map((item: any, index: number) => (
+            <IonItem
+              lines="none"
+              button
+              onClick={() => {
+                handleLink(item.ruta);
+              }}
+              className={`mb-3 ${item.ruta === pathname ? "active" : ""}`}
+              key={index}
+            >
+              <IonImg
+                src={item.img}
+                className="mr-2"
+                style={{ width: "26px" }}
+              />
+              <IonLabel>{item.nombre}</IonLabel>
+            </IonItem>
+          ))}
 
         <IonItem lines="none" button onClick={handleLogout} className="mb-3">
           <IonImg
