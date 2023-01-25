@@ -1,4 +1,4 @@
-import { URLBASE } from "./configuracion";
+import { URLBASE, URLBIENI } from "./configuracion";
 
 export const getValidacionesDependiente = async () => {
   const res = await URLBASE.get("controller/validaciones?op=dependientes", {
@@ -16,6 +16,17 @@ export const getValidacionDependienteId = async (id: any) => {
   );
   return res.data;
 };
+
+export const getImgDependiente = (idusuario: any, idpaciente: any) =>
+  URLBIENI.get("controller/pacienteback", {
+    params: {
+      op: "cargarImgParentesco",
+      idusuario: idusuario,
+      idpaciente: idpaciente,
+      imestamp: new Date().getTime(),
+    },
+    responseType: "json",
+  });
 
 export const updateValidacionDependienteAprobar = (params: any) =>
   URLBASE.post("/controller/validaciones", params, {

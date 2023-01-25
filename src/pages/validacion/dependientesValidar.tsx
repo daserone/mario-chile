@@ -10,6 +10,11 @@ import {
   IonImg,
   IonButton,
   IonToast,
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
 } from "@ionic/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -23,14 +28,12 @@ import {
   getValidacionesDependiente,
   updateValidacionDependienteAprobar,
   updateValidacionDependienteRechazar,
+  getImgDependiente,
 } from "../../servicios/dependientes";
-import { URLPERFIL } from "../../servicios";
+import { URLBIENIPERFIL } from "../../servicios/configuracion";
 const DependientesValidar = () => {
   const [modal, setModal] = useState<boolean>(false);
-  const [img, setImg] = useState<any>({
-    foto: "",
-    documento: "",
-  });
+  const [img, setImg] = useState<any>([]);
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
@@ -79,7 +82,6 @@ const DependientesValidar = () => {
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
     formData.append("idfamiliar", idfamiliar);
-    console.log({ iddocumento, idpaciente, idfamiliar });
     cuentaAprobarMutation.mutate(formData);
   };
 
@@ -96,21 +98,20 @@ const DependientesValidar = () => {
     cuentaRechazarMutation.mutate(formData);
   };
 
-  const handleVerImagen = (
-    idusuario: number,
-    idpaciente: number,
-    imagenDocumento: string,
-    imagenVerificacion: string
-  ) => {
+  const handleVerImagen = (idusuario: any, idpaciente: any) => {
     setModal(!modal);
 
-    let URL = `${URLPERFIL}${idusuario}/reconocimientos/${idpaciente}`;
+    let URL = `${URLBIENIPERFIL}${idusuario}/parentesco/${idpaciente}`;
 
-    let foto = `${URL}/${imagenDocumento}`;
-    let documento = `${URL}/${imagenVerificacion}`;
-
-    setImg({ foto: foto, documento: documento });
-    console.log({ foto, documento });
+    getImgDependiente(idusuario, idpaciente).then((rsp) => {
+      const { data, status } = rsp;
+      if (status === 200) {
+        if (data.data.length > 0) {
+          const nuevo = data.data.map((item: string) => `${URL}/${item}`);
+          setImg(nuevo);
+        }
+      }
+    });
   };
 
   if (isLoading) {
@@ -168,25 +169,7 @@ const DependientesValidar = () => {
       </IonPage>
     );
   }
-
-  /*
-
-nombre
-tipodocumento
-documento
-parentesco
-principal
-
-estadodocumento
-estadofamiliar
-tipoverificacion
-
-iddocumento
-idfamiliar
-idpaciente
-
-*/
-
+  console.log(img);
   return (
     <IonPage className="fondo">
       <IonContent fullscreen>
@@ -304,9 +287,7 @@ idpaciente
                                       onClick={() => {
                                         handleVerImagen(
                                           item.idusuario,
-                                          item.idpaciente,
-                                          item.imagen_documento,
-                                          item.imagen_verificacion
+                                          item.idpaciente
                                         );
                                       }}
                                       className="btn btn-delete-validacion p-0 mr-2"
@@ -369,6 +350,32 @@ idpaciente
           </IonRow>
         </IonGrid>
       </IonContent>
+      <IonModal isOpen={modal}>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle className="p-3">Documento de identidad</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={() => setModal(!modal)}>Cerrar</IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="text-center">
+          <IonRow>
+            {img.length === 0
+              ? null
+              : img.map((item: string, index: number) => (
+                  <IonCol size="5" className="px-3" key={index}>
+                    <img
+                      src={item}
+                      alt="Documento de identidad"
+                      className="rounded mb-3"
+                      width="300px"
+                    />
+                  </IonCol>
+                ))}
+          </IonRow>
+        </IonContent>
+      </IonModal>
       <IonToast
         isOpen={notificacion.estado}
         onDidDismiss={() => setNotificacion({ ...notificacion, estado: false })}
