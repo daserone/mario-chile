@@ -1,16 +1,60 @@
-import image_1 from "../asset/css.png";
-import image_2 from "../asset/pacifica-salud.png";
-import image_3 from "../asset/radimagen.png";
-import image_4 from "../asset/fernandez-laboratorio.png";
+//import image_1 from "../asset/css.png";
 
-export const afiliados = [
+export const dataMenu = [
   {
-    id: "1",
-    image: image_1,
-    name: "CSS - Policlínica Roberto Ramírez de Diego",
+    img: "./images/afiliados-light.svg",
+    nombre: "Mis pacientes",
+    ruta: "/app/mis-pacientes",
+    estado: "inactivo",
+    rol: [1],
   },
-  { id: "2", image: image_1, name: "CSS - Hospital Nelson Collado" },
-  { id: "3", image: image_2, name: "Hospital Pacífica Salud" },
-  { id: "4", image: image_3, name: "Radimagen" },
-  { id: "5", image: image_4, name: "Laboratorio Fernández" },
+  {
+    img: "./images/afiliados-light.svg",
+    nombre: "Pacientes",
+    ruta: "/app/pacientes",
+    estado: "activo",
+    rol: [1, 2],
+  },
+  {
+    img: "./images/doctor-light.svg",
+    nombre: "Perfil",
+    ruta: "/app/perfil",
+    estado: "inactivo",
+    rol: [1, 2],
+  },
+  {
+    img: "./images/configuracion.svg",
+    nombre: "Soporte",
+    ruta: "/app/soporte",
+    estado: "inactivo",
+    rol: [1, 2],
+  },
+  {
+    img: "./images/configuracion.svg",
+    nombre: "Niveles",
+    ruta: "/app/niveles",
+    estado: "activo",
+    rol: [1, 2],
+  },
+  {
+    img: "./images/cuenta-light.svg",
+    nombre: "Usuarios",
+    ruta: "/app/usuarios",
+    estado: "activo",
+    rol: [1],
+  },
+  {
+    img: "./images/cuenta-light.svg",
+    nombre: "Cuentas",
+    ruta: "/app/validacion-cuentas",
+    estado: "activo",
+    rol: [1, 2],
+  },
+  {
+    img: "./images/cuenta-light.svg",
+    nombre: "Dependientes",
+    ruta: "/app/validacion-dependientes",
+    estado: "activo",
+    rol: [1, 2],
+  },
 ];

@@ -36,3 +36,13 @@ export const grupodiscapacidad = [
   { value: "5", label: "Visual" },
   { value: "6", label: "Visceral" },
 ];
+
+export const obtenerEstadoVerificacion = (id: any) => {
+  console.log(typeof id);
+  const map: any = {
+    1: "badge badge-primary", //aprobado
+    2: "badge badge-danger", //no aprobado
+    3: "badge badge-info", //en espera de aprobacion
+  };
+  return map[id] ?? "N/A";
+};

@@ -1,2 +1,2 @@
-import { afiliados } from "./data";
-export { afiliados };
+import { dataMenu } from "./data";
+export { dataMenu };

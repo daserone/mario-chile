@@ -23,7 +23,8 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { NavLateral, HeaderInterior } from "../../components";
+import { useHistory } from "react-router";
+import { NavLateral, HeaderInterior, InfoPeticion } from "../../components";
 import {
   getValidacionesDependiente,
   updateValidacionDependienteAprobar,
@@ -31,7 +32,9 @@ import {
   getImgDependiente,
 } from "../../servicios/dependientes";
 import { URLBIENIPERFIL } from "../../servicios/configuracion";
+
 const DependientesValidar = () => {
+  const history = useHistory();
   const [modal, setModal] = useState<boolean>(false);
   const [img, setImg] = useState<any>([]);
   const [notificacion, setNotificacion] = useState({
@@ -113,63 +116,15 @@ const DependientesValidar = () => {
       }
     });
   };
-
+  //history
   if (isLoading) {
-    return (
-      <IonPage className="fondo">
-        <IonContent fullscreen className="bg-light">
-          <IonGrid className="bg-light">
-            <IonRow
-              className="pt-4 pb-4 mb-2 ion-justify-content-center"
-              style={{
-                height: "100vh",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <span className="spinner-border mb-4"></span>
-                <h1>Cargando....</h1>
-              </div>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
-      </IonPage>
-    );
+    return <InfoPeticion texto="Cargando..." />;
   }
 
   if (error) {
-    return (
-      <IonPage className="fondo">
-        <IonContent fullscreen className="bg-light">
-          <IonGrid className="bg-light">
-            <IonRow
-              className="pt-4 pb-4 mb-2 ion-justify-content-center"
-              style={{
-                height: "100vh",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <span className="spinner-border mb-4"></span>
-                <h1>Error al realizar la solicitud....</h1>
-              </div>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
-      </IonPage>
-    );
+    return <InfoPeticion texto="Cargando..." />;
   }
-  console.log(img);
+
   return (
     <IonPage className="fondo">
       <IonContent fullscreen>

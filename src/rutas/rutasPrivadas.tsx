@@ -10,6 +10,8 @@ import {
   Afiliados,
   CuentasValidar,
   DependientesValidar,
+  Paciente,
+  Pacientes,
 } from "../pages";
 import "../style/tema.css";
 
@@ -41,6 +43,12 @@ const RutasPrivadas: React.FC = () => {
           </Route>
           <Route exact path="/app/afiliados">
             <Afiliados />
+          </Route>
+          <Route exact path="/app/pacientes">
+            <Pacientes />
+          </Route>
+          <Route exact path="/app/paciente/:id">
+            <Paciente />
           </Route>
           <Route exact path="/app">
             <Redirect to="/app/home" />

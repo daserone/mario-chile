@@ -2,9 +2,9 @@ import { HeaderInterior, Header, NavLateral } from "./layout";
 import { Boxfull, BoxAfiliado, BoxfullGeneral } from "./boxfull";
 import { Action } from "./button";
 import { CustomField, FieldSelect, FieldCheckbox, FieldText } from "./field";
-import { Info, InfoDoctor, InfoPaciente, InfoConsulta } from "./info";
+import { Info, InfoPeticion } from "./info";
 import { Loading } from "./loading";
-
+import { Datatable } from "./datatable";
 export {
   HeaderInterior,
   Header,
@@ -14,13 +14,13 @@ export {
   BoxfullGeneral,
   Action,
   Info,
-  InfoConsulta,
-  InfoDoctor,
-  InfoPaciente,
+  InfoPeticion,
   Loading,
   //FIELD
   CustomField,
   FieldSelect,
   FieldCheckbox,
   FieldText,
+  //DATATABLE
+  Datatable,
 };

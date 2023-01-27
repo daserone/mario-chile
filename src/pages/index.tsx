@@ -5,6 +5,7 @@ import { Usuarios, Usuari } from "./usuarios";
 import { Afiliados } from "./afiliados";
 import { Registro, Registros } from "./registro";
 import { Soporte } from "./soporte";
+import { Paciente, Pacientes } from "./pacientes";
 import { CuentasValidar, DependientesValidar } from "./validacion";
 export {
   Login,
@@ -19,4 +20,6 @@ export {
   Afiliados,
   CuentasValidar,
   DependientesValidar,
+  Paciente,
+  Pacientes,
 };

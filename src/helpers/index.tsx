@@ -22,6 +22,7 @@ import {
   meses,
   grupoSanguineos,
   grupodiscapacidad,
+  obtenerEstadoVerificacion,
 } from "./tablasHash";
 import {
   NOTAB,
@@ -60,7 +61,7 @@ export {
   tablaFrecuencia,
   grupoSanguineos,
   grupodiscapacidad,
-
+  obtenerEstadoVerificacion,
   /*-CONSTANTES-----------------*/
   INITIALPERFIL,
   INITIALCREARPERFIL,
