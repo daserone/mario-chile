@@ -66,7 +66,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
               <IonCard className="m-0 card-slide shadow-full">
-                <IonCardContent className="card-content-slide height-vh-con-table">
+                <IonCardContent className="card-content-slide height-vh-con-table d-none">
                   <table className="table table-striped">
                     <thead className="text-gray">
                       <tr>

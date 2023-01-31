@@ -47,7 +47,7 @@ const RutasPrivadas: React.FC = () => {
           <Route exact path="/app/pacientes">
             <Pacientes />
           </Route>
-          <Route exact path="/app/paciente/:id">
+          <Route exact path="/app/paciente/:idu/:idp">
             <Paciente />
           </Route>
           <Route exact path="/app">

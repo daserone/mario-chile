@@ -17,6 +17,7 @@ import {
   IonButtons,
 } from "@ionic/react";
 import { useQuery } from "@tanstack/react-query";
+import { useHistory } from "react-router";
 import {
   NavLateral,
   HeaderInterior,
@@ -26,7 +27,18 @@ import {
 import { getPacientes } from "../../servicios/pacientes";
 import { URLBIENIPERFIL } from "../../servicios/configuracion";
 import { obtenerEstadoVerificacion } from "../../helpers";
+
+const errores = [
+  "Error guardado",
+  "Automatico-documento",
+  "Automatico-verificacion",
+  "Automatico-ambos",
+  "Manual-documento",
+  "Manual-verificacion",
+  "Manual-ambos",
+];
 const Pacientes = () => {
+  const history = useHistory();
   const [modal, setModal] = useState<boolean>(false);
   const [img, setImg] = useState<any>([]);
   const [page, setPage] = useState<number>(1);
@@ -37,7 +49,7 @@ const Pacientes = () => {
 
   const { data, error, isLoading, isFetching } = useQuery(
     ["pacientes", page],
-    () => getPacientes(page),
+    () => getPacientes(page, "0"),
     {
       keepPreviousData: true,
     }
@@ -88,8 +100,17 @@ const Pacientes = () => {
     {
       name: "Tipo de verificacion",
       grow: 1,
-      selector: (row: any) => row.tipoverificacion,
+      selector: (row: any) => (
+        <span
+          className={`${
+            errores.includes(row.tipoverificacion) ? "badge badge-danger" : ""
+          }`}
+        >
+          <b style={{ color: "#fffff" }}>{row.tipoverificacion}</b>
+        </span>
+      ),
     },
+
     {
       name: "Estado",
       grow: 1,
@@ -101,8 +122,10 @@ const Pacientes = () => {
     },
   ];
 
-  const handleDobleClic = (state: any) => {
-    console.log(state);
+  const handleDobleClic = (item: any) => {
+    if ("idusuario" in item && "idpaciente" in item) {
+      history.push(`/app/paciente/${item.idusuario}/${item.idpaciente}`);
+    }
   };
 
   if (isLoading) {
@@ -160,7 +183,7 @@ const Pacientes = () => {
                 </div>
               </div>
               <IonCard className="m-0 card-slide shadow-full">
-                <IonCardContent className="">
+                <IonCardContent className="card-content-slide height-vh-con-table">
                   <Datatable
                     title="Pacientes"
                     columnas={columnas}
@@ -172,69 +195,6 @@ const Pacientes = () => {
                   />
                 </IonCardContent>
               </IonCard>
-              {/*<IonCard className="m-0 card-slide shadow-full">
-                <IonCardContent className="card-content-slide height-vh-con-table">
-                  <table className="table table-striped">
-                    <thead className="text-gray">
-                      <tr>
-                        <th scope="col" className="text-center">
-                          Nombre
-                        </th>
-                        <th scope="col" className="text-center">
-                          Documento
-                        </th>
-                        <th scope="col" className="text-center">
-                          Perfil
-                        </th>
-                        <th scope="col" className="text-center">
-                          Fecha nacimiento
-                        </th>
-                        <th scope="col" className="text-center">
-                          Edad{" "}
-                        </th>
-                        <th scope="col" className="text-center">
-                          Teléfono
-                        </th>
-                        <th scope="col" className="text-center">
-                          Estado
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="fs-13 font-w500">
-                      {data.length === 0 ? (
-                        <tr>
-                          <td colSpan={6}>Sin registro para mostrar</td>
-                        </tr>
-                      ) : (
-                        data.map((item: any) => (
-                          <tr key={item.idpaciente}>
-                            <td>{item.nombre}</td>
-                            <td className="text-center">
-                              {item.documento}
-                              <span className="fs-12 text-info d-block">
-                                {item.tipodocumento}
-                              </span>
-                            </td>
-                            <td>{item.perfil}</td>
-                            <td>{item.fechanacimiento}</td>
-                            <td>
-                              <span>{item.edad}</span>
-                            </td>
-                            <td>
-                              <span>{item.telefono}</span>
-                            </td>
-                            <td>
-                              <div className="d-flex justify-content-center">
-                                {item.estado}
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </IonCardContent>
-                        </IonCard>*/}
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -276,3 +236,11 @@ const Pacientes = () => {
 };
 
 export default Pacientes;
+/*
+  BIENI APP
+  1)frontend:nada aun
+  2)backend:nada aun
+  BIENIWEB
+  1)frontend:acabo de subir cambios a esta rama
+  2)backend:en el servidor me da error
+  */

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   IonGrid,
   IonRow,
@@ -15,18 +15,34 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
+  IonItem,
+  IonThumbnail,
+  IonLabel,
 } from "@ionic/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAddressCard,
-  faCircleCheck,
-  faCircleXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { NavLateral, HeaderInterior, InfoPeticion } from "../../components";
-import { getPacienteId } from "../../servicios/pacientes";
+import { useParams } from "react-router";
+import { getPacientes, getPacienteId } from "../../servicios/pacientes";
 import { URLBIENIPERFIL } from "../../servicios/configuracion";
+const INITIAL = {
+  idparentesco: "",
+  perfil: "",
+  discapacidad: "",
+  documento: "",
+  edad: "",
+  fechanacimiento: "",
+  gruposangre: "",
+  imagen: "",
+  imagendocumento: "",
+  nombre: "",
+  numeroemergencia: "",
+  telefono: "",
+  tipodocumento: "",
+  tipoverificacion: "",
+  verificacioncorreo: "",
+};
 const Paciente = () => {
+  const { idu, idp }: any = useParams();
   const [modal, setModal] = useState<boolean>(false);
   const [img, setImg] = useState<any>([]);
   const [notificacion, setNotificacion] = useState({
@@ -34,30 +50,23 @@ const Paciente = () => {
     estado: false,
   });
 
-  const queryClient = useQueryClient();
+  const [paciente, setPaciente] = useState(INITIAL);
 
-  const id = "1";
-
-  const { data, error, isLoading, isFetching } = useQuery(
-    ["usuario"],
-    () => getPacienteId(id),
-    {
-      onSuccess(data) {},
-    }
-  );
-
-  /* const { error, isLoading } = useQuery(
-    ["usuario", id],
-    () => getUsuariosId(id),
+  const { error, isLoading, isFetching } = useQuery(
+    ["paciente"],
+    () => getPacienteId(idp, idu),
     {
       onSuccess: (res) => {
-        if (res.data) {
-          setForm(res.data[0]);
+        if (res.data.length > 0) {
+          const [item] = res.data;
+          setPaciente(item);
         }
       },
     }
-  );*/
+  );
 
+  const { data } = useQuery(["dependientes", idu], () => getPacientes(1, idu));
+  //select: (data) => data.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id),
   const handleVerImagen = (idusuario: any, idpaciente: any) => {
     setModal(!modal);
 
@@ -72,6 +81,27 @@ const Paciente = () => {
     return <InfoPeticion texto="Error" />;
   }
 
+  const FOTO = "";
+  /*
+discapacidad
+documento
+eda
+fechanacimiento
+gruposangre
+idparentesco
+imagen
+imagendocumento
+nombre
+numeroemergencia
+telefono
+tipodocumento
+tipoverificacion
+verificacioncorreo*/
+
+  console.log(data);
+  const pacientes: any =
+    []; /*data.filter((item: any) => item.perfil !== paciente.perfil);*/
+
   return (
     <IonPage className="fondo">
       <IonContent fullscreen>
@@ -79,48 +109,125 @@ const Paciente = () => {
           <HeaderInterior />
           <IonRow className="mt-0">
             <NavLateral />
-            <IonCol size="10" className="px-3">
+            {/*<IonCol size="10">
               <div className="pb-2">
-                <IonButton
-                  className="btn-outline text-info fs-12"
-                  fill="outline"
-                >
-                  <IonImg
-                    src={"./images/descargar.svg"}
-                    className="mr-2"
-                    style={{ width: "16px" }}
-                  />
-                  Exportar (Excel)
-                </IonButton>
-
                 {isFetching && (
                   <span className="spinner-border ml-2 mt-2"></span>
                 )}
-
-                <div className="float-right">
-                  <IonButton
-                    className="button-deg-gen fs-12 mr-2"
-                    fill="outline"
-                  >
-                    <IonImg
-                      src={"./images/filtrar.svg"}
-                      className="mr-2 filter-white"
-                      style={{ width: "16px" }}
-                    />
-                    Filtrar
-                  </IonButton>
-                  <IonButton className="button-deg-gen fs-12" fill="outline">
-                    <IonImg
-                      src={"./images/ordenar.svg"}
-                      className="mr-2 filter-white"
-                      style={{ width: "16px" }}
-                    />
-                    Ordenar
-                  </IonButton>
-                </div>
               </div>
+                </IonCol>*/}
+            <IonCol size="5" className="px-3">
               <IonCard className="m-0 card-slide shadow-full">
-                <IonCardContent className="card-content-slide height-vh-con-table"></IonCardContent>
+                <IonCardContent>
+                  <div className="p-perfil bg-banner-perfil border-radius-bottom">
+                    <IonToolbar>
+                      <IonTitle className="fs-20 font-w600 text-center">
+                        Paciente
+                        <span
+                          className="position-absolute mr-3"
+                          style={{ right: "0px" }}
+                        >
+                          <IonImg
+                            src={"./images/compartir-light.svg"}
+                            className="filter-white cursor-pointer"
+                          />
+                        </span>
+                      </IonTitle>
+                    </IonToolbar>
+                    <div className="mx-3 pb-2 text-white d-flex">
+                      <div className="">
+                        {FOTO !== "" && (
+                          <img
+                            src={FOTO}
+                            alt="imagen"
+                            className="imagen-perfil"
+                          />
+                        )}
+                      </div>
+
+                      <div className="w-100 ml-3 float-right d-grid">
+                        <p className="fs-16 font-w500 mb-1">
+                          {paciente?.nombre}
+                        </p>
+                        <div className="">
+                          <span className="fs-14 float-left">Edad:</span>
+                          <span className="fs-14 float-right">
+                            {paciente?.edad}{" "}
+                          </span>
+                        </div>
+                        <div className="">
+                          <span className="fs-14 float-left">
+                            Tipo de documento:
+                          </span>
+                          <span className="fs-14 float-right">
+                            {paciente?.tipodocumento}
+                          </span>
+                        </div>
+                        <div className="">
+                          <span className="fs-14 float-left">Documento:</span>
+                          <span className="fs-14 float-right">
+                            {paciente?.documento}
+                          </span>
+                        </div>
+                        <div className="pb-2 border-bottom">
+                          <span className="fs-14 float-left">
+                            Grupo Sangu&iacute;neo:
+                          </span>
+                          <span className="fs-14 float-right text-uppercase">
+                            {paciente?.gruposangre}
+                          </span>
+                        </div>
+                        <div className="pt-2">
+                          <span className="fs-12 float-left text-underline cursor-pointer">
+                            Ver ficha completa
+                          </span>
+                          <span className="fs-12 float-right text-underline cursor-pointer">
+                            Editar
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol size="5" className="px-3">
+              <IonCard className="m-0 card-slide shadow-full">
+                <IonCardContent>
+                  <div className="p-perfil bg-banner-perfil border-radius-bottom">
+                    <IonToolbar>
+                      <IonTitle className="fs-20 font-w600 text-center">
+                        Dependientes
+                        <span
+                          className="position-absolute mr-3"
+                          style={{ right: "0px" }}
+                        >
+                          <IonImg
+                            src={"./images/compartir-light.svg"}
+                            className="filter-white cursor-pointer"
+                          />
+                        </span>
+                      </IonTitle>
+                    </IonToolbar>
+                    <div className="mx-3 pb-2 text-white d-flex">
+                      {pacientes.length === 0 ? (
+                        <div>Este paciente no tiene dependientes</div>
+                      ) : (
+                        pacientes.map(() => (
+                          <IonItem>
+                            <IonThumbnail slot="start">
+                              <img
+                                alt="Silhouette of mountains"
+                                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                              />
+                            </IonThumbnail>
+                            <IonLabel>Item Thumbnail</IonLabel>
+                          </IonItem>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </IonCardContent>
               </IonCard>
             </IonCol>
           </IonRow>

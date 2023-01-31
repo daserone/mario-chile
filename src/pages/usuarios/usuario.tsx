@@ -19,6 +19,7 @@ import { NavLateral, HeaderInterior } from "../../components";
 import "./usuarios.css";
 const Usuario: React.FC = () => {
   const { id }: any = useParams();
+
   const [state, setState] = useState({
     id: "",
     descripcion: "",
