@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import {
   IonGrid,
   IonRow,
@@ -15,11 +15,8 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
-  IonItem,
-  IonThumbnail,
-  IonLabel,
 } from "@ionic/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { NavLateral, HeaderInterior, InfoPeticion } from "../../components";
 import { useParams } from "react-router";
 import { getPacientes, getPacienteId } from "../../servicios/pacientes";
@@ -52,7 +49,7 @@ const Paciente = () => {
 
   const [paciente, setPaciente] = useState(INITIAL);
 
-  const { error, isLoading, isFetching } = useQuery(
+  const { error, isLoading } = useQuery(
     ["paciente"],
     () => getPacienteId(idp, idu),
     {
@@ -65,8 +62,10 @@ const Paciente = () => {
     }
   );
 
-  const { data } = useQuery(["dependientes", idu], () => getPacientes(1, idu));
-  //select: (data) => data.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id),
+  const { data, isLoading: isLoadingD } = useQuery(["dependientes", idu], () =>
+    getPacientes(1, idu)
+  );
+
   const handleVerImagen = (idusuario: any, idpaciente: any) => {
     setModal(!modal);
 
@@ -82,25 +81,30 @@ const Paciente = () => {
   }
 
   const FOTO = "";
-  /*
-discapacidad
-documento
-eda
-fechanacimiento
-gruposangre
-idparentesco
-imagen
-imagendocumento
-nombre
-numeroemergencia
-telefono
-tipodocumento
-tipoverificacion
-verificacioncorreo*/
 
-  console.log(data);
-  const pacientes: any =
-    []; /*data.filter((item: any) => item.perfil !== paciente.perfil);*/
+  const createAddapterDependientes = (data: any, filtro: string) => {
+    let filtrado: any = [];
+    if (filtro === "Principal") {
+      if (data.length > 0) {
+        filtrado = data.filter((item: any) => item.perfil !== "Principal");
+      }
+    } else {
+      if (data.length > 0) {
+        filtrado = data.filter(
+          (item: any) => item.perfil !== "Principal" && item.idpaciente !== idp
+        );
+      }
+    }
+    return filtrado;
+  };
+
+  const createAddapterPrincipal = (data: any, filtro: string) => {
+    let filtrado: any = [];
+    if (data.length > 0) {
+      filtrado = data.filter((item: any) => item.perfil === filtro);
+    }
+    return filtrado;
+  };
 
   return (
     <IonPage className="fondo">
@@ -169,7 +173,7 @@ verificacioncorreo*/
                             {paciente?.documento}
                           </span>
                         </div>
-                        <div className="pb-2 border-bottom">
+                        <div className="pb-2">
                           <span className="fs-14 float-left">
                             Grupo Sangu&iacute;neo:
                           </span>
@@ -177,13 +181,19 @@ verificacioncorreo*/
                             {paciente?.gruposangre}
                           </span>
                         </div>
+                        <div className="pb-2 border-bottom">
+                          <span className="fs-14 float-left">Perfil:</span>
+                          <span className="fs-14 float-right text-uppercase">
+                            {paciente?.perfil}
+                          </span>
+                        </div>
                         <div className="pt-2">
-                          <span className="fs-12 float-left text-underline cursor-pointer">
+                          {/*<span className="fs-12 float-left text-underline cursor-pointer">
                             Ver ficha completa
                           </span>
                           <span className="fs-12 float-right text-underline cursor-pointer">
                             Editar
-                          </span>
+                        </span>*/}
                         </div>
                       </div>
                     </div>
@@ -197,32 +207,104 @@ verificacioncorreo*/
                   <div className="p-perfil bg-banner-perfil border-radius-bottom">
                     <IonToolbar>
                       <IonTitle className="fs-20 font-w600 text-center">
-                        Dependientes
-                        <span
-                          className="position-absolute mr-3"
-                          style={{ right: "0px" }}
-                        >
-                          <IonImg
-                            src={"./images/compartir-light.svg"}
-                            className="filter-white cursor-pointer"
-                          />
-                        </span>
+                        Principal
                       </IonTitle>
                     </IonToolbar>
-                    <div className="mx-3 pb-2 text-white d-flex">
-                      {pacientes.length === 0 ? (
+                    <div>
+                      {isLoadingD ? (
+                        "Cargando"
+                      ) : createAddapterPrincipal(data.data, "Principal")
+                          .length === 0 ? (
                         <div>Este paciente no tiene dependientes</div>
                       ) : (
-                        pacientes.map(() => (
-                          <IonItem>
-                            <IonThumbnail slot="start">
-                              <img
-                                alt="Silhouette of mountains"
-                                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                              />
-                            </IonThumbnail>
-                            <IonLabel>Item Thumbnail</IonLabel>
-                          </IonItem>
+                        createAddapterPrincipal(data.data, "Principal").map(
+                          (item: any, index: number) => (
+                            <div
+                              key={index}
+                              className="mb-2  border-bottom p-1 rounded d-flex justify-content-start"
+                            >
+                              <div className="mr-4">
+                                <p>
+                                  <b>Nombre: </b>
+                                  {item.nombre}
+                                </p>
+                                <p>
+                                  <b>Perfil: </b>
+                                  {item.perfil}
+                                </p>
+                                <p>
+                                  <b>Tipo de documento: </b>
+                                  {item.tipodocumento}
+                                </p>
+                              </div>
+                              <div>
+                                <p>
+                                  <b>Estado: </b>
+                                  {item.estado}
+                                </p>
+                                <p>
+                                  <b>Edad: </b>
+                                  {item.edad}
+                                </p>
+                                <p>
+                                  <b>Documento: </b>
+                                  {item.documento}
+                                </p>
+                              </div>
+                            </div>
+                          )
+                        )
+                      )}
+                    </div>
+                    <IonToolbar>
+                      <IonTitle className="fs-20 font-w600 text-center">
+                        Dependientes de la cuenta principal
+                      </IonTitle>
+                    </IonToolbar>
+                    <div>
+                      {isLoadingD ? (
+                        "Cargando"
+                      ) : createAddapterDependientes(data.data, paciente.perfil)
+                          .length === 0 ? (
+                        <div>Este paciente no tiene dependientes</div>
+                      ) : (
+                        createAddapterDependientes(
+                          data.data,
+                          paciente.perfil
+                        ).map((item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="mb-2  border-bottom p-1 rounded d-flex justify-content-start"
+                          >
+                            <div className="mr-4">
+                              <p>
+                                <b>Nombre: </b>
+                                {item.nombre}
+                              </p>
+                              <p>
+                                <b>Perfil: </b>
+                                {item.perfil}
+                              </p>
+                              <p>
+                                <b>Tipo de documento: </b>
+                                {item.tipodocumento}
+                              </p>
+                            </div>
+                            <div>
+                              <p>
+                                <b>Estado: </b>
+                                {item.estado}
+                              </p>
+                              <p>
+                                <b>Edad: </b>
+                                {item.edad}
+                              </p>
+                              <p>
+                                <b>Documento: </b>
+                                {item.documento}
+                              </p>
+                            </div>
+                          </div>
                         ))
                       )}
                     </div>

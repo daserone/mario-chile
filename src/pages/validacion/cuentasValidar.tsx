@@ -23,7 +23,7 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { NavLateral, HeaderInterior } from "../../components";
+import { NavLateral, HeaderInterior, InfoPeticion } from "../../components";
 import {
   getValidacionesCuenta,
   updateValidacionCuentaAprobar,
@@ -32,6 +32,7 @@ import {
 import { URLPERFIL } from "../../servicios";
 const CuentasValidar = () => {
   const [modal, setModal] = useState<boolean>(false);
+  const [modalPrg, setModalPrg] = useState<boolean>(false);
   const [img, setImg] = useState<any>({
     foto: "",
     documento: "",
@@ -50,7 +51,7 @@ const CuentasValidar = () => {
 
   const cuentaAprobarMutation = useMutation({
     mutationFn: updateValidacionCuentaAprobar,
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       if (queryClient.getQueryData(["validacion-cuentas"])) {
         queryClient.invalidateQueries(["validacion-cuentas"]);
       }
@@ -117,59 +118,11 @@ const CuentasValidar = () => {
   };
 
   if (isLoading) {
-    return (
-      <IonPage className="fondo">
-        <IonContent fullscreen className="bg-light">
-          <IonGrid className="bg-light">
-            <IonRow
-              className="pt-4 pb-4 mb-2 ion-justify-content-center"
-              style={{
-                height: "100vh",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <span className="spinner-border mb-4"></span>
-                <h1>Cargando....</h1>
-              </div>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
-      </IonPage>
-    );
+    return <InfoPeticion texto="Cargando....." />;
   }
 
   if (error) {
-    return (
-      <IonPage className="fondo">
-        <IonContent fullscreen className="bg-light">
-          <IonGrid className="bg-light">
-            <IonRow
-              className="pt-4 pb-4 mb-2 ion-justify-content-center"
-              style={{
-                height: "100vh",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <span className="spinner-border mb-4"></span>
-                <h1>Error al realizar la solicitud....</h1>
-              </div>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
-      </IonPage>
-    );
+    return <InfoPeticion texto="Error" />;
   }
 
   return (

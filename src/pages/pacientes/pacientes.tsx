@@ -110,7 +110,7 @@ const Pacientes = () => {
         </span>
       ),
     },
-
+    { name: "Dependientes", grow: 1, selector: (row: any) => row.dependientes },
     {
       name: "Estado",
       grow: 1,
@@ -135,6 +135,11 @@ const Pacientes = () => {
   if (error) {
     return <InfoPeticion texto="Error" />;
   }
+  //
+
+  const datos = {};
+  console.log(datos ? datos : {});
+  console.log("datos");
   return (
     <IonPage className="fondo">
       <IonContent fullscreen>
@@ -237,10 +242,18 @@ const Pacientes = () => {
 
 export default Pacientes;
 /*
-  BIENI APP
-  1)frontend:nada aun
-  2)backend:nada aun
-  BIENIWEB
-  1)frontend:acabo de subir cambios a esta rama
-  2)backend:en el servidor me da error
+public function handleRequest($ruta, $callback, $method) {
+    if ($_SERVER['REQUEST_METHOD'] !== $method) {
+        return false;
+    }
+    
+    $url = $_SERVER['REQUEST_URI'];
+    $ruta = "#^" . str_replace("/", "\/", $ruta) . "$#";
+    preg_match($ruta, $url, $matches);
+    
+    if (!empty($matches)) {
+        return is_callable($callback) ? call_user_func_array($callback, array_values($matches)) : false;
+    }
+}
+
   */

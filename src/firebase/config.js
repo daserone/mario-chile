@@ -17,11 +17,11 @@ const firebaseConfig = {
   storageBucket: "bieni-health.appspot.com",
   messagingSenderId: "762358975378",
   appId: "1:762358975378:web:fa38463d10336c9e930f4b",
-  measurementId: "G-XF00T0YFME"
+  measurementId: "G-XF00T0YFME",
 };
 //-Initialize-Firebase------------------------
 const app = initializeApp(firebaseConfig);
-//-configuracion-autenticacion------------ 
+//-configuracion-autenticacion------------
 export const auth = getAuth();
 export const provider = new GoogleAuthProvider();
 //-funcion-autenticacion------------------
@@ -50,7 +50,6 @@ export const signOutWithGoogle = () => {
   signOut(auth)
     .then(() => {
       // Sign-out successful.
-      console.log("Finalizada");
     })
     .catch((error) => {
       console.error("Problema al cerrar la sesión con google".error);

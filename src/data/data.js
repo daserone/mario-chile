@@ -58,3 +58,11 @@ export const dataMenu = [
     rol: [1, 2],
   },
 ];
+
+export const dataPreguntas = [
+  { value: 1, name: "Documentos inválidos" },
+  { value: 2, name: "Imágenes incompatibles" },
+  { value: 3, name: "Visibilidad Baja" },
+  { value: 4, name: "Documentos inválidos" },
+  { value: 5, name: "Documentos inválidos" },
+];

@@ -38,7 +38,6 @@ export const grupodiscapacidad = [
 ];
 
 export const obtenerEstadoVerificacion = (id: any) => {
-  console.log(typeof id);
   const map: any = {
     1: "badge badge-primary", //aprobado
     2: "badge badge-danger", //no aprobado

@@ -97,7 +97,7 @@ const ValidacionIngresos: React.FC = () => {
     let documento = `${URL}/${imagenVerificacion}`;
 
     setImg({ foto: foto, documento: documento });
-    console.log({ foto, documento });
+
   };
 
   if (isLoading) {
