@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   IonGrid,
   IonRow,
@@ -18,24 +18,34 @@ import {
 } from "@ionic/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faAddressCard,
   faCircleCheck,
   faCircleXmark,
+  faAddressCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useHistory } from "react-router";
-import { NavLateral, HeaderInterior, InfoPeticion } from "../../components";
+//import { useHistory } from "react-router";
 import {
+  NavLateral,
+  HeaderInterior,
+  InfoPeticion,
+  Datatable,
+} from "../../components";
+import {
+  getDependientes,
+  getDependienteImg,
+  dependiente,
+} from "../../servicios/pacientes";
+import { URLBIENIPERFIL } from "../../servicios/configuracion";
+/*import {
   getValidacionesDependiente,
   updateValidacionDependienteAprobar,
   updateValidacionDependienteRechazar,
   getImgDependiente,
-} from "../../servicios/dependientes";
-import { URLBIENIPERFIL } from "../../servicios/configuracion";
+} from "../../servicios/dependientes";*/
 
 const DependientesValidar = () => {
-  const history = useHistory();
   const [modal, setModal] = useState<boolean>(false);
+  const [page, setPage] = useState<any>(1);
   const [img, setImg] = useState<any>([]);
   const [notificacion, setNotificacion] = useState({
     msg: "",
@@ -44,29 +54,32 @@ const DependientesValidar = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, error, isLoading, isFetching } = useQuery({
-    queryKey: ["validacion-dependientes"],
-    queryFn: getValidacionesDependiente,
-  });
+  const { data, error, isLoading, isFetching } = useQuery(
+    ["dependientes", page],
+    () => getDependientes(page),
+    {
+      keepPreviousData: true,
+    }
+  );
 
-  const cuentaAprobarMutation = useMutation({
-    mutationFn: updateValidacionDependienteAprobar,
+  const aprobarMutation = useMutation({
+    mutationFn: dependiente,
     onSuccess: (data) => {
-      if (queryClient.getQueryData(["validacion-dependientes"])) {
-        queryClient.invalidateQueries(["validacion-dependientes"]);
+      if (queryClient.getQueryData(["dependientes"])) {
+        queryClient.invalidateQueries(["dependientes"]);
       }
       setNotificacion({
-        msg: data.data.msg,
+        msg: data.msg,
         estado: true,
       });
     },
   });
 
-  const cuentaRechazarMutation = useMutation({
-    mutationFn: updateValidacionDependienteRechazar,
+  const rechazarMutation = useMutation({
+    mutationFn: dependiente,
     onSuccess: (data) => {
-      if (queryClient.getQueryData(["validacion-dependientes"])) {
-        queryClient.invalidateQueries(["validacion-dependientes"]);
+      if (queryClient.getQueryData(["dependientes"])) {
+        queryClient.invalidateQueries(["dependientes"]);
       }
       setNotificacion({
         msg: data.data.msg,
@@ -78,14 +91,16 @@ const DependientesValidar = () => {
   const handleAprobar = (
     iddocumento: string,
     idpaciente: string,
-    idfamiliar: string
+    idfamiliar: string,
+    idusuario: string
   ) => {
     const formData = new FormData();
     formData.append("op", "dependienteAprobar");
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
     formData.append("idfamiliar", idfamiliar);
-    cuentaAprobarMutation.mutate(formData);
+    formData.append("idusuario", idusuario);
+    aprobarMutation.mutate(formData);
   };
 
   const handleRechazar = (
@@ -98,25 +113,119 @@ const DependientesValidar = () => {
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
     formData.append("idfamiliar", idfamiliar);
-    cuentaRechazarMutation.mutate(formData);
+    rechazarMutation.mutate(formData);
   };
 
-  const handleVerImagen = (idusuario: any, idpaciente: any) => {
-    setModal(!modal);
-
+  const handleImagen = async (idusuario: any, idpaciente: any) => {
     let URL = `${URLBIENIPERFIL}${idusuario}/parentesco/${idpaciente}`;
 
-    getImgDependiente(idusuario, idpaciente).then((rsp) => {
-      const { data, status } = rsp;
-      if (status === 200) {
-        if (data.data.length > 0) {
-          const nuevo = data.data.map((item: string) => `${URL}/${item}`);
-          setImg(nuevo);
-        }
-      }
-    });
+    const rsp = await getDependienteImg(idusuario, idpaciente);
+
+    if (rsp.data.length > 0) {
+      const nuevo = data.data.map((item: string) => `${URL}/${item}`);
+      setModal(!modal);
+      setImg(nuevo);
+    }
   };
-  //history
+
+  const handleDobleClic = (item: any) => {};
+
+  const columnas = useMemo(
+    () => [
+      {
+        name: "Nombre",
+        grow: 1,
+        selector: (row: any) => row.nombre,
+      },
+      {
+        name: "Documento",
+        grow: 1,
+        selector: (row: any) => (
+          <div className="text-center">
+            {row.documento}
+            <span className="fs-12 text-info d-block">{row.tipodocumento}</span>
+          </div>
+        ),
+      },
+      {
+        name: "Edad",
+        grow: 1,
+        selector: (row: any) => row.edad,
+      },
+      {
+        name: "Relacion familiar",
+        grow: 1,
+        selector: (row: any) => row.parentesco,
+      },
+      {
+        name: "Principal",
+        grow: 1,
+        selector: (row: any) => (
+          <div className="text-center">
+            {row.nombreP}
+            <span className="fs-12 text-info d-block">{row.documentoP}</span>
+          </div>
+        ),
+      },
+      {
+        name: "Tipo verificación",
+        grow: 1,
+        selector: (row: any) => row.tipoverificacion,
+      },
+      {
+        name: "Acciones",
+        grow: 1,
+        selector: (item: any) => (
+          <div className="d-flex justify-content-center">
+            <button
+              onClick={() => {
+                handleImagen(item.idusuario, item.idpaciente);
+              }}
+              className="btn btn-delete-validacion p-0 mr-2"
+            >
+              <FontAwesomeIcon
+                icon={faAddressCard}
+                className="float-right fs-18 text-info cursor-pointer"
+              />
+            </button>
+            <button
+              className="btn btn-delete-validacion p-0 mr-2"
+              onClick={() => {
+                handleAprobar(
+                  item.iddocumento,
+                  item.idpaciente,
+                  item.idfamiliar,
+                  item.idusuario
+                );
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faCircleCheck}
+                className="float-right fs-18 text-success cursor-pointer"
+              />
+            </button>
+            <button
+              className="btn btn-delete-validacion p-0 mr-2"
+              onClick={() => {
+                handleRechazar(
+                  item.iddocumento,
+                  item.idpaciente,
+                  item.idfamiliar
+                );
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className="float-right fs-18 text-danger cursor-pointer"
+              />
+            </button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
   if (isLoading) {
     return <InfoPeticion texto="Cargando..." />;
   }
@@ -174,15 +283,32 @@ const DependientesValidar = () => {
               </div>
               <IonCard className="m-0 card-slide shadow-full">
                 <IonCardContent className="card-content-slide height-vh-con-table">
+                  <Datatable
+                    title="Dependientes"
+                    columnas={columnas}
+                    load={isLoading}
+                    data={data.data}
+                    setPage={setPage}
+                    recordsTotals={data.recordsTotals}
+                    dobleClic={handleDobleClic}
+                  />
+                </IonCardContent>
+              </IonCard>
+              {/*<IonCard className="m-0 card-slide shadow-full">
+                <IonCardContent className="card-content-slide height-vh-con-table">
                   <table className="table table-striped">
                     <thead className="text-gray">
                       <tr>
-                        <th scope="col">Paciente</th>
+                        <th scope="col">Nombre</th>
                         <th scope="col" className="text-center">
                           Documento
                         </th>
+                        <th scope="col" className="text-center">
+                          Edad
+                        </th>
                         <th scope="col">Parentesco</th>
                         <th scope="col">Principal</th>
+                        <th scope="col">Documento</th>
                         <th scope="col">Estado documento</th>
                         <th scope="col">Estado familiar</th>
                         <th scope="col">Verificación</th>
@@ -209,8 +335,15 @@ const DependientesValidar = () => {
                                 {item.tipodocumento}
                               </span>
                             </td>
+                            <td className="text-center">{item.edad}</td>
                             <td>{item.parentesco}</td>
-                            <td>{item.principal}</td>
+                            <td>
+                              {item.nombreP}
+                              <span className="fs-12 text-info d-block">
+                                {item.documentoP}
+                              </span>
+                            </td>
+
                             <td>
                               <span
                                 className={`${
@@ -300,7 +433,7 @@ const DependientesValidar = () => {
                     </tbody>
                   </table>
                 </IonCardContent>
-              </IonCard>
+                                </IonCard>*/}
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -342,3 +475,4 @@ const DependientesValidar = () => {
 };
 
 export default DependientesValidar;
+//196,197 id paciente

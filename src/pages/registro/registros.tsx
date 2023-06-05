@@ -40,7 +40,7 @@ const Registros: React.FC = () => {
           const { data, status } = response;
           if (status === 200) {
             if (data.rsp === 1) {
-              dispatch(doLogin(data.item));
+              dispatch(doLogin(data.data));
               history.push("/app");
             } else {
               setNotificacion({

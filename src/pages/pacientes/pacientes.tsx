@@ -55,12 +55,6 @@ const Pacientes = () => {
     }
   );
 
-  const handleVerImagen = (idusuario: any, idpaciente: any) => {
-    setModal(!modal);
-
-    let URL = `${URLBIENIPERFIL}${idusuario}/parentesco/${idpaciente}`;
-  };
-
   const columnas = [
     {
       name: "Nombre",
@@ -135,11 +129,7 @@ const Pacientes = () => {
   if (error) {
     return <InfoPeticion texto="Error" />;
   }
-  //
 
-  const datos = {};
-  console.log(datos ? datos : {});
-  console.log("datos");
   return (
     <IonPage className="fondo">
       <IonContent fullscreen>
@@ -255,5 +245,4 @@ public function handleRequest($ruta, $callback, $method) {
         return is_callable($callback) ? call_user_func_array($callback, array_values($matches)) : false;
     }
 }
-
-  */
+*/
