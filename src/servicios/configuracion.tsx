@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const URLBASE = axios.create({
-  baseURL: "https://toolkit.maxialatam.com/bieniwebdes",
-});
+  baseURL: "https://toolkit.maxialatam.com/bieniweb",
+}); //des
 
 export const URLBIENI = axios.create({
   baseURL: "https://toolkit.maxialatam.com/bieni",

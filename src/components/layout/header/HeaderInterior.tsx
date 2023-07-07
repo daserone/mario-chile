@@ -60,7 +60,7 @@ export const HeaderInterior: React.FC = () => {
           <div className="ml-3 mr-2">
             <span className="fs-15 font-w700 text-info d-block">
               Dra. {}
-              {user.nombre}
+              {user?.nombre ?? "Error cargar nombre"}
             </span>
             <span className="text-info font-w600">Ginecología</span>
           </div>
