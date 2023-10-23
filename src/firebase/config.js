@@ -11,13 +11,12 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCCYDth5Sem4sEGnofHS6cj7447-vQBfPc",
-  authDomain: "bieni-health.firebaseapp.com",
-  projectId: "bieni-health",
-  storageBucket: "bieni-health.appspot.com",
-  messagingSenderId: "762358975378",
-  appId: "1:762358975378:web:fa38463d10336c9e930f4b",
-  measurementId: "G-XF00T0YFME",
+  apiKey: "AIzaSyDjTFxGCzzsFEPpsjtbSxsPnGgMz-fmwN4",
+  authDomain: "bieniback.firebaseapp.com",
+  projectId: "bieniback",
+  storageBucket: "bieniback.appspot.com",
+  messagingSenderId: "634797319286",
+  appId: "1:634797319286:web:43c6837d67f15d9388eb57"
 };
 //-Initialize-Firebase------------------------
 const app = initializeApp(firebaseConfig);

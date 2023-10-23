@@ -1,7 +1,7 @@
 import { URLBASE, URLBIENI } from "./configuracion";
 
 export const getValidacionesDependiente = async () => {
-  const res = await URLBASE.get("controller/validaciones?op=dependientes", {
+  const res = await URLBASE.get("controller/validaciones.php?op=dependientes", {
     responseType: "json",
   });
   return res.data;
@@ -9,7 +9,7 @@ export const getValidacionesDependiente = async () => {
 
 export const getValidacionDependienteId = async (id: any) => {
   const res = await URLBASE.get(
-    `controller/validaciones?op=dependienteId&id=${id}`,
+    `controller/validaciones.php?op=dependienteId&id=${id}`,
     {
       responseType: "json",
     }

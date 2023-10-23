@@ -1,7 +1,8 @@
 import axios from "axios";
+import { ENTORNO } from "./config";
 
 const cuentasApi = axios.create({
-  baseURL: "https://toolkit.maxialatam.com/bieni/controller/validacionesback",
+  baseURL: `${ENTORNO}/controller/validacionesback.php`
 });
 
 export const getCuentas = async () => {

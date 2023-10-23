@@ -1,11 +1,15 @@
 import axio from "axios";
+let entornos = { 
+  aws: "https://bieniwallet.com/bieniwebback/",
+  awsdes: "https://bieniwallet.com/bieniwebbackdes/",
+};
 
-export const BASEURL = "https://toolkit.maxialatam.com/bieni/";
+export const BASEURL = entornos["aws"];
 
-export const URLPERFIL = "https://toolkit.maxialatam.com/bieni/asset/perfiles/";
+export const URLPERFIL = `${BASEURL}asset/perfiles/`;
 
 export const services = axio.create({
-  baseURL: "https://toolkit.maxialatam.com/bieni/",
+  baseURL: BASEURL,
 });
 
 export const authentication = (form: any) =>

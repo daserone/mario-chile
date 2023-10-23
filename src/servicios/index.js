@@ -1,4 +1,5 @@
 import {
+  BASEURL,
   URLPERFIL,
   services,
   authentication,
@@ -6,6 +7,7 @@ import {
   getFichaCompleta,
 } from "./servicios";
 export {
+  BASEURL,
   URLPERFIL,
   services,
   authentication,

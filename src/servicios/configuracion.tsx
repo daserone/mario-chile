@@ -1,12 +1,13 @@
 import axios from "axios";
+import { BASEURL } from "./servicios";
+
 
 export const URLBASE = axios.create({
-  baseURL: "https://toolkit.maxialatam.com/bieniwebdes",
+  baseURL: BASEURL
 });
 
 export const URLBIENI = axios.create({
-  baseURL: "https://toolkit.maxialatam.com/bieni",
+  baseURL: BASEURL,
 });
 
-export const URLBIENIPERFIL =
-  "https://toolkit.maxialatam.com/bieni/asset/perfiles/";
+export const URLBIENIPERFIL = `${BASEURL}asset/perfiles/`;

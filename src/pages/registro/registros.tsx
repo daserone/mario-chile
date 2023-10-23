@@ -38,9 +38,10 @@ const Registros: React.FC = () => {
         formDa.append("correo", correo);
         postAuthentication(formDa).then(function (response) {
           const { data, status } = response;
+          console.log(data, status);
           if (status === 200) {
             if (data.rsp === 1) {
-              dispatch(doLogin(data.data));
+              dispatch(doLogin(data.item));
               history.push("/app");
             } else {
               setNotificacion({
