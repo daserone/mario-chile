@@ -2,7 +2,7 @@ import axios from "axios";
 import { ENTORNO } from "./config";
 
 const cuentasApi = axios.create({
-  baseURL: `${ENTORNO}/controller/validacionesback.php`
+  baseURL: `${ENTORNO}/controller/validaciones.php`
 });
 
 export const getCuentas = async () => {

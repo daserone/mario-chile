@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASEURL } from "./servicios";
+import { BASEURL, BASEURLBIENI } from "./servicios";
 
 
 export const URLBASE = axios.create({
@@ -7,7 +7,7 @@ export const URLBASE = axios.create({
 });
 
 export const URLBIENI = axios.create({
-  baseURL: BASEURL,
+  baseURL: BASEURLBIENI,
 });
 
 export const URLBIENIPERFIL = `${BASEURL}asset/perfiles/`;

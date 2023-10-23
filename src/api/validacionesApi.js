@@ -2,7 +2,7 @@ import axios from "axios";
 import { BASEURL } from "../../servicios";
 
 const validacionesApi = axios.create({
-  baseURL: `${BASEURL}controller/validacionesback.php`
+  baseURL: `${BASEURL}controller/validaciones.php`
 });
 
 export const getValidaciones = async () => {

@@ -2,11 +2,11 @@ import axios from "axios";
 import { ENTORNO } from "./config";
 
 const nivelesApi = axios.create({
-  baseURL: `${ENTORNO}/controller/nivelesback.php`,
+  baseURL: `${ENTORNO}/controller/niveles.php`,
 });
 
 export const getNiveles = async () => {
-  const res = await nivelesApi.get("?op=getNiveles");
+  const res = await nivelesApi.get(`?op=niveles`);
   return res.data;
 };
 

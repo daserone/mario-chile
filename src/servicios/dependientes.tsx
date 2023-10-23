@@ -18,7 +18,7 @@ export const getValidacionDependienteId = async (id: any) => {
 };
 
 export const getImgDependiente = (idusuario: any, idpaciente: any) =>
-  URLBIENI.get("controller/pacienteback", {
+  URLBIENI.get("controller/pacienteback.php", {
     params: {
       op: "cargarImgParentesco",
       idusuario: idusuario,
@@ -29,11 +29,11 @@ export const getImgDependiente = (idusuario: any, idpaciente: any) =>
   });
 
 export const updateValidacionDependienteAprobar = (params: any) =>
-  URLBASE.post("/controller/validaciones", params, {
+  URLBASE.post("/controller/validaciones.php", params, {
     responseType: "json",
   });
 
 export const updateValidacionDependienteRechazar = (params: any) =>
-  URLBASE.post("/controller/validaciones", params, {
+  URLBASE.post("/controller/validaciones.php", params, {
     responseType: "json",
   });

@@ -60,7 +60,7 @@ export const getDependienteImg = async (idusuario: any, idpaciente: any) => {
 
 export const dependiente = async (params: any) => {
   try {
-    const response = await URLBASE.post(`/controller/pacientes`, params, {
+    const response = await URLBASE.post(`/controller/pacientes.php`, params, {
       responseType: "json",
     });
     if (response.status >= 200 && response.status < 300) {
