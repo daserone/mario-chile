@@ -122,7 +122,7 @@ const DependientesValidar = () => {
     const rsp = await getDependienteImg(idusuario, idpaciente);
 
     if (rsp.data.length > 0) {
-      const nuevo = data.data.map((item: string) => `${URL}/${item}`);
+      const nuevo = data?.data.map((item: string) => `${URL}/${item}`);
       setModal(!modal);
       setImg(nuevo);
     }
@@ -162,8 +162,8 @@ const DependientesValidar = () => {
         grow: 1,
         selector: (row: any) => (
           <div className="text-center">
-            {row.nombreP}
-            <span className="fs-12 text-info d-block">{row.documentoP}</span>
+            {row.principal}
+            <span className="fs-12 text-info d-block">0-000-00</span>
           </div>
         ),
       },
@@ -294,146 +294,6 @@ const DependientesValidar = () => {
                   />
                 </IonCardContent>
               </IonCard>
-              {/*<IonCard className="m-0 card-slide shadow-full">
-                <IonCardContent className="card-content-slide height-vh-con-table">
-                  <table className="table table-striped">
-                    <thead className="text-gray">
-                      <tr>
-                        <th scope="col">Nombre</th>
-                        <th scope="col" className="text-center">
-                          Documento
-                        </th>
-                        <th scope="col" className="text-center">
-                          Edad
-                        </th>
-                        <th scope="col">Parentesco</th>
-                        <th scope="col">Principal</th>
-                        <th scope="col">Documento</th>
-                        <th scope="col">Estado documento</th>
-                        <th scope="col">Estado familiar</th>
-                        <th scope="col">Verificación</th>
-                        <th scope="col" className="text-center">
-                          Imágenes
-                        </th>
-                        <th scope="col" className="text-center">
-                          Acciones
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="fs-13 font-w500">
-                      {data.length === 0 ? (
-                        <tr>
-                          <td colSpan={6}>Sin registro para mostrar</td>
-                        </tr>
-                      ) : (
-                        data.map((item: any) => (
-                          <tr key={item.idpaciente}>
-                            <td>{item.nombre}</td>
-                            <td className="text-center">
-                              {item.documento}
-                              <span className="fs-12 text-info d-block">
-                                {item.tipodocumento}
-                              </span>
-                            </td>
-                            <td className="text-center">{item.edad}</td>
-                            <td>{item.parentesco}</td>
-                            <td>
-                              {item.nombreP}
-                              <span className="fs-12 text-info d-block">
-                                {item.documentoP}
-                              </span>
-                            </td>
-
-                            <td>
-                              <span
-                                className={`${
-                                  item.estadodocumento !== "Aprobado"
-                                    ? "text-danger"
-                                    : ""
-                                }`}
-                              >
-                                {item.estadodocumento}
-                              </span>
-                            </td>
-                            <td>
-                              <span
-                                className={`${
-                                  item.estadofamiliar !== "Aprobado"
-                                    ? "text-danger"
-                                    : ""
-                                }`}
-                              >
-                                {item.estadofamiliar}
-                              </span>
-                            </td>
-                            <td>{item.tipoverificacion}</td>
-                            <td>
-                              <div className="d-flex justify-content-center">
-                                {item.imagen_documento !== "" &&
-                                  item.imagen_verificacion !== "" && (
-                                    <button
-                                      onClick={() => {
-                                        handleVerImagen(
-                                          item.idusuario,
-                                          item.idpaciente
-                                        );
-                                      }}
-                                      className="btn btn-delete-validacion p-0 mr-2"
-                                      disabled={item.isDeleting}
-                                    >
-                                      {item.isDeleting ? (
-                                        <span className="spinner-border spinner-border-sm"></span>
-                                      ) : (
-                                        <FontAwesomeIcon
-                                          icon={faAddressCard}
-                                          className="float-right fs-18 text-info cursor-pointer"
-                                        />
-                                      )}
-                                    </button>
-                                  )}
-                              </div>
-                            </td>
-                            <td>
-                              <div className="d-flex justify-content-center">
-                                <button
-                                  onClick={() => {
-                                    handleAprobar(
-                                      item.iddocumento,
-                                      item.idpaciente,
-                                      item.idfamiliar
-                                    );
-                                  }}
-                                  className="btn btn-delete-validacion p-0 mr-2"
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faCircleCheck}
-                                    className="float-right fs-18 text-success cursor-pointer"
-                                  />
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    handleRechazar(
-                                      item.iddocumento,
-                                      item.idpaciente,
-                                      item.idfamiliar
-                                    );
-                                  }}
-                                  className="btn btn-delete-validacion p-0"
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faCircleXmark}
-                                    className="float-right fs-18 text-danger cursor-pointer"
-                                  />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </IonCardContent>
-                                </IonCard>*/}
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -475,4 +335,3 @@ const DependientesValidar = () => {
 };
 
 export default DependientesValidar;
-//196,197 id paciente

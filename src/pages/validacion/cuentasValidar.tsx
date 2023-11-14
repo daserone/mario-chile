@@ -111,16 +111,29 @@ const CuentasValidar = () => {
     imagenVerificacion: string,
     imagenVerificacionDocumento: string
   ) => {
-    setModal(!modal);
+    console.log({
+      idusuario,
+      idpaciente,
+      imagenDocumento,
+      imagenDocumentoReverso,
+      imagenVerificacion,
+      imagenVerificacionDocumento,
+    });
+    //setModal(!modal);
 
     let URL = `${URLPERFIL}${idusuario}/reconocimientos/${idpaciente}`;
 
-    let foto = imagenDocumento !== '' ? `${URL}/${imagenDocumento}` : '';
-    let fotoReverso = imagenDocumentoReverso !== '' ? `${URL}/${imagenDocumentoReverso}` : '';
-    let documento = imagenVerificacion !== '' ? `${URL}/${imagenVerificacion}` : '';
-    let documentoVerif = imagenVerificacionDocumento !== '' ? `${URL}/${imagenVerificacionDocumento}` : '';
+    let foto = imagenDocumento !== "" ? `${URL}/${imagenDocumento}` : "";
+    let fotoReverso =
+      imagenDocumentoReverso !== "" ? `${URL}/${imagenDocumentoReverso}` : "";
+    let documento =
+      imagenVerificacion !== "" ? `${URL}/${imagenVerificacion}` : "";
+    let documentoVerif =
+      imagenVerificacionDocumento !== ""
+        ? `${URL}/${imagenVerificacionDocumento}`
+        : "";
 
-    setImg({ foto: foto, fotoReverso: fotoReverso, documento: documento, documentoVerif: documentoVerif });
+    //setImg({ foto: foto, fotoReverso: fotoReverso, documento: documento, documentoVerif: documentoVerif });
   };
 
   if (isLoading) {
@@ -226,35 +239,35 @@ const CuentasValidar = () => {
                             <td>{item.tipoverificacion}</td>
                             <td>
                               <div className="d-flex justify-content-center">
-                                { (item.imagen_documento !== "" ||
-                                  item.imagen_documento_reverso !== "" || 
-                                  item.imagen_verificacion !== "" || 
-                                  item.imagen_verificacion_documento !== "" 
-                                  ) && (
-                                    <button
-                                      onClick={() => {
-                                        handleVerImagen(
-                                          item.idusuario,
-                                          item.idpaciente,
-                                          item.imagen_documento,
-                                          item.imagen_documento_reverso,
-                                          item.imagen_verificacion,
-                                          item.imagen_verificacion_documento
-                                        );
-                                      }}
-                                      className="btn btn-delete-validacion p-0 mr-2"
-                                      disabled={item.isDeleting}
-                                    >
-                                      {item.isDeleting ? (
-                                        <span className="spinner-border spinner-border-sm"></span>
-                                      ) : (
-                                        <FontAwesomeIcon
-                                          icon={faAddressCard}
-                                          className="float-right fs-18 text-info cursor-pointer"
-                                        />
-                                      )}
-                                    </button>
-                                  )}
+                                {(item.imagen_documento !== "" ||
+                                  item.imagen_documento_reverso !== "" ||
+                                  item.imagen_verificacion !== "" ||
+                                  item.imagen_verificacion_documento !==
+                                    "") && (
+                                  <button
+                                    onClick={() => {
+                                      handleVerImagen(
+                                        item.idusuario,
+                                        item.idpaciente,
+                                        item.imagen_documento,
+                                        item.imagen_documento_reverso,
+                                        item.imagen_verificacion,
+                                        item.imagen_verificacion_documento
+                                      );
+                                    }}
+                                    className="btn btn-delete-validacion p-0 mr-2"
+                                    disabled={item.isDeleting}
+                                  >
+                                    {item.isDeleting ? (
+                                      <span className="spinner-border spinner-border-sm"></span>
+                                    ) : (
+                                      <FontAwesomeIcon
+                                        icon={faAddressCard}
+                                        className="float-right fs-18 text-info cursor-pointer"
+                                      />
+                                    )}
+                                  </button>
+                                )}
                               </div>
                             </td>
                             <td>
@@ -313,38 +326,46 @@ const CuentasValidar = () => {
         </IonHeader>
         <IonContent className="text-center">
           <IonRow>
-            {img.foto !== '' && <IonCol size="5" className="px-3">
-              <img
-                src={img.foto}
-                alt="Documento de identidad"
-                className="rounded mb-3"
-                width="300px"
-              />
-            </IonCol>}
-            {img.fotoReverso !== '' && <IonCol size="5" className="px-3">
-              <img
-                src={img.fotoReverso}
-                alt="Documento de identidad Reverso"
-                className="rounded mb-3"
-                width="300px"
-              />
-            </IonCol>}
-            {img.documento !== '' && <IonCol size="5" className="px-3">
-              <img
-                src={img.documento}
-                alt="Documento de identidad"
-                className="rounded mb-3"
-                width="300px"
-              />
-            </IonCol>}
-            {img.documentoVerif !== '' && <IonCol size="5" className="px-3">
-              <img
-                src={img.documentoVerif}
-                alt="Documento de verificación"
-                className="rounded mb-3"
-                width="300px"
-              />
-            </IonCol>}
+            {img.foto !== "" && (
+              <IonCol size="5" className="px-3">
+                <img
+                  src={img.foto}
+                  alt="Documento de identidad"
+                  className="rounded mb-3"
+                  width="300px"
+                />
+              </IonCol>
+            )}
+            {img.fotoReverso !== "" && (
+              <IonCol size="5" className="px-3">
+                <img
+                  src={img.fotoReverso}
+                  alt="Documento de identidad Reverso"
+                  className="rounded mb-3"
+                  width="300px"
+                />
+              </IonCol>
+            )}
+            {img.documento !== "" && (
+              <IonCol size="5" className="px-3">
+                <img
+                  src={img.documento}
+                  alt="Documento de identidad"
+                  className="rounded mb-3"
+                  width="300px"
+                />
+              </IonCol>
+            )}
+            {img.documentoVerif !== "" && (
+              <IonCol size="5" className="px-3">
+                <img
+                  src={img.documentoVerif}
+                  alt="Documento de verificación"
+                  className="rounded mb-3"
+                  width="300px"
+                />
+              </IonCol>
+            )}
           </IonRow>
         </IonContent>
       </IonModal>

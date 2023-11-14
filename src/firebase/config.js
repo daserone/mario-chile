@@ -57,8 +57,3 @@ export const signOutWithGoogle = () => {
     });
 };
 
-/*
--data pcm-r6 24 info druid detectar el topico dode estoy agregando info, luego druid limpio la data para presentar y de druid a super set kaskat un canal streamen de dato archivo punto service
--topico:
--dataset:
-*/

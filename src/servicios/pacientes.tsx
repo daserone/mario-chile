@@ -25,6 +25,7 @@ export const getPacienteId = async (id: any, idusuario: any) => {
 //Dependientes
 export const getDependientes = async (page: number | string) => {
   try {
+    // `controller/pacientes?op=dependientes&page=${page}`
     const response = await URLBASE.get(
       `controller/pacientes?op=dependientes&page=${page}`,
       {
@@ -57,10 +58,10 @@ export const getDependienteImg = async (idusuario: any, idpaciente: any) => {
     throw error;
   }
 };
-
 export const dependiente = async (params: any) => {
   try {
-    const response = await URLBASE.post(`/controller/pacientes`, params, {
+    //`/controller/pacientes
+    const response = await URLBASE.post(`/controller/validaciones`, params, {
       responseType: "json",
     });
     if (response.status >= 200 && response.status < 300) {

@@ -46,6 +46,7 @@ const Login: React.FC = () => {
           if (data.rsp === 1) {
             setUsuario("");
             setClave("");
+
             dispatch(doLogin(data.data));
             //history.push("/app");
           } else {
