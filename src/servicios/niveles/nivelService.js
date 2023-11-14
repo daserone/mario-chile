@@ -1,6 +1,7 @@
 import { fetchWrapper } from '../../helpers';
+import { BASEURL } from "../../servicios";
 
-const baseUrl = 'https://toolkit.maxialatam.com/bieni/controller/nivelesback.php';
+const baseUrl = `${BASEURL}controller/nivelesback.php`
 
 export const nivelService = {
     getAll,

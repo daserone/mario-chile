@@ -1,1 +1,3 @@
-export const ENTORNO = "https://toolkit.maxialatam.com/bieni";
+import { BASEURL } from "../servicios";
+
+export const ENTORNO = BASEURL;

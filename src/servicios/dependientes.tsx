@@ -1,7 +1,7 @@
 import { URLBASE, URLBIENI } from "./configuracion";
 
 export const getValidacionesDependiente = async () => {
-  const res = await URLBASE.get("controller/validaciones?op=dependientes", {
+  const res = await URLBASE.get("controller/validaciones.php?op=dependientes", {
     responseType: "json",
   });
   return res.data;
@@ -9,7 +9,7 @@ export const getValidacionesDependiente = async () => {
 
 export const getValidacionDependienteId = async (id: any) => {
   const res = await URLBASE.get(
-    `controller/validaciones?op=dependienteId&id=${id}`,
+    `controller/validaciones.php?op=dependienteId&id=${id}`,
     {
       responseType: "json",
     }
@@ -18,7 +18,7 @@ export const getValidacionDependienteId = async (id: any) => {
 };
 
 export const getImgDependiente = (idusuario: any, idpaciente: any) =>
-  URLBIENI.get("controller/pacienteback", {
+  URLBIENI.get("controller/pacienteback.php", {
     params: {
       op: "cargarImgParentesco",
       idusuario: idusuario,
@@ -29,11 +29,11 @@ export const getImgDependiente = (idusuario: any, idpaciente: any) =>
   });
 
 export const updateValidacionDependienteAprobar = (params: any) =>
-  URLBASE.post("/controller/validaciones", params, {
+  URLBASE.post("/controller/validaciones.php", params, {
     responseType: "json",
   });
 
 export const updateValidacionDependienteRechazar = (params: any) =>
-  URLBASE.post("/controller/validaciones", params, {
+  URLBASE.post("/controller/validaciones.php", params, {
     responseType: "json",
   });

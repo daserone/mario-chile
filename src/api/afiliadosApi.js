@@ -1,7 +1,8 @@
 import axios from "axios";
+import { BASEURL } from "../servicios";
 
 const afiliadosApi = axios.create({
-  baseURL: "https://toolkit.maxialatam.com/bieni/controller/afiliadosback",
+  baseURL: `${BASEURL}controller/afiliadosback.php`
 });
 
 export const getAfiliados = async () => {

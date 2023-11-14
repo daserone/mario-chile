@@ -5,7 +5,7 @@ import { URLBASE, URLBIENI } from "./configuracion";
 };*/
 export const getPacientes = async (page: number, idusuario: any) => {
   const res = await URLBASE.get(
-    `controller/pacientes?op=pacientes&page=${page}&idusuario=${idusuario}`,
+    `controller/pacientes.php?op=pacientes&page=${page}&idusuario=${idusuario}`,
     {
       responseType: "json",
     }
@@ -15,7 +15,7 @@ export const getPacientes = async (page: number, idusuario: any) => {
 
 export const getPacienteId = async (id: any, idusuario: any) => {
   const res = await URLBASE.get(
-    `controller/pacientes?op=pacienteId&id=${id}&idusuario=${idusuario}`,
+    `controller/pacientes.php?op=pacienteId&id=${id}&idusuario=${idusuario}`,
     {
       responseType: "json",
     }
@@ -27,7 +27,7 @@ export const getDependientes = async (page: number | string) => {
   try {
     // `controller/pacientes?op=dependientes&page=${page}`
     const response = await URLBASE.get(
-      `controller/pacientes?op=dependientes&page=${page}`,
+      `controller/pacientes.php?op=dependientes&page=${page}`,
       {
         responseType: "json",
       }
@@ -60,8 +60,7 @@ export const getDependienteImg = async (idusuario: any, idpaciente: any) => {
 };
 export const dependiente = async (params: any) => {
   try {
-    //`/controller/pacientes
-    const response = await URLBASE.post(`/controller/validaciones`, params, {
+    const response = await URLBASE.post(`/controller/pacientes.php`, params, {
       responseType: "json",
     });
     if (response.status >= 200 && response.status < 300) {

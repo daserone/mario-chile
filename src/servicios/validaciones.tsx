@@ -1,7 +1,7 @@
 import { URLBASE } from "./configuracion";
 
 export const getValidacionesCuenta = async () => {
-  const res = await URLBASE.get("controller/validaciones?op=cuentas", {
+  const res = await URLBASE.get("controller/validaciones.php?op=cuentas", {
     responseType: "json",
   });
   return res.data;
@@ -9,7 +9,7 @@ export const getValidacionesCuenta = async () => {
 
 export const getValidacionesCuentaId = async (id: any) => {
   const res = await URLBASE.get(
-    `controller/validaciones?op=cuentaId&id=${id},`,
+    `controller/validaciones.php?op=cuentaId&id=${id},`,
     {
       responseType: "json",
     }
