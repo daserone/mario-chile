@@ -9,4 +9,4 @@ export const URLBIENI = axios.create({
   baseURL: BASEURLBIENI,
 });
 
-export const URLBIENIPERFIL = `${BASEURL}asset/perfiles/`;
+export const URLBIENIPERFIL = `${BASEURLBIENI}asset/perfiles/`;

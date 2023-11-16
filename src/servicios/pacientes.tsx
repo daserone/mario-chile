@@ -42,7 +42,7 @@ export const getDependientes = async (page: number | string) => {
 
 export const getDependienteImg = async (idusuario: any, idpaciente: any) => {
   try {
-    const response = await URLBIENI.get("controller/pacienteback", {
+    const response = await URLBIENI.get("controller/pacienteback.php", {
       params: {
         op: "cargarImgParentesco",
         idusuario: idusuario,
@@ -52,7 +52,7 @@ export const getDependienteImg = async (idusuario: any, idpaciente: any) => {
       responseType: "json",
     });
     if (response.status >= 200 && response.status < 300) {
-      return response.data;
+      return response.data || [];
     }
   } catch (error) {
     throw error;
