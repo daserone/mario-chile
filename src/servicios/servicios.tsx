@@ -5,8 +5,7 @@ let entornos = {
   local: "http://localhost/bieniwebback/",
   bieni: "https://bieniwallet.com/bieniback/",
 };
-
-export const BASEURL = entornos["local"];
+export const BASEURL = entornos["aws"];
 export const BASEURLBIENI = entornos["bieni"];
 
 export const URLPERFIL = `${BASEURL}asset/perfiles/`;

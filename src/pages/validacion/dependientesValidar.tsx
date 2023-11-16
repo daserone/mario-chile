@@ -63,7 +63,7 @@ const DependientesValidar = () => {
       if (queryClient.getQueryData(["dependientes", page])) {
         queryClient.invalidateQueries(["dependientes", page]);
       }
-      console.log(data);
+
       setNotificacion({
         msg: data.msg,
         estado: true,
@@ -77,7 +77,7 @@ const DependientesValidar = () => {
       if (queryClient.getQueryData(["dependientes", page])) {
         queryClient.invalidateQueries(["dependientes", page]);
       }
-      console.log(data);
+
       setNotificacion({
         msg: data.msg,
         estado: true,
@@ -119,9 +119,10 @@ const DependientesValidar = () => {
     const rsp = await getDependienteImg(idusuario, idpaciente);
 
     if (rsp.data.length > 0) {
-      const nuevo = data?.data.map((item: string) => `${URL}/${item}`);
+      console.log(rsp);
+      //const nuevo = data?.data.map((item: string) => `${URL}/${item}`);
       setModal(!modal);
-      setImg(nuevo);
+      //setImg(nuevo);
     }
   };
 
