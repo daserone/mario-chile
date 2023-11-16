@@ -59,9 +59,10 @@ const DependientesValidar = () => {
   const aprobarMutation = useMutation({
     mutationFn: dependiente,
     onSuccess: (data) => {
-      if (queryClient.getQueryData(["dependientes"])) {
-        queryClient.invalidateQueries(["dependientes"]);
+      if (queryClient.getQueryData(["dependientes", page])) {
+        queryClient.invalidateQueries(["dependientes", page]);
       }
+      console.log(data);
       setNotificacion({
         msg: data.msg,
         estado: true,
@@ -72,11 +73,12 @@ const DependientesValidar = () => {
   const rechazarMutation = useMutation({
     mutationFn: dependiente,
     onSuccess: (data) => {
-      if (queryClient.getQueryData(["dependientes"])) {
-        queryClient.invalidateQueries(["dependientes"]);
+      if (queryClient.getQueryData(["dependientes", page])) {
+        queryClient.invalidateQueries(["dependientes", page]);
       }
+      console.log(data);
       setNotificacion({
-        msg: data.data.msg,
+        msg: data.msg,
         estado: true,
       });
     },
