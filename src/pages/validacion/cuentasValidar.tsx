@@ -140,7 +140,7 @@ const CuentasValidar = () => {
   if (error) {
     return <InfoPeticion texto="Error" />;
   }
-
+  console.log(data);
   return (
     <IonPage className="fondo">
       <IonContent fullscreen>
@@ -208,7 +208,7 @@ const CuentasValidar = () => {
                       </tr>
                     </thead>
                     <tbody className="fs-13 font-w500">
-                      {data.length === 0 ? (
+                      {!data || data.length === 0 ? (
                         <tr>
                           <td colSpan={6}>Sin registro para mostrar</td>
                         </tr>

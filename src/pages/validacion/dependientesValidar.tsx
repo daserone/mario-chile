@@ -53,6 +53,7 @@ const DependientesValidar = () => {
     () => getDependientes(page),
     {
       keepPreviousData: true,
+      refetchOnWindowFocus: false,
     }
   );
 
