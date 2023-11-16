@@ -1,12 +1,12 @@
 import axio from "axios";
-let entornos = { 
+let entornos = {
   aws: "https://bieniwallet.com/bieniwebback/",
   awsdes: "https://bieniwallet.com/bieniwebbackdes/",
-  local: "localhost://bieniwebback/",
+  local: "http://localhost/bieniwebback/",
   bieni: "https://bieniwallet.com/bieniback/",
 };
 
-export const BASEURL = entornos["aws"];
+export const BASEURL = entornos["local"];
 export const BASEURLBIENI = entornos["bieni"];
 
 export const URLPERFIL = `${BASEURL}asset/perfiles/`;

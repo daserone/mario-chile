@@ -1,9 +1,8 @@
 import axios from "axios";
 import { BASEURL, BASEURLBIENI } from "./servicios";
 
-
 export const URLBASE = axios.create({
-  baseURL: BASEURL
+  baseURL: BASEURL,
 });
 
 export const URLBIENI = axios.create({

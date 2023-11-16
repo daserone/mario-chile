@@ -58,6 +58,7 @@ export const getDependienteImg = async (idusuario: any, idpaciente: any) => {
     throw error;
   }
 };
+
 export const dependiente = async (params: any) => {
   try {
     const response = await URLBASE.post(`/controller/pacientes.php`, params, {
@@ -70,3 +71,22 @@ export const dependiente = async (params: any) => {
     throw error;
   }
 };
+//Principal
+export const getPrincipales = async () => {
+  const res = await URLBASE.get("controller/pacientes.php?op=principales", {
+    responseType: "json",
+  });
+  return res.data;
+};
+
+export const getPrincipal = async () => {
+  const res = await URLBASE.get("controller/pacientes.php?op=principal", {
+    responseType: "json",
+  });
+  return res.data;
+};
+
+export const postPaciente = (params: any) =>
+  URLBASE.post("/controller/pacientes.php", params, {
+    responseType: "json",
+  });

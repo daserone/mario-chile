@@ -1,7 +1,7 @@
 import { Login } from "./login";
 import { Home } from "./home";
 import { Niveles, Nivel } from "./niveles";
-import { Usuarios, Usuari } from "./usuarios";
+import { Usuarios, Usuario } from "./usuarios";
 import { Afiliados } from "./afiliados";
 import { Registro, Registros } from "./registro";
 import { Soporte } from "./soporte";
@@ -14,7 +14,7 @@ export {
   Niveles,
   Nivel,
   Usuarios,
-  Usuari,
+  Usuario,
   Registro,
   Soporte,
   Afiliados,

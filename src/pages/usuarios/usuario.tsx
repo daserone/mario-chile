@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   IonGrid,
   IonRow,
@@ -7,179 +7,306 @@ import {
   IonCardContent,
   IonContent,
   IonPage,
+  IonImg,
   IonToast,
   IonButton,
 } from "@ionic/react";
-import { Formik, Form } from "formik";
+import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { advancedSchema } from "./validaciones.js";
-import { nivelService } from "../../servicios/niveles";
-import { FieldSelect, FieldText } from "../../components";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Formik } from "formik";
 import { NavLateral, HeaderInterior } from "../../components";
+import { getUsuario, postAddUsuario } from "../../servicios/usuarios";
 import "./usuarios.css";
+
 const Usuario: React.FC = () => {
+  const history = useHistory();
   const { id }: any = useParams();
-
-  const [state, setState] = useState({
-    id: "",
-    descripcion: "",
-    nombre: "",
-    estatus: "",
-  });
-
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
   });
+  const [form, setForm] = useState({
+    nombre: "",
+    apellido: "",
+    correo: "",
+    estado: "",
+  });
 
-  let isAddMode = id;
+  const queryClient = useQueryClient();
+  const { error, isLoading } = useQuery(["usuario", id], () => getUsuario(id), {
+    onSuccess: (res) => {
+      if (res.data) {
+        setForm(res.data[0]);
+      }
+    },
+  });
 
+  const addMutation = useMutation({
+    mutationFn: postAddUsuario,
+    onSuccess: (nivel, variables) => {
+      variables = { ...variables, id: nivel.data.id };
+      if (queryClient.getQueryData(["usuarios"])) {
+        queryClient.setQueryData(["usuarios"], (prevNiveles: any) =>
+          prevNiveles.concat(variables)
+        );
+      }
+      setNotificacion({
+        msg: "Usuario agregado de forma exitosa",
+        estado: true,
+      });
+    },
+  });
+  /**
+   * FORMULARIO FORMIK
+   **/
   const initialValues = {
-    nombre: state.nombre || "",
-    descripcion: state.descripcion || "",
-    estatus: state.estatus || "",
+    nombre: "",
+    apellido: "",
+    correo: "",
+    estado: "",
   };
 
-  function onSubmit(fields: any, { setStatus, setSubmitting, resetForm }: any) {
-    setStatus();
-    if (id === "nuevo") {
-      createNivel(fields, setSubmitting, resetForm);
-    } else {
-      updateNivel(id, fields, setSubmitting, resetForm);
+  const validate = (values: any) => {
+    const errors: any = {};
+    if (!values.nombre) {
+      errors.nombre = "Este campo es requerido";
     }
-  }
 
-  function createNivel(
-    fields: any,
-    setSubmitting: (arg0: boolean) => void,
+    if (!values.apellido) {
+      errors.apellido = "Este campo es requerido";
+    }
+
+    if (!values.coreo) {
+      errors.email = "Required";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      errors.email = "Direccion de correo invalida";
+    }
+
+    return errors;
+  };
+
+  const handleAgregar = (
+    values: any,
+    setSubmitting: any,
     resetForm: Function
-  ) {
-    nivelService
-      .create(fields)
-      .then(() => {
-        //alertService.success('User added', { keepAfterRouteChange: true });
-        setNotificacion({
-          msg: "Nivel agregado",
-          estado: true,
-        });
-        resetForm({});
-        //history.push('.');
-      })
-      .catch((error: any) => {
-        setSubmitting(false);
-        //alertService.error(error);
-        console.warn("Error:" + error);
-      });
+  ) => {
+    console.log(values);
+  };
+
+  const handleActualizar = (values: any, setSubmitting: any) => {
+    console.log(values);
+  };
+
+  const handleListado = (event: any) => {
+    history.push("/usuarios");
+  };
+  /**
+   * INFO REACT-QUERY
+   **/
+  if (isLoading) {
+    return (
+      <IonPage className="fondo">
+        <IonContent fullscreen className="bg-light">
+          <IonGrid className="bg-light">
+            <IonRow
+              className="pt-4 pb-4 mb-2 ion-justify-content-center"
+              style={{
+                height: "100vh",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <span className="spinner-border mb-4"></span>
+                <h1>Cargando....</h1>
+              </div>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </IonPage>
+    );
   }
 
-  function updateNivel(
-    id: any,
-    fields: any,
-    setSubmitting: (arg0: boolean) => void,
-    resetForm: Function
-  ) {
-    fields["id"] = id;
-    nivelService
-      .update(id, fields)
-      .then(() => {
-        //alertService.success('User updated', { keepAfterRouteChange: true });
-        setNotificacion({
-          msg: "Nivel actualizado",
-          estado: true,
-        });
-        //resetForm({})
-        //history.push('..');
-      })
-      .catch((error: any) => {
-        setSubmitting(false);
-        //alertService.error(error);
-        console.warn("Error:" + error);
-      });
+  if (error) {
+    return (
+      <IonPage className="fondo">
+        <IonContent fullscreen className="bg-light">
+          <IonGrid className="bg-light">
+            <IonRow
+              className="pt-4 pb-4 mb-2 ion-justify-content-center"
+              style={{
+                height: "100vh",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <span className="spinner-border mb-4"></span>
+                <h1>Error al realizar la solicitud....</h1>
+              </div>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </IonPage>
+    );
   }
-
-  useEffect(() => {
-    nivelService.getById(id).then((nivel) => {
-      setState(nivel);
-    });
-  }, []);
-
   return (
     <IonPage className="fondo">
       <IonContent fullscreen className="bg-light">
         <IonGrid className="bg-light">
           <HeaderInterior />
-
           <IonRow className="mt-0">
             <NavLateral />
             <IonCol size="10" className="px-3">
               <div className="pb-2">
-                <p>Formulario de nivel</p>
+                <IonButton
+                  className="btn-outline text-info fs-12"
+                  fill="outline"
+                  onClick={handleListado}
+                >
+                  <IonImg
+                    src={"./images/descargar.svg"}
+                    className="mr-2"
+                    style={{ width: "16px" }}
+                  />
+                  Listado
+                </IonButton>
+                <IonButton
+                  className="btn-outline text-info fs-12"
+                  fill="outline"
+                >
+                  <IonImg
+                    src={"./images/descargar.svg"}
+                    className="mr-2"
+                    style={{ width: "16px" }}
+                  />
+                  Exportar (Excel)
+                </IonButton>
+                <div className="float-right">
+                  <IonButton
+                    className="button-deg-gen fs-12 mr-2"
+                    fill="outline"
+                  >
+                    <IonImg
+                      src={"./images/filtrar.svg"}
+                      className="mr-2 filter-white"
+                      style={{ width: "16px" }}
+                    />
+                    Filtrar
+                  </IonButton>
+                  <IonButton className="button-deg-gen fs-12" fill="outline">
+                    <IonImg
+                      src={"./images/ordenar.svg"}
+                      className="mr-2 filter-white"
+                      style={{ width: "16px" }}
+                    />
+                    Ordenar
+                  </IonButton>
+                </div>
               </div>
               <IonCard className="m-0 card-slide shadow-full">
                 <IonCardContent className="card-content-slide height-vh-con-table">
                   <Formik
-                    initialValues={initialValues}
-                    validationSchema={advancedSchema}
+                    initialValues={form || initialValues}
                     enableReinitialize
-                    //onSubmit={onSubmit}
                     onSubmit={(values, actions) => {
-                      if (isAddMode === "nuevo") {
-                        createNivel(
+                      if (id === "0") {
+                        handleAgregar(
                           values,
                           actions.setSubmitting,
                           actions.resetForm
                         );
                       } else {
-                        updateNivel(
-                          id,
-                          values,
-                          actions.setSubmitting,
-                          actions.resetForm
-                        );
+                        handleActualizar(values, actions.setSubmitting);
                       }
                       setTimeout(() => {
                         actions.setSubmitting(false);
                       }, 500);
                     }}
                   >
-                    {({ isSubmitting }) => {
-                      return (
-                        <Form>
-                          <h2>
-                            {isAddMode === "nuevo"
-                              ? "Agregar Nivel"
-                              : "Editar Nivel"}
-                          </h2>
-                          <FieldText label="Nombre" name="nombre" type="text" />
-
-                          <FieldText
-                            label="Descripción"
-                            name="descripcion"
-                            type="text"
-                          />
-
-                          <FieldSelect label="Estatus" name="estatus">
-                            <option value="">Seleccione</option>
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                          </FieldSelect>
-
-                          <div className="w-100 text-center mt-3">
-                            <IonButton
-                              disabled={isSubmitting}
-                              className="btn-outline text-info"
-                              fill="outline"
-                              type="submit"
-                            >
-                              {isSubmitting && (
-                                <span className="spinner-border spinner-border-sm mr-1"></span>
-                              )}
-                              Guardar
-                            </IonButton>
+                    {({ values, errors, handleSubmit, handleChange }) => (
+                      <form onSubmit={handleSubmit}>
+                        <div className="field">
+                          <label className="label">Nombre</label>
+                          <div className="control">
+                            <input
+                              type="text"
+                              name="nombre"
+                              onChange={handleChange}
+                              value={values.nombre}
+                            />
                           </div>
-                        </Form>
-                      );
-                    }}
+                          {errors.nombre && (
+                            <div id="feedback">{errors.nombre}</div>
+                          )}
+                        </div>
+                        <div className="field">
+                          <label className="label">Apellido</label>
+                          <div className="control">
+                            <input
+                              type="text"
+                              name="apellido"
+                              onChange={handleChange}
+                              value={values.apellido}
+                            />
+                          </div>
+                          {errors.apellido && (
+                            <div id="feedback">{errors.apellido}</div>
+                          )}
+                        </div>
+                        <div className="field">
+                          <label className="label">Correo</label>
+                          <div className="control">
+                            <input
+                              type="text"
+                              name="correo"
+                              onChange={handleChange}
+                              value={values.correo}
+                            />
+                          </div>
+                          {errors.apellido && (
+                            <div id="feedback">{errors.correo}</div>
+                          )}
+                        </div>
+
+                        <div className="field">
+                          <label className="label">Estado</label>
+                          <div className="control">
+                            <div className="select is-rounded">
+                              <select
+                                id="estado"
+                                name="estado"
+                                onChange={handleChange}
+                                value={values.estado}
+                              >
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <IonButton
+                            className="button-deg-gen fs-12"
+                            fill="outline"
+                            type="submit"
+                          >
+                            Agregar
+                          </IonButton>
+                        </div>
+                      </form>
+                    )}
                   </Formik>
                 </IonCardContent>
               </IonCard>

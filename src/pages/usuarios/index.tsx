@@ -1,3 +1,3 @@
 import Usuarios from "./usuarios";
-import Usuari from "./usuari";
-export { Usuarios, Usuari };
+import Usuario from "./usuario";
+export { Usuarios, Usuario };

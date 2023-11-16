@@ -7,9 +7,9 @@ export const getUsuarios = async () => {
   return res.data;
 };
 
-export const getUsuariosId = async (id: any) => {
+export const getUsuario = async (id: any) => {
   const res = await URLBASE.get(
-    `controller/usuarios.php?op=usuarioId&id=${id}`
+    `controller/usuarios.php?op=usuario&id=${id}`
   );
   return res.data;
 };

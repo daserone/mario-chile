@@ -36,12 +36,6 @@ import {
   dependiente,
 } from "../../servicios/pacientes";
 import { URLBIENIPERFIL } from "../../servicios/configuracion";
-/*import {
-  getValidacionesDependiente,
-  updateValidacionDependienteAprobar,
-  updateValidacionDependienteRechazar,
-  getImgDependiente,
-} from "../../servicios/dependientes";*/
 
 const DependientesValidar = () => {
   const [modal, setModal] = useState<boolean>(false);
@@ -95,7 +89,7 @@ const DependientesValidar = () => {
     idusuario: string
   ) => {
     const formData = new FormData();
-    formData.append("op", "dependienteAprobar");
+    formData.append("op", "dependiente/aprobar");
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
     formData.append("idfamiliar", idfamiliar);
@@ -109,7 +103,7 @@ const DependientesValidar = () => {
     idfamiliar: string
   ) => {
     const formData = new FormData();
-    formData.append("op", "dependienteRechazar");
+    formData.append("op", "dependiente/rechazar");
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
     formData.append("idfamiliar", idfamiliar);

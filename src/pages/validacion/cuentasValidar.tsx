@@ -24,21 +24,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { NavLateral, HeaderInterior, InfoPeticion } from "../../components";
-import {
-  getValidacionesCuenta,
-  updateValidacionCuentaAprobar,
-  updateValidacionCuentaRechazar,
-} from "../../servicios/validaciones";
+import { getPrincipales, postPaciente } from "../../servicios/pacientes";
 import { URLPERFIL } from "../../servicios";
 const CuentasValidar = () => {
   const [modal, setModal] = useState<boolean>(false);
-  const [modalPrg, setModalPrg] = useState<boolean>(false);
   const [img, setImg] = useState<any>({
     foto: "",
     fotoReverso: "",
     documento: "",
     documentoVerif: "",
   });
+
   const [notificacion, setNotificacion] = useState({
     msg: "",
     estado: false,
@@ -48,11 +44,13 @@ const CuentasValidar = () => {
 
   const { data, error, isLoading, isFetching } = useQuery({
     queryKey: ["validacion-cuentas"],
-    queryFn: getValidacionesCuenta,
+    queryFn: getPrincipales,
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
   });
 
-  const cuentaAprobarMutation = useMutation({
-    mutationFn: updateValidacionCuentaAprobar,
+  const aprobarMutation = useMutation({
+    mutationFn: postPaciente,
     onSuccess: (data: any) => {
       if (queryClient.getQueryData(["validacion-cuentas"])) {
         queryClient.invalidateQueries(["validacion-cuentas"]);
@@ -64,8 +62,8 @@ const CuentasValidar = () => {
     },
   });
 
-  const cuentaRechazarMutation = useMutation({
-    mutationFn: updateValidacionCuentaRechazar,
+  const rechazarMutation = useMutation({
+    mutationFn: postPaciente,
     onSuccess: (data) => {
       if (queryClient.getQueryData(["validacion-cuentas"])) {
         queryClient.invalidateQueries(["validacion-cuentas"]);
@@ -83,11 +81,11 @@ const CuentasValidar = () => {
     idusuario: string
   ) => {
     const formData = new FormData();
-    formData.append("op", "cuentaAprobar");
+    formData.append("op", "principal/aprobar");
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
     formData.append("idusuario", idusuario);
-    cuentaAprobarMutation.mutate(formData);
+    aprobarMutation.mutate(formData);
   };
 
   const handleRechazar = (
@@ -96,11 +94,11 @@ const CuentasValidar = () => {
     idusuario: string
   ) => {
     const formData = new FormData();
-    formData.append("op", "cuentaRechazar");
+    formData.append("op", "principal/rechazar");
     formData.append("iddocumento", iddocumento);
     formData.append("idpaciente", idpaciente);
     formData.append("idusuario", idusuario);
-    cuentaRechazarMutation.mutate(formData);
+    rechazarMutation.mutate(formData);
   };
 
   const handleVerImagen = (
@@ -120,7 +118,6 @@ const CuentasValidar = () => {
       imagenVerificacionDocumento,
     });
     //setModal(!modal);
-
     let URL = `${URLPERFIL}${idusuario}/reconocimientos/${idpaciente}`;
 
     let foto = imagenDocumento !== "" ? `${URL}/${imagenDocumento}` : "";

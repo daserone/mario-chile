@@ -6,7 +6,7 @@ import {
   Niveles,
   Nivel,
   Usuarios,
-  Usuari,
+  Usuario,
   Afiliados,
   CuentasValidar,
   DependientesValidar,
@@ -39,7 +39,7 @@ const RutasPrivadas: React.FC = () => {
             <Usuarios />
           </Route>
           <Route exact path="/app/usuario/:id">
-            <Usuari />
+            <Usuario />
           </Route>
           <Route exact path="/app/afiliados">
             <Afiliados />
