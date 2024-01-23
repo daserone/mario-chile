@@ -10,6 +10,7 @@ import {
   Afiliados,
   CuentasValidar,
   DependientesValidar,
+  Notificaciones,
   Paciente,
   Pacientes,
 } from "../pages";
@@ -28,6 +29,9 @@ const RutasPrivadas: React.FC = () => {
           </Route>
           <Route exact path="/app/validacion-dependientes">
             <DependientesValidar />
+          </Route>
+          <Route exact path="/app/notificaciones">
+            <Notificaciones />
           </Route>
           <Route exact path="/app/niveles">
             <Niveles />

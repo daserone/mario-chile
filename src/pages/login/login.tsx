@@ -48,7 +48,7 @@ const Login: React.FC = () => {
             setClave("");
 
             dispatch(doLogin(data.data));
-            //history.push("/app");
+            history.push("/app");
           } else {
             setNotificacion({
               msg: data.msg,

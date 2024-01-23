@@ -57,6 +57,13 @@ export const dataMenu = [
     estado: "activo",
     rol: [1, 2],
   },
+  {
+    img: "./images/cuenta-light.svg",
+    nombre: "Notificaciones",
+    ruta: "/app/notificaciones",
+    estado: "activo",
+    rol: [1, 2],
+  }
 ];
 
 export const dataPreguntas = [
