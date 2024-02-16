@@ -1,0 +1,67 @@
+.rdt_TableCol_Sortable > .form-control {
+  font-size: 1rem !important;
+  font-weight: 900 !important;
+  color: #3e4954;
+}
+#pagination-previous-page:not([disabled]),
+#pagination-next-page:not([disabled]) {
+  fill: #fff;
+  background: #0a6fb8;
+  border-radius: 0.2rem;
+  height: 25px;
+  margin-right: 0.4rem;
+  padding: initial;
+  width: 25px;
+}
+#pagination-first-page:not([disabled]),
+#pagination-last-page:not([disabled]) {
+  fill: #fff;
+  background: #293f76;
+  border-radius: 0.2rem;
+  height: 25px;
+  margin-right: 0.4rem;
+  padding: initial;
+  width: 25px;
+}
+
+.main-menu .navbar-header .navbar-brand .brand-logo img {
+  max-width: 80px !important;
+}
+.react-dataTable
+  .rdt_TableHead
+  .rdt_TableHeadRow
+  .rdt_TableCol
+  .rdt_TableCol_Sortable {
+  color: #6e6b7b;
+  font-weight: bold;
+  font-style: 0.857rem;
+  letter-spacing: 0px !important;
+  text-transform: uppercase;
+}
+
+[dir] .react-dataTable .rdt_TableHead .rdt_TableHeadRow .rdt_TableCol {
+  padding: 0.72rem 0.5rem !important;
+}
+/*
+    .horizontal-menu .header-navbar.navbar-brand-center .navbar-header .navbar-brand .brand-logo img {
+        max-width: 400px !important;
+    }
+    [dir=ltr] .horizontal-menu .header-navbar.navbar-brand-center .navbar-header {
+        left: calc(0% - 0px) !important;
+    }
+    */
+
+.dropdown-select {
+  /*container for custom dropdown arrow*/
+  -webkit-appearance: none;
+  -moz-appearance: window;
+  padding: 2px 50px 2px 2px;
+  border: none;
+  background-image: url("../images/icons/chevron-down.png");
+  background-repeat: no-repeat;
+  background-position: right center;
+  font-weight: 500;
+}
+.dropdown-select:focus {
+  outline: none;
+}
