@@ -33,7 +33,6 @@ interface NavbarClasses {
   [key: string]: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const WrapperVerticalLayout = () => {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -52,7 +51,6 @@ const WrapperVerticalLayout = () => {
   const [menuVisibility, setMenuVisibility] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setMenuCollapsed = (val: any) => dispatch(handleMenuCollapsed(val));
   // Update Window Width
   const handleWindowWidth = () => {
@@ -136,9 +134,6 @@ const WrapperVerticalLayout = () => {
       {/*NavBar*/}
       <Navbar
         expand="lg"
-        //container={false}
-        //light={skin !== "dark"}
-        //dark={skin === "dark" || bgColorCondition}
         color={bgColorCondition ? navbarColor : undefined}
         style={{ margin: "0 27px", position: "absolute" }}
         className={classnames(

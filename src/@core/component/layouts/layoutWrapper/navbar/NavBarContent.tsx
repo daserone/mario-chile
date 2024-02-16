@@ -18,7 +18,7 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
     <>
       {" "}
       <Container fluid>
-        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Toggle aria-controls="navbarScroll" className="" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
             className="me-auto my-1 my-lg-0"
@@ -26,7 +26,7 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
             navbarScroll
           >
             <Nav.Link
-              className="nav-menu-main menu-toggle hidden-xs is-active"
+              className="nav-menu-main menu-toggle is-active d-xl-none"
               onClick={() => setMenuVisibility(true)}
             >
               <Menu className="ficon" />

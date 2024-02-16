@@ -138,7 +138,11 @@ const Login = () => {
                   </label>
                 </div>
               }
-              <Button type="submit">Iniciar Sesión</Button>
+              <div className="d-flex justify-content-center">
+                <Button size="lg" type="submit">
+                  Iniciar Sesión
+                </Button>
+              </div>
               <div className="center">
                 <div className="pt-1 text-center">
                   <div className="divider my-1">
