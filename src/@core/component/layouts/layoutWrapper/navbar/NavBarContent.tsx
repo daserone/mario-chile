@@ -1,12 +1,17 @@
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 //Component
-import { BottonDarkMode } from "../BottonDarkMode";
 import { Menu } from "react-feather";
+// image clinic
+import logoClinic from "../../../../../assets/images/logo-ejemplo.svg";
+import profilePic from "../../../../../assets/images/profile.png";
+import iconNotif from "../../../../../assets/sidebar/notification.svg";
+import iconSearch from "../../../../../assets/sidebar/search.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 interface Props {
   setMenuVisibility: (params: boolean) => void;
@@ -14,6 +19,26 @@ interface Props {
   setSkin: (params: string) => void;
 }
 const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
+  const CustomToggle = React.forwardRef(
+    (
+      {
+        children,
+        onClick,
+      }: {
+        children: React.ReactNode;
+        onClick: React.MouseEventHandler<HTMLImageElement>;
+      },
+      ref
+    ) => (
+      <img
+        src={profilePic}
+        onClick={(e) => {
+          e.preventDefault();
+          onClick(e);
+        }}
+      />
+    )
+  );
   return (
     <>
       {" "}
@@ -31,21 +56,35 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
             >
               <Menu className="ficon" />
             </Nav.Link>
+            <div className="clinic">
+              <img src={logoClinic} alt="" />
+              <span className="font-medium-2">Clínica el sol</span>
+              <FontAwesomeIcon icon={faChevronDown} size="lg" />
+            </div>
           </Nav>
-          <BottonDarkMode skin={skin} setSkin={setSkin} />
-          <Dropdown as={ButtonGroup}>
-            <Button variant="success">Split Button</Button>
-            <Dropdown.Toggle
-              split
-              variant="success"
-              id="dropdown-split-basic"
+          {/* <BottonDarkMode skin={skin} setSkin={setSkin} /> */}
+          <div className="user-items">
+            {/* icon notification  */}
+            <img
+              src={iconNotif}
+              alt="icon-notifications"
+              height={25}
+              width={25}
             />
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+            {/* icon search */}
+            <img src={iconSearch} alt="icon-search" height={25} width={25} />
+            <Dropdown drop="start">
+              <Dropdown.Toggle
+                as={CustomToggle}
+                id="dropdown-custom-components"
+              />
+              <Dropdown.Menu>
+                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </Navbar.Collapse>
       </Container>
     </>

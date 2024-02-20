@@ -229,3 +229,19 @@
 .margin-small-2 {
   margin-left: 20px;
 }
+
+.clinic {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 10px;
+}
+
+.user-items {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 10px;
+}
