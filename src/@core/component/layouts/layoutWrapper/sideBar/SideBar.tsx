@@ -79,6 +79,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Usuarios"
+              url="usuarios"
             />
             {/* biniwallet  */}
             <span
@@ -94,6 +95,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Pacientes"
+              url="bieni-wallet/pacientes"
             />
             {/* validacion  */}
             <MenuItemSidebar
@@ -101,6 +103,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Validación"
+              url="bieni-wallet/validacion"
             />
             {/* afiliados  */}
             <MenuItemSidebar
@@ -108,6 +111,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Afiliados"
+              url="bieni-wallet/afiliados"
             />
             {/* difusion  */}
             <MenuItemSidebar
@@ -115,6 +119,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Difusión"
+              url="bieni-wallet/difusion"
             />
             {/* BieniMedico  */}
             <span
@@ -130,6 +135,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Estadísticas"
+              url="bieni-medico/estadisticas"
             />
             {/* clientes  */}
             <MenuItemSidebar
@@ -137,6 +143,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Clientes"
+              url="bieni-medico/clientes"
             />
             {/* planes  */}
             <MenuItemSidebar
@@ -144,6 +151,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Planes"
+              url="bieni-medico/planes"
             />
             {/* integraciones  */}
             <MenuItemSidebar
@@ -151,6 +159,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Integraciones"
+              url="bieni-medico/integraciones"
             />
           </Menu>
         </Sidebar>
