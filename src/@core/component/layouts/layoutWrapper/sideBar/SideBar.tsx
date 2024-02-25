@@ -3,7 +3,6 @@ import { Sidebar, Menu } from "react-pro-sidebar";
 import classnames from "classnames";
 import { Menu as MenuFeather } from "react-feather";
 import themeConfig from "@src/config/theme.config";
-
 import layoutGrid from "../../../../../assets/sidebar/layout-grid.svg";
 import users from "../../../../../assets/sidebar/users.svg";
 import listCheck from "../../../../../assets/sidebar/list-check.svg";
@@ -19,8 +18,10 @@ import MenuItemSidebar from "./MenuItemSidebar";
 interface Props {
   skin: string;
   menuVisibility?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setMenuVisibility?: any;
   menuCollapsed: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setMenuCollapsed?: any;
 }
 

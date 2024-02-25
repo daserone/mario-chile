@@ -1,3 +1,4 @@
+import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -11,7 +12,7 @@ import iconNotif from "../../../../../assets/sidebar/notification.svg";
 import iconSearch from "../../../../../assets/sidebar/search.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+
 
 interface Props {
   setMenuVisibility: (params: boolean) => void;

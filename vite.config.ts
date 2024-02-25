@@ -30,6 +30,10 @@ export default defineConfig({
         find: "@hooks",
         replacement: path.resolve(path.join(__dirname, "/src/hooks")),
       },
+      {
+        find: "@component",
+        replacement: path.resolve(path.join(__dirname, "/src/component")),
+      },
     ],
   },
 });
