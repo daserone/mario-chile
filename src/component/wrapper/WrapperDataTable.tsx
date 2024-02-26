@@ -66,14 +66,19 @@ export const WrapperDataTable: React.FC<Props> = ({
       },
       background: {
         default: "#f8f8f8",
+        hover: "red",
       },
       divider: {
         default: "#DBDADE",
       },
       action: {
         button: "rgba(0,0,0,.54)",
-        hover: "rgba(0,0,0,.08)",
+        hover: "rgba(198, 198, 198, 0.08)",
         disabled: "rgba(0,0,0,.12)",
+      },
+      highlightOnHover: {
+        default: "#DBDADE",
+        text: "rgba(0, 0, 0, 0.87)",
       },
     },
     "dark"
@@ -83,6 +88,12 @@ export const WrapperDataTable: React.FC<Props> = ({
       style: {
         color: "#4B465C",
         fontWeight: "600",
+      },
+    },
+    hover: {
+      when: "even", // 'odd', 'even', 'none'
+      style: {
+        background: "red", // change the background color on hover
       },
     },
   };
@@ -106,7 +117,6 @@ export const WrapperDataTable: React.FC<Props> = ({
           data={data}
           highlightOnHover
           responsive
-          striped
           pagination
           paginationServer
           paginationDefaultPage={page ?? 1}

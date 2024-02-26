@@ -1,13 +1,17 @@
-import DataTable, {
-  TableColumn,
-  createTheme,
-} from "react-data-table-component";
+import { WrapperDataTable } from "@src/component/wrapper";
+import { useState } from "react";
+import { TableColumn, createTheme } from "react-data-table-component";
 interface DataRow {
   user: string;
   email: string;
   status: boolean;
 }
 const UsuariosTable = () => {
+  const [page, setPage] = useState<number>(1);
+  const [countPerPage, setCountPerPage] = useState<number>(10);
+  const [search, setSearch] = useState<string>("");
+  const [selecion, setSelecion] = useState<DataRow | null>(null);
+
   const columns: TableColumn<DataRow>[] = [
     {
       name: "USUARIO",
@@ -49,43 +53,24 @@ const UsuariosTable = () => {
       status: true,
     },
   ];
-  createTheme(
-    "solarized",
-    {
-      text: {
-        primary: "#4B465C",
-        secondary: "#4B465C",
-      },
-      background: {
-        default: "#f8f8f8",
-      },
 
-      divider: {
-        default: "#DBDADE",
-      },
-      action: {
-        button: "rgba(0,0,0,.54)",
-        hover: "rgba(0,0,0,.08)",
-        disabled: "rgba(0,0,0,.12)",
-      },
-    },
-    "dark"
-  );
-  const customStyles = {
-    headCells: {
-      style: {
-        color: "#4B465C",
-        fontWeight: "600",
-      },
-    },
-  };
   return (
-    <DataTable
+    <WrapperDataTable
+      title=""
       columns={columns}
+      load={false}
+      error={false}
       data={data}
-      pagination
-      theme="solarized"
-      customStyles={customStyles}
+      recordsTotals={1}
+      countPerPage={countPerPage}
+      setCountPerPage={setCountPerPage}
+      page={page}
+      setPage={setPage}
+      handleClick={(data) => {
+        setSelecion(data);
+      }}
+      handleDoubleClick={() => {}}
+      isExpandable={false}
     />
   );
 };
