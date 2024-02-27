@@ -2,14 +2,11 @@ import { useState } from "react";
 import { TableColumn } from "react-data-table-component";
 import { Card, Col, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-//Component
-import { WrapperDataTable } from "@component/wrapper";
-//Service
-import { getPacientes } from "@services/paciente.service";
-//Style
-import "./Pacientes.scss";
+import exportIcon from "@src/assets/icons/share-screen.svg";
+import PacientesTable from "./components/PacientesTable";
+import ExportButton from "@src/component/buttons/ExportButton";
 
 interface DataRow {
   idusuario: string | number;
@@ -72,65 +69,77 @@ const Pacientes = () => {
     <>
       <Row>
         <Col>
-          <h2 className="my-2">BieniWallet/Pacientes</h2>
+          <h2 className="my-2">
+            {" "}
+            <span className="text-muted">BieniWallet /</span> Pacientes
+          </h2>
           <Card>
             <Card.Header>
               <h3>Filtro</h3>
             </Card.Header>
             <div className="card-header-inputs">
-              <div className="w-100 row mt-2">
+              {/* TODO: 4 columns with 2 inputs and 2 buttons, one for export and one for add, inputs are for search and state select  */}
+              <div className="w-100 row mt-2 border-bottom pb-2">
                 {/* search col  */}
                 <div className="col-6 col-lg-4">
+                  {/* fecha registro select  */}
+                  <select className="form-select">
+                    {/* //fecha de registro default option */}
+                    <option value="0" selected disabled>
+                      Fecha de registro
+                    </option>
+                    <option value="1">Activo</option>
+                    <option value="2">Inactivo</option>
+                  </select>
+                </div>
+                {/* perfil select col  */}
+                <div className="col-6 col-lg-4">
+                  {/* perfil select input  */}
+                  <select className="form-select">
+                    {/* perfil default option */}
+                    <option value="0" selected disabled>
+                      Perfil
+                    </option>
+                    <option value="1">Activo</option>
+                    <option value="2">Inactivo</option>
+                  </select>
+                </div>
+                {/* verificacion select col  */}
+                <div className="col-6 col-lg-4 mt-2 mt-lg-0">
+                  {/* verificacion select input  */}
+                  <select className="form-select">
+                    {/* verificacion default option */}
+                    <option value="0" selected disabled>
+                      Verificación
+                    </option>
+                    <option value="1">Activo</option>
+                    <option value="2">Inactivo</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="w-100 row mt-2 justify-content-between">
+                {/* search col  */}
+                <div className="col-12 col-lg-4">
                   {/* search input  */}
                   <div className="input-group">
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Buscar usuario..."
+                      placeholder="Buscar por nombre o cedula..."
                     />
                     <button className="btn btn-outline-secondary" type="button">
                       <FontAwesomeIcon icon={faSearch} />
                     </button>
                   </div>
                 </div>
-                {/* state select col  */}
-                <div className="col-6 col-lg-4">
-                  {/* state select input  */}
-                  <select className="form-select">
-                    <option value="1">Activo</option>
-                    <option value="2">Inactivo</option>
-                  </select>
-                </div>
-                {/* export button col  */}
-                <div className="col-6 col-lg-2">
-                  <button className="btn btn-secondary">Exportar</button>
-                </div>
                 {/* add button col  */}
-                <div className="col-6 col-lg-2">
-                  <button className="btn btn-primary">
-                    <FontAwesomeIcon icon={faPlus} className="me-2" />
-                    Agregar usuario
-                  </button>
+                <div className="col-12 col-lg-3 mt-2 mt-lg-0 d-flex justify-content-end ">
+                  <ExportButton />
                 </div>
               </div>
             </div>
-            <Card.Body>
-              <WrapperDataTable
-                title=""
-                columns={columns}
-                isLoading={isLoading}
-                isError={isError}
-                data={data?.data ?? []}
-                recordsTotals={data?.recordsTotals ?? 0}
-                countPerPage={countPerPage}
-                setCountPerPage={setCountPerPage}
-                page={page}
-                setPage={setPage}
-                handleClick={() => {}}
-                handleDoubleClick={() => {}}
-                isExpandable={false}
-              />
-            </Card.Body>
+            <PacientesTable />
           </Card>
         </Col>
       </Row>

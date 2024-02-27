@@ -14,7 +14,7 @@ export const doLogin = (form: any) =>
     },
   });
 
-export const usuarios = async ({ ...parameters }) => {
+export const getUsuarios = async ({ ...parameters }) => {
   const apiUrl = buildUrl(endpoint.usuario, "usuarios", parameters);
   const response = await servicios.get(apiUrl, { responseType: "json" });
   if (response.status >= 200 && response.status < 300) {
@@ -24,7 +24,7 @@ export const usuarios = async ({ ...parameters }) => {
   }
 };
 
-export const usuario = async ({ ...parameters }) => {
+export const getUsuario = async ({ ...parameters }) => {
   const apiUrl = buildUrl(endpoint.usuario, "usuario", parameters);
   const response = await servicios.get(apiUrl, { responseType: "json" });
   if (response.status >= 200 && response.status < 300) {
