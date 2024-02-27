@@ -7,7 +7,8 @@ interface DataRow {
   email: string;
   status: boolean;
 }
-const UsuariosTable = () => {
+
+const UsuariosTable: React.FC = () => {
   const columns: TableColumn<DataRow>[] = [
     {
       name: "USUARIO",
@@ -31,24 +32,14 @@ const UsuariosTable = () => {
       ),
     },
   ];
-
   const data: DataRow[] = [
     {
       user: "Juan",
       email: "juan@pruebas.com",
       status: true,
     },
-    {
-      user: "Pedro",
-      email: "pedro@pruebas.com",
-      status: false,
-    },
-    {
-      user: "Maria",
-      email: "maria@pruebas.com",
-      status: true,
-    },
   ];
+
   createTheme(
     "solarized",
     {

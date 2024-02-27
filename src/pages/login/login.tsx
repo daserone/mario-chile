@@ -2,16 +2,20 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, CardTitle, Form, Button, CardText } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 //Hook
 import { useForm } from "../../hooks";
 //Assets
-import bieni from "../../assets/images/logo/bieni-icon.svg";
-import fondo from "../../assets/images/pages/fondo.svg";
+import bieni from "@assets/images/logo/bieni-icon.svg";
+import fondo from "@assets/images/pages/fondo.svg";
 //Redux
-import { createUser } from "../../state/slice/user";
+import { createUser } from "@store/slice/user";
+//Service
+import { doLogin } from "@services/usuario.service";
+//Model
+import { ResponseNotificacion } from "@src/models";
 //Style
 import "../../@core/scss/react/pages/page-authentication.scss";
-///react/pages/page-authentication.scss
 type inputs = {
   email: string;
   contrasena: string;
@@ -23,20 +27,40 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const { value, handleSubmit, handleInput } = useForm({
     email: "",
-    contrasena: "",
+    contrasena: "Australopithecus",
   });
 
   const onSubmit = (value: inputs) => {
-    console.log(value);
-    const rsp = {
-      id: 22323,
-      name: "christopher",
-      email: "carnevale",
-      token: "fdfdsfdfkdhslgf",
-      active: true,
-    };
-    dispatch(createUser(rsp));
-    history("/usuarios", { replace: true });
+    if (value.email === "") {
+      toast.error("Agregue el correo.");
+      return;
+    }
+    if (value.contrasena === "") {
+      toast.error("Agregue la contraseña.");
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form: any = new FormData();
+    form.append("op", "dologinWithCredencial");
+    form.append("correo", value.email.trim());
+    form.append("clave", value.contrasena.trim());
+    doLogin(form)
+      .then((rsp) => {
+        const { status, data } = rsp;
+        if (status === 200) {
+          const { responseCode, item }: ResponseNotificacion = data;
+          if (responseCode === 1) {
+            dispatch(createUser(item));
+            history("/usuarios", { replace: true });
+          } else {
+            toast.error("Correo o contraseña incorrecta.");
+          }
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        toast.error("Error al procesar solicitud.");
+      });
   };
 
   const restorePassword = () => {
@@ -85,7 +109,8 @@ const Login = () => {
                 >
                   <Form.Label>Email</Form.Label>
                   <Form.Control
-                    type="email"
+                    type="text"
+                    name="email"
                     value={value?.email ?? ""}
                     placeholder="name@example.com"
                     onChange={handleInput}
@@ -100,7 +125,8 @@ const Login = () => {
                   >
                     <Form.Label>Contraseña</Form.Label>
                     <Form.Control
-                      type="contrasena"
+                      name="contrasena"
+                      type="password"
                       value={value.contrasena || ""}
                       placeholder="******************"
                       onChange={handleInput}

@@ -67,7 +67,9 @@ const Correo = () => {
               setCountPerPage={setCountPerPage}
               page={page}
               setPage={setPage}
-              handleClick={() => {}}
+              handleClick={(data) => {
+                setSelecion(data);
+              }}
               handleDoubleClick={() => {}}
               isExpandable={false}
             />

@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 //Store
 import store from "@src/state/store.ts";
-//Component
+//Component root
 import App from "./App.tsx";
+//Component
 import { FallbackSpinner } from "./@core/component/spinner";
 //Core styles
 import "./@core/assets/fonts/feather/iconfont.css";

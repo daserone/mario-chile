@@ -14,15 +14,15 @@ import { Routers } from "@src/router";
 function App() {
   return (
     <>
-      <ThemeContext>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeContext>
           <Routers />
           <Toaster
             position={themeConfig?.layout?.toastPosition ?? "top-right"}
             toastOptions={{ className: "react-hot-toast" }}
           />
-        </QueryClientProvider>
-      </ThemeContext>
+        </ThemeContext>
+      </QueryClientProvider>
     </>
   );
 }

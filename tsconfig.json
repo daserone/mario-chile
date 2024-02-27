@@ -7,8 +7,10 @@
       "@styles/*": ["./src/@core/scss/*"],
       "@store/*": ["./src/state/*"],
       "@configs/*": ["./src/config/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@component/*": ["src/component/*"]
+      "@hooks/*": ["./src/hooks/*"],
+      "@component/*": ["./src/component/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@services/*": ["./src/services/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

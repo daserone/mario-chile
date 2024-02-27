@@ -1,10 +1,11 @@
 import DataTable, { createTheme } from "react-data-table-component";
+import Alert from "react-bootstrap/Alert";
 
 interface Props {
   title?: string;
   columns: object[];
-  load: boolean;
-  error: boolean;
+  isLoading: boolean;
+  isError: boolean;
   data: object[];
   recordsTotals: number;
   countPerPage: number;
@@ -35,8 +36,8 @@ const ExpandedTemplateDefault = () => {
 export const WrapperDataTable: React.FC<Props> = ({
   title,
   columns,
-  load,
-  error,
+  isLoading,
+  isError,
   data,
   recordsTotals,
   countPerPage,
@@ -89,10 +90,10 @@ export const WrapperDataTable: React.FC<Props> = ({
 
   return (
     <>
-      {error ? (
-        <div className="p-2">
-          <p>Estamos presentando problemas al procesar tu solicitud.</p>
-        </div>
+      {isError ? (
+        <Alert variant="danger" className="p-2 m-2">
+          Estamos presentando problemas al procesar tu solicitud.
+        </Alert>
       ) : (
         <DataTable
           title={title}
@@ -102,7 +103,7 @@ export const WrapperDataTable: React.FC<Props> = ({
           theme="solarized"
           customStyles={customStyles}
           columns={columns}
-          progressPending={load}
+          progressPending={isLoading}
           data={data}
           highlightOnHover
           responsive
