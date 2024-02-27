@@ -1,31 +1,43 @@
-import { WrapperDataTable } from "@src/component/wrapper";
 import { useState } from "react";
 import { TableColumn } from "react-data-table-component";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+//Component
+import { WrapperDataTable } from "@src/component/wrapper";
+//Service
+import { getUsuarios } from "@services/usuario.service";
+
 interface DataRow {
-  user: string;
-  email: string;
-  status: boolean;
+  nombre: string;
+  correo: string;
+  estado: string;
 }
-const UsuariosTable = () => {
+
+const UsuariosTable: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
-  const [selecion, setSelecion] = useState<DataRow | null>(null);
-
+  const [seleccion, setSeleccion] = useState<DataRow | null>(null);
+  //Solicitud
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["usuarios"],
+    queryFn: () => getUsuarios({ page }),
+    placeholderData: keepPreviousData,
+  });
+  //Column
   const columns: TableColumn<DataRow>[] = [
     {
       name: "USUARIO",
-      selector: (row) => row.user,
+      selector: (row) => row.nombre,
     },
     {
       name: "CORREO",
-      selector: (row) => row.email,
+      selector: (row) => row.correo,
     },
     {
       name: "ESTADO",
-      selector: (row) => row.status,
+      selector: (row) => row.estado,
       cell: (row) => (
         <div>
-          {row.status ? (
+          {row.estado === "activo" ? (
             <span className="active-badge">Activo</span>
           ) : (
             <span className="inactive-badge">Inactivo</span>
@@ -34,28 +46,21 @@ const UsuariosTable = () => {
       ),
     },
   ];
-  const data: DataRow[] = [
-    {
-      user: "Juan",
-      email: "juan@pruebas.com",
-      status: true,
-    },
-  ];
-
+  console.log(seleccion);
   return (
     <WrapperDataTable
       title=""
       columns={columns}
-      isLoading={false}
-      isError={false}
-      data={data}
-      recordsTotals={1}
+      isLoading={isLoading}
+      isError={isError}
+      data={data?.data ?? []}
+      recordsTotals={data?.recordsTotals ?? 0}
       countPerPage={countPerPage}
       setCountPerPage={setCountPerPage}
       page={page}
       setPage={setPage}
       handleClick={(data) => {
-        setSelecion(data);
+        setSeleccion(data);
       }}
       handleDoubleClick={() => {}}
       isExpandable={false}

@@ -1,70 +1,11 @@
-import { useState } from "react";
-import { TableColumn } from "react-data-table-component";
 import { Card, Col, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import exportIcon from "@src/assets/icons/share-screen.svg";
+//Component
 import PacientesTable from "./components/PacientesTable";
 import ExportButton from "@src/component/buttons/ExportButton";
 
-interface DataRow {
-  idusuario: string | number;
-  idpaciente: string | number;
-  documento: string;
-  nombre: string;
-  edad: string;
-  fechaNacimiento: string;
-  perfil: string;
-  tipoDocumento: string;
-  telefono: string;
-  registrado: string;
-}
 const Pacientes = () => {
-  const [page, setPage] = useState<number>(1);
-  const [countPerPage, setCountPerPage] = useState<number>(10);
-  //Solicitud
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["pacientes", page],
-    queryFn: () => getPacientes({ page }),
-    placeholderData: keepPreviousData,
-  });
-  //Column
-  const columns: TableColumn<DataRow>[] = [
-    {
-      name: "NOMBRE",
-      selector: (row) => row.nombre,
-    },
-    {
-      name: "DOCUMENTO",
-      selector: (row) => row.documento,
-      cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
-          <div>{row.documento}</div>
-          <div>{row.tipoDocumento}</div>
-        </div>
-      ),
-    },
-    {
-      name: "EDAD",
-      selector: (row) => row.edad,
-      cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
-          <div>{row.edad}</div>
-          <div>{row.fechaNacimiento}</div>
-        </div>
-      ),
-    },
-    {
-      name: "REGISTRO",
-      selector: (row) => row.registrado,
-    },
-    {
-      name: "PERFIL",
-      selector: (row) => row.perfil,
-    },
-  ];
-
   return (
     <>
       <Row>
@@ -78,8 +19,7 @@ const Pacientes = () => {
               <h3>Filtro</h3>
             </Card.Header>
             <div className="card-header-inputs">
-              {/* TODO: 4 columns with 2 inputs and 2 buttons, one for export and one for add, inputs are for search and state select  */}
-              <div className="w-100 row mt-2 border-bottom pb-2">
+              <div className="w-100 row mt-2 border-bottom ps-1 pe-1 pb-2">
                 {/* search col  */}
                 <div className="col-6 col-lg-4">
                   {/* fecha registro select  */}
@@ -118,7 +58,7 @@ const Pacientes = () => {
                 </div>
               </div>
 
-              <div className="w-100 row mt-2 justify-content-between">
+              <div className="w-100 row mt-2 justify-content-between ps-1 pe-1">
                 {/* search col  */}
                 <div className="col-12 col-lg-4">
                   {/* search input  */}
