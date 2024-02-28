@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, CardTitle, Form, Button, CardText } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 //Hook
 import { useForm } from "../../hooks";
@@ -9,13 +8,13 @@ import { useForm } from "../../hooks";
 import bieni from "@assets/images/logo/bieni-icon.svg";
 import fondo from "@assets/images/pages/fondo.svg";
 //Redux
-import { createUser } from "@store/slice/user";
 //Service
 import { doLogin } from "@services/usuario.service";
 //Model
-import { ResponseNotificacion } from "@src/models";
+import { ResponseNotificacion, user } from "@src/models";
 //Style
 import "../../@core/scss/react/pages/page-authentication.scss";
+import useAuth from "@src/@core/hooks/useAuth";
 type inputs = {
   email: string;
   contrasena: string;
@@ -23,13 +22,13 @@ type inputs = {
 
 const Login = () => {
   const history = useNavigate();
-  const dispatch = useDispatch();
   const [rememberMe, setRememberMe] = useState(false);
   const { value, handleSubmit, handleInput } = useForm({
     email: "",
     contrasena: "Australopithecus",
   });
 
+  const { saveUser } = useAuth();
   const onSubmit = (value: inputs) => {
     if (value.email === "") {
       toast.error("Agregue el correo.");
@@ -50,7 +49,7 @@ const Login = () => {
         if (status === 200) {
           const { responseCode, item }: ResponseNotificacion = data;
           if (responseCode === 1) {
-            dispatch(createUser(item));
+            saveUser(item);
             history("/usuarios", { replace: true });
           } else {
             toast.error("Correo o contraseña incorrecta.");

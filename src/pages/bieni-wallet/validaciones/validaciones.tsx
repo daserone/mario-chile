@@ -20,7 +20,9 @@ const Validacion = () => {
     <>
       <Row>
         <Col>
-          <h2 className="my-2">BieniWallet/Validación</h2>
+          <h2 className="my-2">
+            <span className="text-muted">BieniWallet /</span> Validación
+          </h2>
           <Card>
             <Tabs
               id="controlled-tab-example"

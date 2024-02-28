@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import "../Validaciones.scss";
+import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 
 const CustomToggle = React.forwardRef(
   (
@@ -35,7 +36,7 @@ interface DataRow {
   document: string;
   age: string | number;
   registerDate: string;
-  image: string;
+  image: string[];
 }
 const Dependiente = () => {
   const [page, setPage] = useState<number>(1);
@@ -93,14 +94,14 @@ const Dependiente = () => {
       document: "123456789",
       age: 25,
       registerDate: "2021-08-18",
-      image: defaulImage,
+      image: [defaulImage],
     },
     {
       name: "Maria Lopez",
       document: "987654321",
       age: 30,
       registerDate: "2021-08-18",
-      image: "",
+      image: [],
     },
   ];
 
@@ -141,38 +142,28 @@ const Dependiente = () => {
             lg={4}
             className="border-start border-top ps-lg-0"
           >
-            <div className="image-container">
-              <div className="image">
-                {selecion?.image === "" ? (
-                  <div className="d-flex justify-content-center p-5">
-                    Sin imagen
-                  </div>
-                ) : (
-                  <img src={selecion?.image}></img>
-                )}
-              </div>
-              {selecion !== null ? (
-                <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
-                  <Dropdown>
-                    <Dropdown.Toggle as={CustomToggle} />
+            <ImageSliders images={selecion?.image ?? []} />
+            {selecion !== null ? (
+              <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
+                <Dropdown>
+                  <Dropdown.Toggle as={CustomToggle} />
 
-                    <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
-                        Another action
-                      </Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">
-                        Something else
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Button variant="success" className="ms-1" size="sm">
-                    <FontAwesomeIcon icon={faThumbsUp} className="me-1" />
-                    Aprobar
-                  </Button>
-                </div>
-              ) : null}
-            </div>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Something else
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Button variant="success" className="ms-1" size="sm">
+                  <FontAwesomeIcon icon={faThumbsUp} className="me-1" />
+                  Aprobar
+                </Button>
+              </div>
+            ) : null}
           </Col>
         </Row>
       </div>
