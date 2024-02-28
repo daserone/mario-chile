@@ -11,7 +11,7 @@ import fondo from "@assets/images/pages/fondo.svg";
 //Service
 import { doLogin } from "@services/usuario.service";
 //Model
-import { ResponseNotificacion, user } from "@src/models";
+import { ResponseNotificacion } from "@src/models";
 //Style
 import "../../@core/scss/react/pages/page-authentication.scss";
 import useAuth from "@src/@core/hooks/useAuth";

@@ -39,7 +39,7 @@
       width: 1rem;
     }
   }
-  [class*='avatar-status-'] {
+  [class*="avatar-status-"] {
     border-radius: 50%;
     width: $avatar-status-size;
     height: $avatar-status-size;
@@ -85,7 +85,29 @@
 
   // Size Modifier
   // ========================================================================
-
+  &.avatar-xxl {
+    font-size: 1.5rem;
+    img {
+      width: $avatar-size-xxl;
+      height: $avatar-size-xxl;
+    }
+    .avatar-content {
+      height: $avatar-size-xxl;
+      width: $avatar-size-xxl;
+      font-size: 2.57rem;
+      .avatar-icon,
+      i,
+      svg {
+        height: 3rem;
+        width: 3rem;
+        font-size: 3rem;
+      }
+    }
+    [class*="avatar-status-"] {
+      right: 3px;
+      bottom: 0;
+    }
+  }
   &.avatar-xl {
     font-size: 1.5rem;
     img {
@@ -104,7 +126,7 @@
         font-size: 3rem;
       }
     }
-    [class*='avatar-status-'] {
+    [class*="avatar-status-"] {
       right: 3px;
       bottom: 0;
     }
@@ -127,7 +149,7 @@
         font-size: 2rem;
       }
     }
-    [class*='avatar-status-'] {
+    [class*="avatar-status-"] {
       right: 3px;
       bottom: 1px;
     }
@@ -149,7 +171,7 @@
       width: $avatar-size-sm;
       height: $avatar-size-sm;
     }
-    [class*='avatar-status-'] {
+    [class*="avatar-status-"] {
       right: -3px;
       bottom: -2px;
     }
@@ -164,7 +186,8 @@
     transition: all 0.25s ease;
     img,
     .avatar-content {
-      box-shadow: 0 0 0 2px $avatar-group-border, inset 0 0 0 1px rgba($black, 0.07);
+      box-shadow: 0 0 0 2px $avatar-group-border,
+        inset 0 0 0 1px rgba($black, 0.07);
     }
     .avatar-content {
       background-color: tint-color($secondary, 20%) !important;

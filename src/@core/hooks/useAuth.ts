@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { createUser, reset } from "@src/state/slice/user";
-import { user } from "@src/models";
 
 export default function useAuth() {
   const dispatch = useDispatch();

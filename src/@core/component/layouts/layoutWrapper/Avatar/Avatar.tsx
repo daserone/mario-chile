@@ -12,7 +12,7 @@ interface Props {
   className?: string;
   imgClassName?: string;
   contentStyles?: React.CSSProperties;
-  size?: "sm" | "lg" | "xl";
+  size?: "sm" | "lg" | "xl" | "xxl";
   tag?: React.ElementType | string;
   status?: "online" | "offline" | "away" | "busy";
   imgHeight?: string | number;
