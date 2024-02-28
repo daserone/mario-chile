@@ -6,7 +6,7 @@ interface Props {
   src?: string;
   img?: string;
   badgeUp?: boolean;
-  initials: string;
+  initials?: string;
   content?: string;
   badgeText?: string;
   className?: string;
@@ -47,6 +47,7 @@ interface Props {
     | "light-info"
     | "light-warning"
     | "light-dark";
+  onClick?: (e: any) => void;
 }
 
 const Avatar = (props: Props) => {
@@ -65,6 +66,7 @@ const Avatar = (props: Props) => {
     imgHeight,
     badgeColor,
     contentStyles,
+    onClick,
   } = props;
 
   // ** Function to extract initials from content
@@ -84,6 +86,7 @@ const Avatar = (props: Props) => {
         [`bg-${color}`]: color,
         [`avatar-${size}`]: size,
       })}
+      onClick={onClick}
     >
       {img === "" ? (
         <span

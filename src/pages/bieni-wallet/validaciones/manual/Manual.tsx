@@ -18,6 +18,8 @@ import { getPacientesManuales } from "@services/paciente.service";
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
+
+import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //import defaulImage from "@src/assets/images/defaul-validation.png";
 
 interface DataRow {
@@ -36,6 +38,7 @@ interface DataRow {
   state: string;
   imageDocument: string;
   imageVerefication: string;
+  image: Array<string>;
 }
 
 const CustomToggle = React.forwardRef(
@@ -55,7 +58,6 @@ const CustomToggle = React.forwardRef(
     </Button>
   )
 );
-
 const Manual = () => {
   //Hook
   const [page, setPage] = useState<number>(1);
@@ -125,7 +127,44 @@ const Manual = () => {
       ),
     },
   ];
-  console.log(selection);
+
+  /*
+    const data: DataRow[] = [];
+  {
+      name: "Juan Perez",
+      document: "123456789",
+      age: "25",
+      registrationDate: "2021-08-18",
+      image: ["defaulImage", "secondImage"],
+    },
+    {
+      name: "Maria Lopez",
+      document: "987654321",
+      age: "30",
+      registrationDate: "2021-08-18",
+      image: [],
+    },
+*/
+  const [currentImageLength, setCurrentImageLength] = useState<number>(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+
+  const handleSelect = (row: DataRow) => {
+    setSelection(row);
+    setCurrentImageLength(row.image.length);
+    setCurrentImageIndex(0);
+  };
+
+  const handleNextImage = () => {
+    if (currentImageIndex + 1 < currentImageLength) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+  const handlePrevImage = () => {
+    if (currentImageIndex - 1 >= 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
+  };
+
   return (
     <>
       <div className="px-2 border-bottom ">
@@ -151,7 +190,7 @@ const Manual = () => {
               page={page}
               setPage={setPage}
               handleClick={(data) => {
-                setSelection(data);
+                handleSelect(data);
               }}
               handleDoubleClick={() => {}}
               isExpandable={false}
@@ -161,44 +200,30 @@ const Manual = () => {
             xs={12}
             md={12}
             lg={4}
-            className="border-start border-top ps-lg-0"
+            className="border-start border-top ps-lg-0 "
           >
-            <div className="image-container">
-              <div className="image">
-                {selection?.imageDocument === "" ? (
-                  <div className="d-flex justify-content-center p-5">
-                    Sin imagen
-                  </div>
-                ) : (
-                  <img src={selection?.imageDocument}></img>
-                )}
+            <ImageSliders images={selection?.image ?? []} />
+            {selection !== null ? (
+              <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
+                <Dropdown>
+                  <Dropdown.Toggle as={CustomToggle} />
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Something else
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Button variant="success" className="ms-1" size="sm">
+                  <FontAwesomeIcon icon={faThumbsUp} className="me-1" />
+                  Aprobar
+                </Button>
               </div>
-              {selection !== null ? (
-                <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
-                  <Dropdown>
-                    <Dropdown.Toggle as={CustomToggle} />
-                    <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
-                        Another action
-                      </Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">
-                        Something else
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Button
-                    variant="success"
-                    className="ms-1"
-                    size="sm"
-                    onClick={handleApprove}
-                  >
-                    <FontAwesomeIcon icon={faThumbsUp} className="me-1" />
-                    Aprobar
-                  </Button>
-                </div>
-              ) : null}
-            </div>
+            ) : null}
           </Col>
         </Row>
       </div>
