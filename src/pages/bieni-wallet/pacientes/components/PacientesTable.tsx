@@ -50,7 +50,7 @@ const PacientesTable = () => {
       name: "DOCUMENTO",
       selector: (row) => row.document,
       cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-column align-items-start">
           {row.document}
           <span className="text-muted">{row.documentType}</span>
         </div>
@@ -60,7 +60,7 @@ const PacientesTable = () => {
       name: "EDAD",
       selector: (row) => row.age,
       cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-column align-items-start">
           {row.age}
           <span className="text-muted">{row.birthdate}</span>
         </div>
@@ -70,7 +70,7 @@ const PacientesTable = () => {
       name: "REGISTRO",
       selector: (row) => row.registrationDate,
       cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-column align-items-start">
           {row.registrationDate}
           <span className="text-muted"></span>
         </div>

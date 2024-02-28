@@ -60,7 +60,7 @@ const Dependiente = () => {
       name: "DOCUMENTO",
       selector: (row) => row.document,
       cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-column align-items-start">
           {row.document}
           <span className="text-muted">Cédula</span>
         </div>
@@ -70,7 +70,7 @@ const Dependiente = () => {
       name: "EDAD",
       selector: (row) => row.age,
       cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-column align-items-start">
           {row.age}
           <span className="text-muted">20/05/2001</span>
         </div>
@@ -80,7 +80,7 @@ const Dependiente = () => {
       name: "REGISTRO",
       selector: (row) => row.registerDate,
       cell: (row) => (
-        <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-column align-items-start">
           {row.registerDate}
           <span className="text-muted">12:00:00</span>
         </div>
