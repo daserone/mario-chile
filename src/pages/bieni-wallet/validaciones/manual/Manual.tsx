@@ -71,6 +71,7 @@ const Manual = () => {
     queryFn: () => getPacientesManuales({ page, search: query }),
     placeholderData: keepPreviousData,
   });
+
   //Handle
   const handleApprove = () => {
     toast.error("Aprobar.");
@@ -145,24 +146,19 @@ const Manual = () => {
       image: [],
     },
 */
-  const [currentImageLength, setCurrentImageLength] = useState<number>(0);
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const handleSelect = (row: DataRow) => {
-    setSelection(row);
-    setCurrentImageLength(row.image.length);
-    setCurrentImageIndex(0);
-  };
-
-  const handleNextImage = () => {
-    if (currentImageIndex + 1 < currentImageLength) {
-      setCurrentImageIndex(currentImageIndex + 1);
+    let images = [];
+    if (row.imageDocument !== "") {
+      images.push(row.imageDocument);
     }
-  };
-  const handlePrevImage = () => {
-    if (currentImageIndex - 1 >= 0) {
-      setCurrentImageIndex(currentImageIndex - 1);
+    if (row.imageVerefication !== "") {
+      images.push(row.imageVerefication);
     }
+    setSelection({
+      ...row,
+      image: images,
+    });
   };
 
   return (
