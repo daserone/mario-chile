@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import ExportButton from "@src/component/buttons/ExportButton";
 interface Props {
   texto: string;
   setTexto: (params: string) => void;
@@ -7,31 +8,29 @@ interface Props {
 const Barra: React.FC<Props> = ({ texto, setTexto }) => {
   return (
     <>
-      <div className="card-header-inputs">
-        <div className="w-100 row mt-2">
-          <div className="col-6">
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Buscar usuario..."
-                value={texto}
-                onChange={(e) => {
-                  setTexto(e.target.value);
-                }}
-              />
-              <button className="btn btn-outline-secondary" type="button">
-                <FontAwesomeIcon icon={faSearch} />
-              </button>
-            </div>
-          </div>
-
-          <div className="col-6 ms-auto">
-            <button className="btn btn-primary">
-              <FontAwesomeIcon icon={faPlus} className="me-2" />
-              Exportar
+      <div className="card-header-inputs w-100">
+        <div className="px-2 py-1 mt-2 d-flex flex-row justify-content-between align-items-center">
+          <div
+            className="input-group"
+            style={{
+              width: "60%",
+            }}
+          >
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Buscar por nombre, cédula o correo..."
+              value={texto}
+              onChange={(e) => {
+                setTexto(e.target.value);
+              }}
+            />
+            <button className="btn btn-outline-secondary" type="button">
+              <FontAwesomeIcon icon={faSearch} />
             </button>
           </div>
+
+          <ExportButton />
         </div>
       </div>
     </>
