@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ExportButton from "@src/component/buttons/ExportButton";
 interface Props {
   texto: string;
@@ -25,9 +25,26 @@ const Barra: React.FC<Props> = ({ texto, setTexto }) => {
                 setTexto(e.target.value);
               }}
             />
-            <button className="btn btn-outline-secondary" type="button">
-              <FontAwesomeIcon icon={faSearch} />
-            </button>
+
+            {texto !== "" ? (
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => {
+                  setTexto("");
+                }}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            ) : (
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                disabled
+              >
+                <FontAwesomeIcon icon={faSearch} />
+              </button>
+            )}
           </div>
 
           <ExportButton />
