@@ -3,22 +3,23 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Dropdown from "react-bootstrap/Dropdown";
-//Component
-import { Menu } from "react-feather";
-// image clinic
-import logoClinic from "../../../../../assets/images/logo-ejemplo.svg";
-import profilePic from "../../../../../assets/images/profile.png";
-import iconNotif from "../../../../../assets/sidebar/notification.svg";
-import iconSearch from "../../../../../assets/sidebar/search.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-
+//Component
+import { BottonDarkMode } from "../BottonDarkMode";
+import { Menu } from "react-feather";
+// image clinic
+import logoClinic from "@src/assets/images/logo-ejemplo.svg";
+import profilePic from "@src/assets/images/profile.png";
+import iconNotif from "@src/assets/sidebar/notification.svg";
+import iconSearch from "@src/assets/sidebar/search.svg";
 
 interface Props {
   setMenuVisibility: (params: boolean) => void;
   skin: string;
   setSkin: (params: string) => void;
 }
+
 const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
   const CustomToggle = React.forwardRef(
     (
@@ -63,7 +64,7 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
               <FontAwesomeIcon icon={faChevronDown} size="lg" />
             </div>
           </Nav>
-          {/* <BottonDarkMode skin={skin} setSkin={setSkin} /> */}
+          <BottonDarkMode skin={skin} setSkin={setSkin} />
           <div className="user-items">
             {/* icon notification  */}
             <img

@@ -57,7 +57,6 @@ const Pacientes = () => {
                   </select>
                 </div>
               </div>
-
               <div className="w-100 row mt-2 justify-content-between ps-1 pe-1">
                 {/* search col  */}
                 <div className="col-12 col-lg-4">

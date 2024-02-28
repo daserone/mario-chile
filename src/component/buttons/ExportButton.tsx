@@ -1,24 +1,23 @@
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import exportIcon from "../../assets/icons/share-screen.svg";
+import exportIcon from "@src/assets/icons/share-screen.svg";
 import { Dropdown } from "react-bootstrap";
 import React from "react";
+/*
 interface ExportButtonProps {
   title?: string;
   handleClick?: () => void;
 }
-
+*/
 const CustomToggle = React.forwardRef(
-  (
-    {
-      children,
-      onClick,
-    }: {
-      children: React.ReactNode;
-      onClick: React.MouseEventHandler<HTMLButtonElement>;
-    },
-    ref
-  ) => (
+  ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick: React.MouseEventHandler<HTMLButtonElement>;
+  }) => (
+    //ref
     <button
       className="btn btn-secondary  border-0"
       type="button"

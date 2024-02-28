@@ -6,20 +6,29 @@ import { WrapperDataTable } from "@src/component/wrapper";
 //Service
 import { getUsuarios } from "@services/usuario.service";
 
+interface Params {
+  state: string;
+  search: string;
+}
+
+interface Props {
+  params: Params;
+}
+
 interface DataRow {
   nombre: string;
   correo: string;
   estado: string;
 }
 
-const UsuariosTable: React.FC = () => {
+const UsuariosTable: React.FC<Props> = ({ params }) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [seleccion, setSeleccion] = useState<DataRow | null>(null);
   //Solicitud
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["usuarios"],
-    queryFn: () => getUsuarios({ page }),
+    queryKey: ["usuarios", page, params],
+    queryFn: () => getUsuarios({ page, ...params }),
     placeholderData: keepPreviousData,
   });
   //Column

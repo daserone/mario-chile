@@ -24,3 +24,17 @@ export const getLocalStorage = <T>(key: string): T | null => {
 export const clearLocalStorage = (key: string) => {
   localStorage.removeItem(key);
 };
+
+interface Data {
+  [key: string]: string;
+}
+
+export const evaluateSuggestionFilter = (data: Data) => {
+  let iterado = 0;
+  for (const clave in data) {
+    if (data[clave] !== "") {
+      iterado++;
+    }
+  }
+  return iterado;
+};

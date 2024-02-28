@@ -27,6 +27,7 @@
     "react-data-table-component": "^7.6.2",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
+    "react-hook-form": "^7.50.1",
     "react-hot-toast": "^2.4.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-pro-sidebar": "^1.1.0",
