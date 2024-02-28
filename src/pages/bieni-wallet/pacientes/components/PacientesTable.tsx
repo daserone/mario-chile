@@ -32,80 +32,6 @@ const PacientesTable = () => {
     queryFn: () => getPacientes({ page }),
     placeholderData: keepPreviousData,
   });
-  /*
-  const columns: TableColumn<DataRow>[] = [
-    {
-      name: "NOMBRE",
-      selector: (row) => row.name,
-      cell: (row) => (
-        <div className="d-flex align-items-center">
-          <div className="email-badge me-1  ">
-            <img src={iconEmail} alt="email" className="" />
-          </div>
-          {row.name}
-        </div>
-      ),
-    },
-    {
-      name: "DOCUMENTO",
-      selector: (row) => row.document,
-      cell: (row) => (
-        <div className="d-flex flex-column ">
-          {row.document}
-          <span className="text-muted">Cédula</span>
-        </div>
-      ),
-    },
-
-    {
-      name: "EDAD",
-      cell: (row) => (
-        <div className="d-flex flex-column ">
-          {getAge(row.age)} años
-          <span className="text-muted">{getDateFormat(row.age)}</span>
-        </div>
-      ),
-    },
-    //date register
-    {
-      name: "FECHA DE REGISTRO",
-      cell: (row) => (
-        <div className="d-flex flex-column ">
-          {getDateFormat(row.registrationDate)}
-          <span className="text-muted">{getHour(row.registrationDate)}</span>
-        </div>
-      ),
-    },
-    {
-      name: "PERFIL",
-      selector: (row) => row.profileType,
-      cell: (row) => (
-        <div
-          className={`${
-            row.profileType === "principal" ? "main-badge" : "dependent-badge"
-          }`}
-        >
-          {row.profileType === "principal" ? "Principal" : "Dependiente"}
-        </div>
-      ),
-    },
-    {
-      name: "VERIFICACIÓN",
-      selector: (row) => row.verification,
-      cell: (row) => (
-        <div
-          className={`${
-            row.verification === "automática"
-              ? "automatic-badge"
-              : "inactive-badge"
-          }`}
-        >
-          {row.verification === "automática" ? "Automática" : "Manual"}
-        </div>
-      ),
-    },
-  ];
-  */
   //Column
   const columns: TableColumn<DataRow>[] = [
     {
@@ -146,7 +72,7 @@ const PacientesTable = () => {
       cell: (row) => (
         <div className="d-flex flex-column align-items-center">
           {row.registrationDate}
-          <span className="text-muted">12:00:00</span>
+          <span className="text-muted"></span>
         </div>
       ),
     },

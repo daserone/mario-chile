@@ -1,24 +1,45 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import { TableColumn } from "react-data-table-component";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+//Hook
+import { useDebounce } from "@src/hooks";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 import { Barra } from "../component";
+//Service
+import { getPacientesManuales } from "@services/paciente.service";
+//Asset
 import iconEmail from "@src/assets/icons/email-table.svg";
-import defaulImage from "@src/assets/images/defaul-validation.png";
-import secondImage from "@src/assets/images/profile.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faChevronRight,
-  faThumbsDown,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+//Style
 import "../Validaciones.scss";
+
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
+//import defaulImage from "@src/assets/images/defaul-validation.png";
+
+interface DataRow {
+  idusuario: string | number;
+  idpaciente: string | number;
+  iddocumento: string | number;
+  document: string;
+  documentType: string;
+  name: string;
+  age: string;
+  birthdate: string;
+  phone: string;
+  profileType: string;
+  verification: "verificacion-automatica" | "verificacion-manual";
+  registrationDate: string;
+  state: string;
+  imageDocument: string;
+  imageVerefication: string;
+  image: Array<string>;
+}
 
 const CustomToggle = React.forwardRef(
   (
@@ -37,18 +58,31 @@ const CustomToggle = React.forwardRef(
     </Button>
   )
 );
-interface DataRow {
-  name: string;
-  document: string;
-  age: string | number;
-  registerDate: string;
-  image: string[];
-}
 const Manual = () => {
+  //Hook
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
-  const [selecion, setSelecion] = useState<DataRow | null>(null);
+  const [selection, setSelection] = useState<DataRow | null>(null);
+  const query = useDebounce(search, 2000);
+  //Solicitud
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["pacientes-manuales", page, query],
+    queryFn: () => getPacientesManuales({ page, search: query }),
+    placeholderData: keepPreviousData,
+  });
+  //Handle
+  const handleApprove = () => {
+    toast.error("Aprobar.");
+    /*if (value.email === "") {
+        toast.error("Agregue el correo.");
+        return;
+      }*/
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form: any = new FormData();
+    form.append("op", "dologinWithCredencial");
+  };
   const columns: TableColumn<DataRow>[] = [
     {
       name: "NOMBRE",
@@ -68,7 +102,7 @@ const Manual = () => {
       cell: (row) => (
         <div className="d-flex flex-column align-items-center">
           {row.document}
-          <span className="text-muted">Cédula</span>
+          <span className="text-muted">{row.documentType}</span>
         </div>
       ),
     },
@@ -78,44 +112,44 @@ const Manual = () => {
       cell: (row) => (
         <div className="d-flex flex-column align-items-center">
           {row.age}
-          <span className="text-muted">20/05/2001</span>
+          <span className="text-muted">{row.birthdate}</span>
         </div>
       ),
     },
     {
       name: "REGISTRO",
-      selector: (row) => row.registerDate,
+      selector: (row) => row.registrationDate,
       cell: (row) => (
         <div className="d-flex flex-column align-items-center">
-          {row.registerDate}
-          <span className="text-muted">12:00:00</span>
+          {row.registrationDate}
+          <span className="text-muted"></span>
         </div>
       ),
     },
   ];
 
-  const data: DataRow[] = [
-    {
+  /*
+    const data: DataRow[] = [];
+  {
       name: "Juan Perez",
       document: "123456789",
-      age: 25,
-      registerDate: "2021-08-18",
-      image: [defaulImage, secondImage],
+      age: "25",
+      registrationDate: "2021-08-18",
+      image: ["defaulImage", "secondImage"],
     },
     {
       name: "Maria Lopez",
       document: "987654321",
-      age: 30,
-      registerDate: "2021-08-18",
+      age: "30",
+      registrationDate: "2021-08-18",
       image: [],
     },
-  ];
-
+*/
   const [currentImageLength, setCurrentImageLength] = useState<number>(0);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const handleSelect = (row: DataRow) => {
-    setSelecion(row);
+    setSelection(row);
     setCurrentImageLength(row.image.length);
     setCurrentImageIndex(0);
   };
@@ -147,10 +181,10 @@ const Manual = () => {
             <WrapperDataTable
               title=""
               columns={columns}
-              isLoading={false}
-              isError={false}
-              data={data ?? []}
-              recordsTotals={0}
+              isLoading={isLoading}
+              isError={isError}
+              data={data?.data ?? []}
+              recordsTotals={data?.recordsTotals ?? 0}
               countPerPage={countPerPage}
               setCountPerPage={setCountPerPage}
               page={page}
@@ -168,8 +202,8 @@ const Manual = () => {
             lg={4}
             className="border-start border-top ps-lg-0 "
           >
-            <ImageSliders images={selecion?.image ?? []} />
-            {selecion !== null ? (
+            <ImageSliders images={selection?.image ?? []} />
+            {selection !== null ? (
               <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
                 <Dropdown>
                   <Dropdown.Toggle as={CustomToggle} />

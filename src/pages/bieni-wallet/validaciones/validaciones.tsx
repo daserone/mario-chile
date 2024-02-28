@@ -11,6 +11,7 @@ import lego from "@src/assets/icons/lego.svg";
 import legoActive from "@src/assets/icons/lego-active.svg";
 import mail from "@src/assets/icons/mail.svg";
 import mailActive from "@src/assets/icons/mail-active.svg";
+//Style;
 import "./Validaciones.scss";
 
 const Validacion = () => {

@@ -24,7 +24,6 @@ interface DataRow {
 const UsuariosTable: React.FC<Props> = ({ params }) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
-  const [seleccion, setSeleccion] = useState<DataRow | null>(null);
   //Solicitud
   const { data, isError, isLoading } = useQuery({
     queryKey: ["usuarios", page, params],
@@ -55,7 +54,7 @@ const UsuariosTable: React.FC<Props> = ({ params }) => {
       ),
     },
   ];
-  console.log(seleccion);
+
   return (
     <WrapperDataTable
       title=""
@@ -68,9 +67,7 @@ const UsuariosTable: React.FC<Props> = ({ params }) => {
       setCountPerPage={setCountPerPage}
       page={page}
       setPage={setPage}
-      handleClick={(data) => {
-        setSeleccion(data);
-      }}
+      handleClick={() => {}}
       handleDoubleClick={() => {}}
       isExpandable={false}
     />
