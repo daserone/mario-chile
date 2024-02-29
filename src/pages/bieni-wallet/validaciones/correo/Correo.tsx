@@ -12,11 +12,7 @@ import { useDebounce } from "@src/hooks";
 //Assets
 import iconEmail from "@src/assets/icons/email-table.svg";
 import iconCheck from "@src/assets/icons/circle-check.svg";
-/*
-interface DataRow {
-  email: string;
-  url: string;
-}*/
+
 interface DataRow {
   idusuario: string | number;
   idpaciente: string | number;
@@ -47,6 +43,7 @@ const Correo = () => {
     queryFn: () => getPacientesCorreos({ page, search: query }),
     placeholderData: keepPreviousData,
   });
+
   const columns: TableColumn<DataRow>[] = [
     {
       name: "CORREO",
@@ -65,6 +62,7 @@ const Correo = () => {
       selector: (row) => row.url,
       cell: (row) => (
         <div className="d-flex align-items-center">
+          <a href={row.email}>correo de Semrush</a>
           <div className="email-badge me-1  ">
             <img src={iconCheck} alt="email" className="" />
           </div>
@@ -87,17 +85,6 @@ const Correo = () => {
       ),
     },
   ];
-  /*
-  const data: DataRow[] = [
-    {
-      email: "usuario@correo.com",
-      url: "https://www.google.com",
-    },
-    {
-      email: "usuario2@correo.com",
-      url: "https://www.google.com",
-    },
-  ];*/
 
   return (
     <>
