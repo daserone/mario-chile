@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Row, Col, Card } from "react-bootstrap";
+import { Row, Col, Card, Button } from "react-bootstrap";
 //Hook
 import { useToggle, useDebounce } from "@src/hooks";
 //Helpers
@@ -14,7 +14,7 @@ import UsuariosTable from "./components/UsuarioTable";
 //Style
 import "./Usuarios.scss";
 
-interface Select {
+interface Params {
   state: string;
   search: string;
 }
@@ -23,7 +23,7 @@ const initial = { state: "", search: "" };
 
 const Usuarios = () => {
   //Hook
-  const [params, setParams] = useState<Select>(initial);
+  const [params, setParams] = useState<Params>(initial);
 
   const query = useDebounce(params, 2000);
 
@@ -32,7 +32,7 @@ const Usuarios = () => {
   const handleChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
   > = (e) => {
-    setParams((prev: Select) => ({
+    setParams((prev: Params) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -50,8 +50,13 @@ const Usuarios = () => {
       <Row>
         <Col>
           <Card>
-            <Card.Header>
+            <Card.Header className="d-flex">
               <h3>Filtro</h3>
+              {isFiltros > 0 ? (
+                <Button variant="link" onClick={handleClear}>
+                  Limpiar filtros <FontAwesomeIcon icon={faFilter} />
+                </Button>
+              ) : null}
             </Card.Header>
             <div className="card-header-inputs ">
               <div className="w-100 row mt-2 mb-2 ps-1 pe-1">
@@ -64,6 +69,7 @@ const Usuarios = () => {
                       name="search"
                       className="form-control"
                       placeholder="Buscar usuario..."
+                      value={params.search || ""}
                       onChange={handleChange}
                     />
                     <button
@@ -93,15 +99,6 @@ const Usuarios = () => {
                 </div>
                 {/* export and add button col  */}
                 <div className="col-12 col-lg-5 d-flex gap-2 justify-content-between mt-2 mt-lg-0">
-                  {isFiltros > 0 ? (
-                    <button
-                      className="btn btn-outline-secondary"
-                      type="button"
-                      onClick={handleClear}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  ) : null}
                   <ExportButton />
                   <AddButton title="Agregar usuario" handleClick={toggle} />
                 </div>

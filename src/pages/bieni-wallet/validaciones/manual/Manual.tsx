@@ -84,6 +84,7 @@ const Manual = () => {
     const form: any = new FormData();
     form.append("op", "dologinWithCredencial");
   };
+
   const columns: TableColumn<DataRow>[] = [
     {
       name: "NOMBRE",

@@ -47,6 +47,7 @@ interface Props {
     | "light-info"
     | "light-warning"
     | "light-dark";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: (e: any) => void;
 }
 

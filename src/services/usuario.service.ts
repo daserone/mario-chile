@@ -3,7 +3,7 @@ import axio from "axios";
 import { buildUrl, templateData, endpoint } from "@src/config/service.config";
 
 export const servicios = axio.create({
-  baseURL: "https://bieniwallet.com/bieniwebbackdes/",
+  baseURL: "http://localhost/bieniwebback/",
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const doLogin = (form: any) =>
