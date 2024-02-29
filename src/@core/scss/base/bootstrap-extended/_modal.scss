@@ -225,3 +225,21 @@
   //transform: translateX(10%) !important;
   transition: transform 0.3 s ease-out !important;
 }
+
+.offcanvas {
+  .offcanvas-header {
+    padding-top: 2rem;
+    .btn-close {
+      display: flex;
+      padding: 7px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 6px;
+      background: var(
+        --light-opacity-color-gray-gray-16,
+        rgba(75, 70, 92, 0.16)
+      );
+    }
+  }
+}

@@ -9,12 +9,14 @@ interface Props {
 }
 
 type FormValues = {
-  name: string;
-  email: string;
+  title: string;
+  description: string;
   status: string;
+  genre: string;
+  age: string;
 };
 
-const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
+const DifusionForm: React.FC<Props> = ({ state, handleToggle }) => {
   const {
     register,
     handleSubmit,
@@ -46,36 +48,39 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
             className="position-relative h-100"
           >
             <Form.Group className="mb-1" controlId="name">
-              <Form.Label>Nombre</Form.Label>
+              <Form.Label>
+                Titulo de la difusión <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
-                isInvalid={errors.name ? true : false}
+                isInvalid={errors.title ? true : false}
                 type="text"
-                placeholder="Nombre del usuario..."
-                {...register("name", { required: true, maxLength: 100 })}
+                placeholder="Titulo de la difusión..."
+                {...register("title", { required: true, maxLength: 100 })}
               />
-              {errors.name && (
+              {errors.title && (
                 <Form.Text className="text-danger">
                   Este campo es requerido
                 </Form.Text>
               )}
             </Form.Group>
-
             <Form.Group className="mb-1" controlId="email">
-              <Form.Label>Correo</Form.Label>
+              <Form.Label>
+                Descripción <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
-                isInvalid={errors.email ? true : false}
-                type="email"
-                placeholder="Correo del usuario..."
-                {...register("email", { required: true })}
-                aria-invalid={errors.email ? "true" : "false"}
+                isInvalid={errors.description ? true : false}
+                as="textarea"
+                rows={3}
+                placeholder="Descripción..."
+                {...register("description", { required: true })}
+                aria-invalid={errors.description ? "true" : "false"}
               />
-              {errors.email && (
+              {errors.description && (
                 <Form.Text className="text-danger">
                   Este campo es requerido
                 </Form.Text>
               )}
             </Form.Group>
-
             {/*state select  */}
             <Form.Group className="mb-1" controlId="state">
               <Form.Label>Estado</Form.Label>
@@ -85,7 +90,6 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
                 {...register("status", { required: true })}
                 aria-invalid={errors.status ? "true" : "false"}
               >
-                <option value="">Seleccionar...</option>
                 <option value="active">Activo</option>
                 <option value="inactive">Inactivo</option>
               </Form.Select>
@@ -95,11 +99,53 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
                 </Form.Text>
               )}
             </Form.Group>
-
+            <hr />
+            <span className="font-small-2">
+              Seleccione los usuarios que recibirán la difusión.
+            </span>
+            <Form.Group className="mb-1 mt-1" controlId="state">
+              <Form.Label>Genero</Form.Label>
+              <Form.Select
+                isInvalid={errors.genre ? true : false}
+                aria-label="Default select example"
+                {...register("genre", { required: true })}
+                aria-invalid={errors.genre ? "true" : "false"}
+              >
+                <option value="">Seleccionar...</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+              </Form.Select>
+              {errors.genre && (
+                <Form.Text className="text-danger">
+                  Este campo es requerido
+                </Form.Text>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-1" controlId="state">
+              <Form.Label>Edad</Form.Label>
+              <Form.Select
+                isInvalid={errors.age ? true : false}
+                aria-label="Default select example"
+                {...register("age", { required: true })}
+                aria-invalid={errors.age ? "true" : "false"}
+              >
+                <option value="">Seleccionar...</option>
+                <option value="0-18">0-18</option>
+                <option value="19-30">19-30</option>
+                <option value="31-50">31-50</option>
+                <option value="51-70">51-70</option>
+                <option value="71-100">71-100</option>
+              </Form.Select>
+              {errors.age && (
+                <Form.Text className="text-danger">
+                  Este campo es requerido
+                </Form.Text>
+              )}
+            </Form.Group>
             {/* cancelar y agregar buttons  row */}
             <div
-              className="d-flex justify-content-end gap-10"
-              style={{ position: "absolute", bottom: "30px", width: "100%" }}
+              className="d-flex justify-content-end gap-10 mt-5"
+              //   style={{ position: "absolute", bottom: "30px", width: "100%" }}
             >
               <Button
                 variant="secondary"
@@ -109,7 +155,7 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
                 <span className="text-dark">Cancelar</span>
               </Button>
               <Button variant="primary" type="submit">
-                Agregar usuario
+                Aplicar
               </Button>
             </div>
           </Form>
@@ -119,4 +165,4 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
   );
 };
 
-export default UsuarioFormulario;
+export default DifusionForm;
