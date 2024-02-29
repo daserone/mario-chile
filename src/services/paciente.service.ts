@@ -3,7 +3,7 @@ import axio from "axios";
 import { buildUrl, templateData, endpoint } from "@src/config/service.config";
 
 export const servicios = axio.create({
-  baseURL: "http://localhost/bieniwebback/",
+  baseURL: "https://bieniwallet.com/bieniwebbackdes/",
 });
 
 export const getPacientes = async ({ ...parameters }) => {
@@ -27,7 +27,7 @@ export const getPaciente = async ({ ...parameters }) => {
 };
 
 export const getPacientesManuales = async ({ ...parameters }) => {
-  const apiUrl = buildUrl(endpoint.paciente, "manual", parameters);
+  const apiUrl = buildUrl(endpoint.paciente, "principales", parameters);
   const response = await servicios.get(apiUrl, { responseType: "json" });
   if (response.status >= 200 && response.status < 300) {
     return response?.data ?? templateData;
@@ -37,10 +37,10 @@ export const getPacientesManuales = async ({ ...parameters }) => {
 };
 
 export const getPacientesDependientes = async ({ ...parameters }) => {
-  const apiUrl = buildUrl(endpoint.paciente, "usuario", parameters);
+  const apiUrl = buildUrl(endpoint.paciente, "dependientes", parameters);
   const response = await servicios.get(apiUrl, { responseType: "json" });
   if (response.status >= 200 && response.status < 300) {
-    return response?.data?.data ?? templateData;
+    return response?.data ?? templateData;
   } else {
     throw new Error(
       `Error al obtener paciente dependiente: ${response.statusText}`
@@ -48,11 +48,11 @@ export const getPacientesDependientes = async ({ ...parameters }) => {
   }
 };
 
-export const getPacientesCorreo = async ({ ...parameters }) => {
-  const apiUrl = buildUrl(endpoint.paciente, "usuario", parameters);
+export const getPacientesCorreos = async ({ ...parameters }) => {
+  const apiUrl = buildUrl(endpoint.paciente, "pacientes/correo", parameters);
   const response = await servicios.get(apiUrl, { responseType: "json" });
   if (response.status >= 200 && response.status < 300) {
-    return response?.data?.data ?? templateData;
+    return response?.data ?? templateData;
   } else {
     throw new Error(`Error al obtener paciente correo: ${response.statusText}`);
   }

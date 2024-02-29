@@ -101,7 +101,6 @@ const Pacientes = () => {
                     onChange={(date) => {
                       if (date !== null) {
                         handleDateTime(date);
-                        console.log(date);
                       }
                     }}
                     options={optionsFlatpickr}

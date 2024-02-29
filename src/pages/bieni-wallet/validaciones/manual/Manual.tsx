@@ -12,15 +12,13 @@ import { useDebounce } from "@src/hooks";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 import { Barra } from "../component";
+import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
 import { getPacientesManuales } from "@services/paciente.service";
 //Asset
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
-
-import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
-//import defaulImage from "@src/assets/images/defaul-validation.png";
 
 interface DataRow {
   idusuario: string | number;
@@ -35,9 +33,6 @@ interface DataRow {
   profileType: string;
   verification: "verificacion-automatica" | "verificacion-manual";
   registrationDate: string;
-  state: string;
-  imageDocument: string;
-  imageVerefication: string;
   image: Array<string>;
 }
 
@@ -64,6 +59,7 @@ const Manual = () => {
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
   const [selection, setSelection] = useState<DataRow | null>(null);
+
   const query = useDebounce(search, 2000);
   //Solicitud
   const { data, isError, isLoading } = useQuery({
@@ -147,19 +143,8 @@ const Manual = () => {
       image: [],
     },
 */
-
-  const handleSelect = (row: DataRow) => {
-    let images = [];
-    if (row.imageDocument !== "") {
-      images.push(row.imageDocument);
-    }
-    if (row.imageVerefication !== "") {
-      images.push(row.imageVerefication);
-    }
-    setSelection({
-      ...row,
-      image: images,
-    });
+  const handleSelect = (data: DataRow) => {
+    setSelection(data);
   };
 
   return (
