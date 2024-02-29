@@ -34,13 +34,12 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
   const CustomToggle = React.forwardRef(
     (
       {
-        children,
         onClick,
       }: {
         children: React.ReactNode;
         onClick: React.MouseEventHandler<HTMLImageElement>;
       },
-      ref
+      ref: React.Ref<HTMLImageElement>
     ) => (
       <Avatar
         img={profilePic}
@@ -51,6 +50,7 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
           e.preventDefault();
           onClick(e);
         }}
+        forwardedRef={ref}
       />
     )
   );

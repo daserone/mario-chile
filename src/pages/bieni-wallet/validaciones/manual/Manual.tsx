@@ -6,7 +6,6 @@ import { TableColumn } from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 //Hook
 import { useDebounce } from "@src/hooks";
 //Component
@@ -39,20 +38,19 @@ interface DataRow {
 const CustomToggle = React.forwardRef(
   (
     {
-      children,
       onClick,
     }: {
-      children: React.ReactNode;
       onClick: React.MouseEventHandler<HTMLButtonElement>;
     },
-    ref
+    ref: React.Ref<HTMLButtonElement>
   ) => (
-    <Button variant="danger" size="sm" onClick={onClick}>
-      <FontAwesomeIcon icon={faThumbsDown} className="me-1" /> Denegar
-      {children}
+    <Button variant="danger" size="sm" onClick={onClick} ref={ref}>
+      <FontAwesomeIcon icon={faThumbsDown} className="me-1" />
+      Denegar
     </Button>
   )
 );
+
 const Manual = () => {
   //Hook
   const [page, setPage] = useState<number>(1);
@@ -69,17 +67,18 @@ const Manual = () => {
   });
 
   //Handle
-  const handleApprove = () => {
+  /*const handleApprove = () => {
     toast.error("Aprobar.");
-    /*if (value.email === "") {
+    if (value.email === "") {
         toast.error("Agregue el correo.");
         return;
-      }*/
+      }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const form: any = new FormData();
     form.append("op", "dologinWithCredencial");
   };
+  */
 
   const columns: TableColumn<DataRow>[] = [
     {
@@ -126,23 +125,6 @@ const Manual = () => {
     },
   ];
 
-  /*
-    const data: DataRow[] = [];
-  {
-      name: "Juan Perez",
-      document: "123456789",
-      age: "25",
-      registrationDate: "2021-08-18",
-      image: ["defaulImage", "secondImage"],
-    },
-    {
-      name: "Maria Lopez",
-      document: "987654321",
-      age: "30",
-      registrationDate: "2021-08-18",
-      image: [],
-    },
-*/
   const handleSelect = (data: DataRow) => {
     setSelection(data);
   };

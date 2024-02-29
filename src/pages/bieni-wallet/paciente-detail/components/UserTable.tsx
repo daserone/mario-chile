@@ -14,8 +14,7 @@ interface DataRow {
 export const UserTable = () => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
-  const [search, setSearch] = useState<string>("");
-  const [selecion, setSelecion] = useState<DataRow | null>(null);
+
   const columns: TableColumn<DataRow>[] = [
     {
       name: "NOMBRE",
@@ -116,7 +115,7 @@ export const UserTable = () => {
         setCountPerPage={setCountPerPage}
         page={page}
         setPage={setPage}
-        handleClick={(data) => {}}
+        handleClick={() => {}}
         handleDoubleClick={() => {}}
         isExpandable={false}
       />

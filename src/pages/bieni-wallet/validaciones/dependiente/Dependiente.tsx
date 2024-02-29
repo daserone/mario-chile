@@ -46,9 +46,9 @@ const CustomToggle = React.forwardRef(
       children: React.ReactNode;
       onClick: React.MouseEventHandler<HTMLButtonElement>;
     },
-    ref
+    ref: React.Ref<HTMLButtonElement>
   ) => (
-    <Button variant="danger" size="sm" onClick={onClick}>
+    <Button variant="danger" size="sm" onClick={onClick} ref={ref}>
       <FontAwesomeIcon icon={faThumbsDown} className="me-1" /> Denegar
       {children}
     </Button>
