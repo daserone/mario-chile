@@ -5,8 +5,12 @@ import ExportButton from "@src/component/buttons/ExportButton";
 import { Row, Col, Card } from "react-bootstrap";
 import "./Difusion.scss";
 import DifusionList from "./components/DifusionList";
+import { useToggle } from "@src/hooks";
+import DifusionForm from "./components/DifusionForm";
 
 const Difusion = () => {
+  const { state, toggle } = useToggle(false);
+
   return (
     <>
       <Row>
@@ -52,7 +56,7 @@ const Difusion = () => {
                 {/* export and add button col  */}
                 <div className="col-12 col-lg-5 d-flex gap-2 justify-content-between mt-2 mt-lg-0">
                   <ExportButton />
-                  <AddButton title="Agregar difusion" handleClick={() => {}} />
+                  <AddButton title="Agregar difusion" handleClick={toggle} />
                 </div>
               </div>
             </div>
@@ -62,6 +66,7 @@ const Difusion = () => {
           </Card>
         </Col>
       </Row>
+      <DifusionForm state={state} handleToggle={toggle} />
     </>
   );
 };
