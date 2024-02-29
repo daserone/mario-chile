@@ -12,15 +12,13 @@ import { useDebounce } from "@src/hooks";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 import { Barra } from "../component";
+import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
 import { getPacientesManuales } from "@services/paciente.service";
 //Asset
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
-
-import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
-//import defaulImage from "@src/assets/images/defaul-validation.png";
 
 interface DataRow {
   idusuario: string | number;
@@ -35,9 +33,6 @@ interface DataRow {
   profileType: string;
   verification: "verificacion-automatica" | "verificacion-manual";
   registrationDate: string;
-  state: string;
-  imageDocument: string;
-  imageVerefication: string;
   image: Array<string>;
 }
 
@@ -64,6 +59,9 @@ const Manual = () => {
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
   const [selection, setSelection] = useState<DataRow | null>(null);
+  const [currentImageLength, setCurrentImageLength] = useState<number>(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+
   const query = useDebounce(search, 2000);
   //Solicitud
   const { data, isError, isLoading } = useQuery({
@@ -129,26 +127,6 @@ const Manual = () => {
     },
   ];
 
-  /*
-    const data: DataRow[] = [];
-  {
-      name: "Juan Perez",
-      document: "123456789",
-      age: "25",
-      registrationDate: "2021-08-18",
-      image: ["defaulImage", "secondImage"],
-    },
-    {
-      name: "Maria Lopez",
-      document: "987654321",
-      age: "30",
-      registrationDate: "2021-08-18",
-      image: [],
-    },
-*/
-  const [currentImageLength, setCurrentImageLength] = useState<number>(0);
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-
   const handleSelect = (row: DataRow) => {
     setSelection(row);
     setCurrentImageLength(row.image.length);
@@ -160,6 +138,7 @@ const Manual = () => {
       setCurrentImageIndex(currentImageIndex + 1);
     }
   };
+
   const handlePrevImage = () => {
     if (currentImageIndex - 1 >= 0) {
       setCurrentImageIndex(currentImageIndex - 1);
