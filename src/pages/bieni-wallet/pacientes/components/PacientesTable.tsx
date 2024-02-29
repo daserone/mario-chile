@@ -22,14 +22,26 @@ interface DataRow {
   registrationDate: string;
 }
 
-const PacientesTable = () => {
+interface Params {
+  date: string | Date;
+  from: string | undefined;
+  to: string | undefined;
+  profile: string;
+  verification: string;
+  search: string;
+}
+
+interface Props {
+  params: Params;
+}
+
+const PacientesTable: React.FC<Props> = ({ params }) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
-  const [seleccion, setSeleccion] = useState<DataRow | null>(null);
   //Solicitud
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["pacientes", page],
-    queryFn: () => getPacientes({ page }),
+    queryKey: ["pacientes", page, params],
+    queryFn: () => getPacientes({ page, ...params }),
     placeholderData: keepPreviousData,
   });
   //Column
@@ -107,7 +119,7 @@ const PacientesTable = () => {
       ),
     },
   ];
-  console.log(seleccion);
+
   return (
     <WrapperDataTable
       title=""
@@ -120,9 +132,7 @@ const PacientesTable = () => {
       setCountPerPage={setCountPerPage}
       page={page}
       setPage={setPage}
-      handleClick={(data) => {
-        setSeleccion(data);
-      }}
+      handleClick={() => {}}
       handleDoubleClick={() => {}}
       isExpandable={false}
     />
