@@ -67,6 +67,7 @@ const Manual = () => {
     queryFn: () => getPacientesManuales({ page, search: query }),
     placeholderData: keepPreviousData,
   });
+
   //Handle
   const handleApprove = () => {
     toast.error("Aprobar.");
@@ -125,8 +126,25 @@ const Manual = () => {
     },
   ];
 
-  const handleSelect = (row: DataRow) => {
-    setSelection(row);
+  /*
+    const data: DataRow[] = [];
+  {
+      name: "Juan Perez",
+      document: "123456789",
+      age: "25",
+      registrationDate: "2021-08-18",
+      image: ["defaulImage", "secondImage"],
+    },
+    {
+      name: "Maria Lopez",
+      document: "987654321",
+      age: "30",
+      registrationDate: "2021-08-18",
+      image: [],
+    },
+*/
+  const handleSelect = (data: DataRow) => {
+    setSelection(data);
   };
 
   return (
