@@ -1,10 +1,11 @@
+import { useState } from "react";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//Style
 import "./ImageSlider.scss";
-import { useState } from "react";
 
 interface ImageSlidersProps {
   images: string[];

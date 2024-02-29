@@ -59,8 +59,6 @@ const Manual = () => {
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
   const [selection, setSelection] = useState<DataRow | null>(null);
-  const [currentImageLength, setCurrentImageLength] = useState<number>(0);
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const query = useDebounce(search, 2000);
   //Solicitud
@@ -129,20 +127,6 @@ const Manual = () => {
 
   const handleSelect = (row: DataRow) => {
     setSelection(row);
-    setCurrentImageLength(row.image.length);
-    setCurrentImageIndex(0);
-  };
-
-  const handleNextImage = () => {
-    if (currentImageIndex + 1 < currentImageLength) {
-      setCurrentImageIndex(currentImageIndex + 1);
-    }
-  };
-
-  const handlePrevImage = () => {
-    if (currentImageIndex - 1 >= 0) {
-      setCurrentImageIndex(currentImageIndex - 1);
-    }
   };
 
   return (
