@@ -8,7 +8,7 @@ import users from "../../../../../assets/sidebar/users.svg";
 import listCheck from "../../../../../assets/sidebar/list-check.svg";
 import reportSearch from "../../../../../assets/sidebar/report-search.svg";
 import speakerphone from "../../../../../assets/sidebar/speakerphone.svg";
-import infographic from "../../../../../assets/sidebar/infographic.svg";
+// import infographic from "../../../../../assets/sidebar/infographic.svg";
 import moneyReport from "../../../../../assets/sidebar/money-report.svg";
 import brand from "../../../../../assets/sidebar/brand.svg";
 import shape from "../../../../../assets/sidebar/shape.svg";
@@ -131,13 +131,13 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               BieniMédico
             </span>
             {/* estadisticas  */}
-            <MenuItemSidebar
+            {/* <MenuItemSidebar
               icon={infographic}
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Estadísticas"
               url="bieni-medico/estadisticas"
-            />
+            /> */}
             {/* clientes  */}
             <MenuItemSidebar
               icon={brand}

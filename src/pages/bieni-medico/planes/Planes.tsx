@@ -9,10 +9,10 @@ import { evaluateSuggestionFilter } from "@src/helpers/helpers";
 //Component
 import ExportButton from "@src/component/buttons/ExportButton";
 import AddButton from "@src/component/buttons/AddButton";
-import UsuarioFormulario from "./components/UsuarioFormulario";
-import UsuariosTable from "./components/UsuarioTable";
+import TablePlans from "./components/TablePlans";
+
 //Style
-import "./Usuarios.scss";
+import "./Planes.scss";
 
 interface Params {
   state: string;
@@ -21,7 +21,7 @@ interface Params {
 
 const initial = { state: "", search: "" };
 
-const Usuarios = () => {
+const Planes = () => {
   //Hook
   const [params, setParams] = useState<Params>(initial);
 
@@ -46,7 +46,9 @@ const Usuarios = () => {
 
   return (
     <>
-      <h2 className="my-2">Usuarios</h2>
+      <h2 className="my-2">
+        <span className="text-muted">BieniMedico /</span> Planes
+      </h2>{" "}
       <Row>
         <Col>
           <Card>
@@ -104,13 +106,12 @@ const Usuarios = () => {
                 </div>
               </div>
             </div>
-            <UsuariosTable params={query} />
+            <TablePlans params={query} />
           </Card>
         </Col>
       </Row>
-      <UsuarioFormulario state={state} handleToggle={toggle} />
     </>
   );
 };
 
-export default Usuarios;
+export default Planes;

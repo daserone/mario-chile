@@ -9,10 +9,10 @@ import { evaluateSuggestionFilter } from "@src/helpers/helpers";
 //Component
 import ExportButton from "@src/component/buttons/ExportButton";
 import AddButton from "@src/component/buttons/AddButton";
-import UsuarioFormulario from "./components/UsuarioFormulario";
-import UsuariosTable from "./components/UsuarioTable";
+
 //Style
-import "./Usuarios.scss";
+import "./Clientes.scss";
+import TableClients from "./components/TableClients";
 
 interface Params {
   state: string;
@@ -21,7 +21,7 @@ interface Params {
 
 const initial = { state: "", search: "" };
 
-const Usuarios = () => {
+const Clientes = () => {
   //Hook
   const [params, setParams] = useState<Params>(initial);
 
@@ -46,7 +46,9 @@ const Usuarios = () => {
 
   return (
     <>
-      <h2 className="my-2">Usuarios</h2>
+      <h2 className="my-2">
+        <span className="text-muted">BieniMedico /</span> Clientes
+      </h2>{" "}
       <Row>
         <Col>
           <Card>
@@ -59,9 +61,39 @@ const Usuarios = () => {
               ) : null}
             </Card.Header>
             <div className="card-header-inputs ">
-              <div className="w-100 row mt-2 mb-2 ps-1 pe-1">
+              {/* first row  */}
+              <div className="w-100 row m-0  ps-1 pe-1 border-top border-bottom py-1">
+                {/* plan select col  */}
+                <div className="col-12 col-lg-6 mb-2 mb-lg-0">
+                  <select
+                    className="form-select"
+                    name="state"
+                    value={params.state || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccionar plan...</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                  </select>
+                </div>
+                {/* state select col  */}
+                <div className="col-12 col-lg-6">
+                  <select
+                    className="form-select"
+                    name="state"
+                    value={params.state || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccionar estado...</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                  </select>
+                </div>
+              </div>
+              {/* second row  */}
+              <div className="w-100 m-0 row  ps-1 pe-1 border-top border-bottom py-1">
                 {/* search col  */}
-                <div className="col-12 col-lg-4 ">
+                <div className="col-12 col-lg-6">
                   {/* search input  */}
                   <div className="input-group">
                     <input
@@ -82,35 +114,21 @@ const Usuarios = () => {
                   </div>
                 </div>
                 {/* state select col  */}
-                <div className="col-12 col-lg-3 mt-2 mt-lg-0">
-                  {/* state select input  */}
-                  <select
-                    name="state"
-                    className="form-select"
-                    onChange={handleChange}
-                    value={params.state || ""}
-                  >
-                    <option value="" disabled selected hidden>
-                      Estado
-                    </option>
-                    <option value="activo">Activo</option>
-                    <option value="inactivo">Inactivo</option>
-                  </select>
-                </div>
+
                 {/* export and add button col  */}
-                <div className="col-12 col-lg-5 d-flex gap-2 justify-content-between mt-2 mt-lg-0">
+                <div className="col-12 col-lg-6 d-flex gap-2 justify-content-around mt-2 mt-lg-0">
                   <ExportButton />
                   <AddButton title="Agregar usuario" handleClick={toggle} />
                 </div>
               </div>
             </div>
-            <UsuariosTable params={query} />
+            {/* <Card.Body></Card.Body> */}
+            <TableClients params={query} />
           </Card>
         </Col>
       </Row>
-      <UsuarioFormulario state={state} handleToggle={toggle} />
     </>
   );
 };
 
-export default Usuarios;
+export default Clientes;
