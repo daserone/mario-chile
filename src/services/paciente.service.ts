@@ -3,8 +3,8 @@ import axio from "axios";
 import { buildUrl, templateData, endpoint } from "@src/config/service.config";
 
 export const servicios = axio.create({
-  baseURL: "https://bieniwallet.com/bieniwebbackdes/",
-  //baseURL: "http://localhost/bieniwebback/",
+  //baseURL: "https://bieniwallet.com/bieniwebbackdes/",
+  baseURL: "http://localhost/bieniwebback/",
 });
 
 export const getPacientes = async ({ ...parameters }) => {
@@ -58,3 +58,11 @@ export const getPacientesCorreos = async ({ ...parameters }) => {
     throw new Error(`Error al obtener paciente correo: ${response.statusText}`);
   }
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const postPaciente = (form: any) =>
+  servicios.post(endpoint.paciente, form, {
+    responseType: "json",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });

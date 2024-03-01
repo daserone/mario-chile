@@ -63,7 +63,7 @@ const Correo = () => {
       cell: (row) => (
         <div className="d-flex align-items-center">
           <a href={row.email}>correo de Semrush</a>
-          <div className="email-badge me-1  ">
+          <div className="email-badge me-1">
             <img src={iconCheck} alt="email" className="" />
           </div>
           {row.url}

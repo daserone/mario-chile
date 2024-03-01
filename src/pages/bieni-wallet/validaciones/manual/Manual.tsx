@@ -1,23 +1,38 @@
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 import Dropdown from "react-bootstrap/Dropdown";
 import { TableColumn } from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import {
+  useQuery,
+  keepPreviousData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 //Hook
 import { useDebounce } from "@src/hooks";
+//Model
+import { ResponseNotificacion } from "@src/models";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
-import { getPacientesManuales } from "@services/paciente.service";
+import { getPacientesManuales, postPaciente } from "@services/paciente.service";
+//Helpers
+import { dropdownManual } from "../helpers/data";
 //Asset
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
+//Config
+const MySwal = withReactContent(Swal);
 
 interface DataRow {
   idusuario: string | number;
@@ -60,34 +75,124 @@ const Manual = () => {
 
   const query = useDebounce(search, 2000);
   //Solicitud
+  const queryClient = useQueryClient();
+
+  const pacienteMutation = useMutation({
+    mutationFn: postPaciente,
+  });
+
   const { data, isError, isLoading } = useQuery({
     queryKey: ["pacientes-manuales", page, query],
     queryFn: () => getPacientesManuales({ page, search: query }),
     placeholderData: keepPreviousData,
   });
-
   //Handle
-  /*const handleApprove = () => {
-    toast.error("Aprobar.");
-    if (value.email === "") {
-        toast.error("Agregue el correo.");
-        return;
-      }
-
-
+  const handleApprove = () => {
+    if (selection === null) {
+      toast.error("Seleccione un registro");
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const form: any = new FormData();
-    form.append("op", "dologinWithCredencial");
+    form.append("op", "principal/aprobar");
+    form.append("idusuario", selection.idusuario);
+    form.append("idpaciente", selection.idpaciente);
+    form.append("iddocumento", selection.iddocumento);
+    pacienteMutation.mutate(form, {
+      onSuccess: (rsp) => {
+        const { data, status } = rsp;
+        if (status >= 200 && status < 300) {
+          const { responseCode }: ResponseNotificacion = data;
+          if (responseCode === 1) {
+            toast.success("Principal aprobado.");
+            queryClient.invalidateQueries({
+              queryKey: ["pacientes-manuales", page, query],
+            });
+            setSelection(null);
+          }
+        }
+      },
+      onError: () => {
+        toast.error("Error al aprobar principal.");
+        setSelection(null);
+      },
+    });
   };
-  */
+
+  const decline = (value: string) => {
+    if (selection === null) {
+      toast.error("Seleccione un registro");
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form: any = new FormData();
+    form.append("op", "principal/rechazar");
+    form.append("idusuario", selection.idusuario);
+    form.append("idpaciente", selection.idpaciente);
+    form.append("iddocumento", selection.iddocumento);
+    form.append("idoption", value);
+    pacienteMutation.mutate(form, {
+      onSuccess: (rsp) => {
+        const { data, status } = rsp;
+        if (status >= 200 && status < 300) {
+          const { responseCode }: ResponseNotificacion = data;
+          if (responseCode === 1) {
+            toast.success("Principal rechazado.");
+            queryClient.invalidateQueries({
+              queryKey: ["pacientes-manuales", page, query],
+            });
+            setSelection(null);
+          }
+        }
+      },
+      onError: () => {
+        toast.error("Error al aprobar principal.");
+        setSelection(null);
+      },
+    });
+  };
+
+  const handlePrevDecline = async (value: string) => {
+    const result = await MySwal.fire({
+      title: "Rechazar paciente",
+      html: "Esta seguro de rechazar",
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
+      customClass: {
+        confirmButton: "btn btn-secondary",
+        cancelButton: "btn btn-outline-danger ms-1",
+      },
+      didClose: () => window.scrollTo(0, 0),
+      buttonsStyling: false,
+    });
+    if (result.value) {
+      decline(value);
+    }
+  };
 
   const columns: TableColumn<DataRow>[] = [
     {
       name: "NOMBRE",
       selector: (row) => row.name,
       cell: (row) => (
-        <div className="d-flex align-items-center">
+        <div
+          className="d-flex align-items-center"
+          style={{
+            borderLeft: `${
+              selection?.idpaciente === row.idpaciente
+                ? "4px solid #9087f1"
+                : ""
+            }`,
+          }}
+        >
           <div className="email-badge me-1  ">
-            <img src={iconEmail} alt="email" className="" />
+            {selection?.idpaciente === row.idpaciente &&
+            pacienteMutation.isPending ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              <img src={iconEmail} alt="email" className="" />
+            )}
           </div>
           {row.name}
         </div>
@@ -125,10 +230,6 @@ const Manual = () => {
     },
   ];
 
-  const handleSelect = (data: DataRow) => {
-    setSelection(data);
-  };
-
   return (
     <>
       <div className="px-2 border-bottom ">
@@ -154,7 +255,7 @@ const Manual = () => {
               page={page}
               setPage={setPage}
               handleClick={(data) => {
-                handleSelect(data);
+                setSelection(data);
               }}
               handleDoubleClick={() => {}}
               isExpandable={false}
@@ -171,18 +272,25 @@ const Manual = () => {
               <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
                 <Dropdown>
                   <Dropdown.Toggle as={CustomToggle} />
-
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">
-                      Another action
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">
-                      Something else
-                    </Dropdown.Item>
+                    {dropdownManual.map((item, index) => (
+                      <Dropdown.Item
+                        key={index}
+                        onClick={() => {
+                          handlePrevDecline(item.value);
+                        }}
+                      >
+                        {item.label}
+                      </Dropdown.Item>
+                    ))}
                   </Dropdown.Menu>
                 </Dropdown>
-                <Button variant="success" className="ms-1" size="sm">
+                <Button
+                  variant="success"
+                  className="ms-1"
+                  size="sm"
+                  onClick={handleApprove}
+                >
                   <FontAwesomeIcon icon={faThumbsUp} className="me-1" />
                   Aprobar
                 </Button>
