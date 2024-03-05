@@ -7,6 +7,8 @@ import { AuthGuard } from "./authGuard.tsx";
 import Pacientes from "@src/pages/bieni-wallet/pacientes/Pacientes.tsx";
 import PacienteDetail from "@src/pages/bieni-wallet/paciente-detail/PacienteDetail.tsx";
 import Difusion from "@src/pages/bieni-wallet/disusion/Difusion.tsx";
+import Clientes from "@src/pages/bieni-medico/clientes/Clientes.tsx";
+import Planes from "@src/pages/bieni-medico/planes/Planes.tsx";
 //Page
 const Usuarios = lazy(() => import("../pages/usuarios/usuarios"));
 const Login = lazy(() => import("../pages/login/login.tsx"));
@@ -32,6 +34,9 @@ function Routers() {
               />
               <Route path="bieni-wallet/validacion" element={<Validacion />} />
               <Route path="bieni-wallet/difusion" element={<Difusion />} />
+
+              <Route path="bieni-medico/clientes" element={<Clientes />} />
+              <Route path="bieni-medico/planes" element={<Planes />} />
               <Route path="*" element={<div>Ruta no encontrada</div>} />
             </Route>
           </Route>

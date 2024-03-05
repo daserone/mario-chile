@@ -77,7 +77,6 @@ const Pacientes = () => {
       <Row>
         <Col>
           <h2 className="my-2">
-            {" "}
             <span className="text-muted">BieniWallet /</span> Pacientes
           </h2>
           <Card>
@@ -160,9 +159,7 @@ const Pacientes = () => {
                 </div>
               </div>
             </div>
-            <Card.Body>
-              <PacientesTable params={params} />
-            </Card.Body>
+            <PacientesTable params={params} />
           </Card>
         </Col>
       </Row>
