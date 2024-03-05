@@ -10,7 +10,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@component/*": ["./src/component/*"],
       "@assets/*": ["./src/assets/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@models/*": ["./src/models/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

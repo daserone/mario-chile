@@ -42,6 +42,10 @@ export default defineConfig({
         find: "@services",
         replacement: path.resolve(path.join(__dirname, "/src/services")),
       },
+      {
+        find: "@models",
+        replacement: path.resolve(path.join(__dirname, "/src/models")),
+      },
     ],
   },
 });

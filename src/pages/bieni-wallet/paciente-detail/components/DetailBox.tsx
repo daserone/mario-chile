@@ -1,8 +1,8 @@
 interface Props {
   title?: string;
   subtitle: string;
-  perfilType?: "principal" | "dependent";
-  verificationType?: "manual" | "automatic";
+  profileType?: string;
+  verification?: "verificacion-manual" | "verificacion-automatica";
   state?: "pending" | "active" | "rejected";
   age?: string;
   birthdate?: string;
@@ -14,36 +14,37 @@ const DetailBox = (props: Props) => {
   const {
     title,
     subtitle,
-    perfilType,
-    verificationType,
+    profileType,
+    verification,
     state,
     age,
     birthdate,
     registerDate,
     email,
   } = props;
+
   return (
     <div className="detail-item my-1">
       <span className="subtitle text-muted">{subtitle}</span>
       {title && <span className="title">{title}</span>}
-      {perfilType && (
+      {profileType && (
         <span
           className={`${
-            perfilType === "principal" ? "main-badge" : "dependent-badge"
+            profileType === "Principal" ? "main-badge" : "dependent-badge"
           }`}
         >
-          {perfilType === "principal" ? "Principal" : "Dependiente"}
+          {profileType === "Principal" ? "Principal" : "Dependiente"}
         </span>
       )}
-      {verificationType && (
+      {verification && (
         <span
           className={`${
-            verificationType === "automatic"
+            verification === "verificacion-automatica"
               ? "automatic-badge"
               : "inactive-badge"
           }`}
         >
-          {verificationType === "automatic" ? "Automática" : "Manual"}
+          {verification === "verificacion-automatica" ? "Automática" : "Manual"}
         </span>
       )}
       {state && (
@@ -70,7 +71,7 @@ const DetailBox = (props: Props) => {
             paddingBottom: "4px",
           }}
         >
-          <span>{birthdate}</span>, {age} años
+          <span>{birthdate}</span>, {age}
         </div>
       )}
       {registerDate && (

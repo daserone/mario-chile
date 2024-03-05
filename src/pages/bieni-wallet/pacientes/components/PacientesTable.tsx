@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TableColumn } from "react-data-table-component";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 //Service
 import { getPacientes } from "@services/paciente.service";
 //Component
@@ -15,6 +16,7 @@ interface DataRow {
   documentType: string;
   name: string;
   age: string;
+  email?: string;
   birthdate: string;
   phone: string;
   profileType: string;
@@ -36,6 +38,7 @@ interface Props {
 }
 
 const PacientesTable: React.FC<Props> = ({ params }) => {
+  const history = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   //Solicitud
@@ -97,7 +100,7 @@ const PacientesTable: React.FC<Props> = ({ params }) => {
             row.profileType === "Principal" ? "main-badge" : "dependent-badge"
           }`}
         >
-          {row.profileType === "principal" ? "Principal" : "Dependiente"}
+          {row.profileType === "Principal" ? "Principal" : "Dependiente"}
         </div>
       ),
     },
@@ -132,8 +135,12 @@ const PacientesTable: React.FC<Props> = ({ params }) => {
       setCountPerPage={setCountPerPage}
       page={page}
       setPage={setPage}
-      handleClick={() => {}}
-      handleDoubleClick={() => {}}
+      handleClick={(item: DataRow) => {
+        history(`/bieni-wallet/paciente/${item.idpaciente}`);
+      }}
+      handleDoubleClick={(item: DataRow) => {
+        history(`/bieni-wallet/paciente/${item.idpaciente}`);
+      }}
       isExpandable={false}
     />
   );
@@ -141,20 +148,10 @@ const PacientesTable: React.FC<Props> = ({ params }) => {
 
 export default PacientesTable;
 /*
-  const getDateFormat = (date: Date) => {
-    // date-fns
-    // ex 20/05/2021
-    return format(date, "dd/MM/yyyy");
-  };
-
-  const getHour = (date: Date) => {
-    // date-fns
-    // ex 20:05
-    return format(date, "HH:mm");
-  };
-
-  const getAge = (date: Date) => {
-    const today = new Date();
-    return differenceInYears(today, date);
-  };
+  // ex 20/05/2021
+  return format(date, "dd/MM/yyyy");
+  // ex 20:05
+  return format(date, "HH:mm");
+  const today = new Date();
+  return differenceInYears(today, date);
 */

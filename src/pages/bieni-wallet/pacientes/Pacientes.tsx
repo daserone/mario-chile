@@ -8,7 +8,7 @@ import PacientesTable from "./components/PacientesTable";
 import ExportButton from "@src/component/buttons/ExportButton";
 //Hook
 import { useDebounce } from "@src/hooks";
-//Helpers
+//Helper
 import { evaluateSuggestionFilter } from "@src/helpers/helpers";
 import { adapterDateTime } from "@src/helpers/adapter";
 //Style
@@ -110,7 +110,7 @@ const Pacientes = () => {
                 <div className="col-6 col-lg-4">
                   <select
                     className="form-select"
-                    value={params.profile}
+                    value={params.profile || ""}
                     name="profile"
                     onChange={handleChange}
                   >
@@ -125,7 +125,7 @@ const Pacientes = () => {
                 <div className="col-6 col-lg-4 mt-2 mt-lg-0">
                   <select
                     className="form-select"
-                    value={params.verification}
+                    value={params.verification || ""}
                     name="verification"
                     onChange={handleChange}
                   >
@@ -145,7 +145,7 @@ const Pacientes = () => {
                       type="text"
                       className="form-control"
                       placeholder="Buscar por nombre o cedula..."
-                      value={params.search}
+                      value={params.search || ""}
                       name="search"
                       onChange={handleChange}
                     />

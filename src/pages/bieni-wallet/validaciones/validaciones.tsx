@@ -45,7 +45,7 @@ const Validacion = () => {
                   </span>
                 }
               >
-                <Manual />
+                <Manual tab={key} />
               </Tab>
               <Tab
                 eventKey="dependiente"
@@ -60,7 +60,7 @@ const Validacion = () => {
                   </span>
                 }
               >
-                <Dependiente />
+                <Dependiente tab={key} />
               </Tab>
               <Tab
                 eventKey="correo"
@@ -75,7 +75,7 @@ const Validacion = () => {
                   </span>
                 }
               >
-                <Correo />
+                <Correo tab={key} />
               </Tab>
             </Tabs>
           </Card>

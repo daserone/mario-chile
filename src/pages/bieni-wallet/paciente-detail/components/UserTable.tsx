@@ -1,21 +1,31 @@
 import { useState } from "react";
 import { TableColumn } from "react-data-table-component";
-import iconEmail from "@src/assets/icons/email-table.svg";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+//Service
+import { getPacientes } from "@services/paciente.service";
+//Component
 import { WrapperDataTable } from "@src/component/wrapper";
+//Model
+import { DataRowPacientes } from "@src/models/paciente.model";
+//Assets
+import iconEmail from "@src/assets/icons/email-table.svg";
 
-interface DataRow {
-  name: string;
-  document: string;
-  age: string | number;
-  registerDate: string;
-  kinship: string;
-  verificationType: "automatic" | "manual";
+interface Props {
+  idUsuario: string | number;
+  idPaciente: string | number;
 }
-export const UserTable = () => {
+export const UserTable = ({ idUsuario, idPaciente }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
+  //Solicitud
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["pacientes", page, idUsuario, idPaciente],
+    queryFn: () =>
+      getPacientes({ page, idusuario: idUsuario, idpaciente: idPaciente }),
+    placeholderData: keepPreviousData,
+  });
 
-  const columns: TableColumn<DataRow>[] = [
+  const columns: TableColumn<DataRowPacientes>[] = [
     {
       name: "NOMBRE",
       selector: (row) => row.name,
@@ -50,67 +60,51 @@ export const UserTable = () => {
     },
     {
       name: "REGISTRO",
-      selector: (row) => row.registerDate,
+      selector: (row) => row.registrationDate,
       cell: (row) => (
         <div className="d-flex flex-column align-items-start">
-          {row.registerDate}
-          <span className="text-muted">12:00:00</span>
+          {row.registrationDate}
+          <span className="text-muted">{row.registrationDate}</span>
         </div>
       ),
     },
     {
       name: "PARENTESCO",
-      selector: (row) => row.kinship,
+      selector: (row) => row.profileType,
       cell: (row) => (
         <div className="d-flex flex-column align-items-start">
-          {row.kinship}
+          {row.profileType}
         </div>
       ),
     },
     {
       name: "VERIFICACIÓN",
-      selector: (row) => row.verificationType,
+      selector: (row) => row.verification,
       cell: (row) => (
         <div
           className={`${
-            row.verificationType === "automatic"
+            row.verification === "verificacion-automatica"
               ? "automatic-badge"
               : "inactive-badge"
           }`}
         >
-          {row.verificationType === "automatic" ? "Automática" : "Manual"}
+          {row.verification === "verificacion-automatica"
+            ? "Automática"
+            : "Manual"}
         </div>
       ),
     },
   ];
 
-  const data: DataRow[] = [
-    {
-      name: "Juan Perez",
-      document: "123456789",
-      age: 25,
-      registerDate: "2021-08-18",
-      kinship: "Padre",
-      verificationType: "automatic",
-    },
-    {
-      name: "Maria Lopez",
-      document: "987654321",
-      age: 30,
-      registerDate: "2021-08-18",
-      kinship: "Hijo",
-      verificationType: "manual",
-    },
-  ];
   return (
     <div className="border my-1">
       <WrapperDataTable
         title=""
         columns={columns}
-        isLoading={false}
-        isError={false}
-        data={data ?? []}
-        recordsTotals={data.length}
+        isLoading={isLoading}
+        isError={isError}
+        data={data?.data ?? []}
+        recordsTotals={0}
         countPerPage={countPerPage}
         setCountPerPage={setCountPerPage}
         page={page}

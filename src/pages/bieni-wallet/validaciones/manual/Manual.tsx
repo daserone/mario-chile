@@ -25,6 +25,8 @@ import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
 import { getPacientesManuales, postPaciente } from "@services/paciente.service";
+//Models
+import { DataRowPacientes } from "@models/paciente.model";
 //Helpers
 import { dropdownManual } from "../helpers/data";
 //Asset
@@ -34,19 +36,7 @@ import "../Validaciones.scss";
 //Config
 const MySwal = withReactContent(Swal);
 
-interface DataRow {
-  idusuario: string | number;
-  idpaciente: string | number;
-  iddocumento: string | number;
-  document: string;
-  documentType: string;
-  name: string;
-  age: string;
-  birthdate: string;
-  phone: string;
-  profileType: string;
-  verification: "verificacion-automatica" | "verificacion-manual";
-  registrationDate: string;
+interface DataRow extends DataRowPacientes {
   image: Array<string>;
 }
 
@@ -66,7 +56,11 @@ const CustomToggle = React.forwardRef(
   )
 );
 
-const Manual = () => {
+interface Props {
+  tab: string;
+}
+
+const Manual = ({ tab }: Props) => {
   //Hook
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
@@ -85,6 +79,8 @@ const Manual = () => {
     queryKey: ["pacientes-manuales", page, query],
     queryFn: () => getPacientesManuales({ page, search: query }),
     placeholderData: keepPreviousData,
+    enabled: tab === "manual",
+    refetchOnWindowFocus: false,
   });
   //Handle
   const handleApprove = () => {

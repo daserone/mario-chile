@@ -20,6 +20,7 @@ const ImageSliders = ({ images }: ImageSlidersProps) => {
       setCurrentImageIndex(currentImageIndex + 1);
     }
   };
+
   const handlePrevImage = () => {
     if (currentImageIndex - 1 >= 0) {
       setCurrentImageIndex(currentImageIndex - 1);

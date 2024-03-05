@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { TableColumn } from "react-data-table-component";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+//Models
+import { DataRowPacientes } from "@models/paciente.model";
 //Component
 import { WrapperDataTable } from "@component/wrapper";
 import { Barra } from "../component";
@@ -13,26 +15,18 @@ import { useDebounce } from "@src/hooks";
 import iconEmail from "@src/assets/icons/email-table.svg";
 import iconCheck from "@src/assets/icons/circle-check.svg";
 
-interface DataRow {
-  idusuario: string | number;
-  idpaciente: string | number;
-  iddocumento: string | number;
-  idfamiliar: string | number;
-  document: string;
-  documentType: string;
-  name: string;
-  age: string | number;
-  birthdate: string;
-  profileType: string;
-  major: string;
-  verification: "verificacion-automatica" | "verificacion-manual";
-  registrationDate: string;
-  relationship: string;
+interface DataRow extends DataRowPacientes {
   image: Array<string>;
   email: string;
   url: string;
 }
-const Correo = () => {
+
+interface Props {
+  tab: string;
+}
+
+const Correo = ({ tab }: Props) => {
+  //Hook
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
@@ -42,6 +36,8 @@ const Correo = () => {
     queryKey: ["pacientes-correos", page, query],
     queryFn: () => getPacientesCorreos({ page, search: query }),
     placeholderData: keepPreviousData,
+    enabled: tab === "correo",
+    refetchOnWindowFocus: false,
   });
 
   const columns: TableColumn<DataRow>[] = [

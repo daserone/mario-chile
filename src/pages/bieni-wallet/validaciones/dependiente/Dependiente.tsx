@@ -21,6 +21,8 @@ import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Model
 import { ResponseNotificacion } from "@src/models";
+//Models
+import { DataRowPacientes } from "@models/paciente.model";
 //Service
 import {
   getPacientesDependientes,
@@ -36,21 +38,9 @@ import "../Validaciones.scss";
 import iconEmail from "@src/assets/icons/email-table.svg"; //Config
 const MySwal = withReactContent(Swal);
 
-interface DataRow {
-  idusuario: string | number;
-  idpaciente: string | number;
-  iddocumento: string | number;
-  idfamiliar: string | number;
-  document: string;
-  documentType: string;
-  name: string;
-  age: string | number;
-  birthdate: string;
-  profileType: string;
-  major: string;
-  verification: "verificacion-automatica" | "verificacion-manual";
-  registrationDate: string;
+interface DataRow extends DataRowPacientes {
   relationship: string;
+  idfamiliar: string | number;
   image: Array<string>;
 }
 
@@ -72,7 +62,12 @@ const CustomToggle = React.forwardRef(
   )
 );
 
-const Dependiente = () => {
+interface Props {
+  tab: string;
+}
+
+const Dependiente = ({ tab }: Props) => {
+  //Hook
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
@@ -90,6 +85,8 @@ const Dependiente = () => {
     queryKey: ["pacientes-dependientes", page, query],
     queryFn: () => getPacientesDependientes({ page, search: query }),
     placeholderData: keepPreviousData,
+    enabled: tab === "dependiente",
+    refetchOnWindowFocus: false,
   });
   //Handle
   const handleApprove = () => {
@@ -237,7 +234,6 @@ const Dependiente = () => {
       ),
     },
   ];
-  console.log(selection);
   //const data: DataRow[] = [];
 
   return (
