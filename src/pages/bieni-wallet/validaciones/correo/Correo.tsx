@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { Col, Row, Button } from "react-bootstrap";
 import { TableColumn } from "react-data-table-component";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
-//Models
+import {
+  useQuery,
+  keepPreviousData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import toast from "react-hot-toast";
+//Model
+import { ResponseNotificacion } from "@src/models";
 import { DataRowPacientes } from "@models/paciente.model";
 //Component
 import { WrapperDataTable } from "@component/wrapper";
 import { Barra } from "../component";
 //Service
-import { getPacientesCorreos } from "@src/services/paciente.service";
+import {
+  getPacientesCorreos,
+  postPacienteBieni,
+} from "@src/services/paciente.service";
 //Hook
 import { useDebounce } from "@src/hooks";
 //Assets
@@ -25,6 +35,9 @@ interface Props {
   tab: string;
 }
 
+interface ResponseNotificacionExt extends ResponseNotificacion {
+  rsp: string | number;
+}
 const Correo = ({ tab }: Props) => {
   //Hook
   const [page, setPage] = useState<number>(1);
@@ -32,6 +45,12 @@ const Correo = ({ tab }: Props) => {
   const [search, setSearch] = useState<string>("");
   const query = useDebounce(search, 2000);
   //Solicitud
+  const queryClient = useQueryClient();
+
+  const pacienteMutation = useMutation({
+    mutationFn: postPacienteBieni,
+  });
+
   const { data, isError, isLoading } = useQuery({
     queryKey: ["pacientes-correos", page, query],
     queryFn: () => getPacientesCorreos({ page, search: query }),
@@ -45,6 +64,23 @@ const Correo = ({ tab }: Props) => {
     const form: any = new FormData();
     form.append("op", "enviarLink");
     form.append("correo", correo);
+    pacienteMutation.mutate(form, {
+      onSuccess: (rsp) => {
+        const { data, status } = rsp;
+        if (status >= 200 && status < 300) {
+          const { rsp: responseCode }: ResponseNotificacionExt = data;
+          if (responseCode === 1) {
+            toast.success("Correo enviado.");
+            queryClient.invalidateQueries({
+              queryKey: ["pacientes-correos", page, query],
+            });
+          }
+        }
+      },
+      onError: () => {
+        toast.error("Error al enviar correo.");
+      },
+    });
   };
 
   const handleMailClick = (correo: string) => {
@@ -76,7 +112,7 @@ const Correo = ({ tab }: Props) => {
       selector: (row) => row.url,
       cell: (row) => (
         <div className="d-flex align-items-center">
-          <a href="">{row.url}</a>
+          <div>{row.url}</div>
           <div className="email-badge me-1">
             <img src={iconCheck} alt="email" className="" />
           </div>

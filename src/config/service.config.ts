@@ -1,3 +1,14 @@
+import axio from "axios";
+
+const service = axio.create({
+  baseURL: "https://bieniwallet.com/bieniwebbackdes/",
+  //baseURL: "http://localhost/bieniwebback/",
+});
+
+const serviceBieni = axio.create({
+  baseURL: "https://bieniwallet.com/bienibackdes/",
+});
+
 const buildUrl = (url: string, op: string, parameters = {}) => {
   const queryString = new URLSearchParams(parameters).toString();
   return `${url}?op=${op}&${queryString}`;
@@ -16,4 +27,4 @@ const endpoint = {
   login: "controller/login.php",
 };
 
-export { buildUrl, templateData, endpoint };
+export { service, serviceBieni, buildUrl, templateData, endpoint };
