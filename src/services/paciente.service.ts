@@ -3,8 +3,8 @@ import axio from "axios";
 import { buildUrl, templateData, endpoint } from "@src/config/service.config";
 
 export const servicios = axio.create({
-  //baseURL: "https://bieniwallet.com/bieniwebbackdes/",
-  baseURL: "http://localhost/bieniwebback/",
+  baseURL: "https://bieniwallet.com/bieniwebbackdes/",
+  //baseURL: "http://localhost/bieniwebback/",
 });
 
 export const getPacientes = async ({ ...parameters }) => {

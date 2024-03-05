@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Button } from "react-bootstrap";
 import { TableColumn } from "react-data-table-component";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 //Models
@@ -40,6 +40,17 @@ const Correo = ({ tab }: Props) => {
     refetchOnWindowFocus: false,
   });
 
+  const handleSendEmail = (correo: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form: any = new FormData();
+    form.append("op", "enviarLink");
+    form.append("correo", correo);
+  };
+
+  const handleMailClick = (correo: string) => {
+    window.location.href = `mailto:${correo}?subject=Bieni`;
+  };
+
   const columns: TableColumn<DataRow>[] = [
     {
       name: "CORREO",
@@ -47,7 +58,14 @@ const Correo = ({ tab }: Props) => {
       cell: (row) => (
         <div className="d-flex align-items-center">
           <div className="email-badge me-1  ">
-            <img src={iconEmail} alt="email" className="" />
+            <img
+              src={iconEmail}
+              alt="email"
+              className=""
+              onClick={() => {
+                handleMailClick(row.email);
+              }}
+            />
           </div>
           {row.email}
         </div>
@@ -58,26 +76,25 @@ const Correo = ({ tab }: Props) => {
       selector: (row) => row.url,
       cell: (row) => (
         <div className="d-flex align-items-center">
-          <a href={row.email}>correo de Semrush</a>
+          <a href="">{row.url}</a>
           <div className="email-badge me-1">
             <img src={iconCheck} alt="email" className="" />
           </div>
-          {row.url}
         </div>
       ),
     },
     {
       name: "",
-      selector: (row) => row.url,
+      selector: (row) => row.email,
       cell: (row) => (
-        <a
-          href={row.url}
-          style={{
-            textDecoration: "underline",
+        <Button
+          variant="link"
+          onClick={() => {
+            handleSendEmail(row.email);
           }}
         >
           Reenviar enlace
-        </a>
+        </Button>
       ),
     },
   ];
