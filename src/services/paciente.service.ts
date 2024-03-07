@@ -65,7 +65,6 @@ export const postPaciente = (form: any) =>
       "Content-Type": "multipart/form-data",
     },
   });
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const postPacienteBieni = (form: any) =>
   serviceBieni.post("/controller/email.php", form, {

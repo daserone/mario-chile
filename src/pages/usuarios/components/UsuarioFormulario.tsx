@@ -3,16 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Form } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useForm } from "react-hook-form";
+import { User } from "@src/models";
+
+interface FormValues extends User {
+  name: string;
+  email: string;
+  status: string;
+}
+
 interface Props {
   state: boolean;
   handleToggle: (params: boolean) => void;
 }
-
-type FormValues = {
-  name: string;
-  email: string;
-  status: string;
-};
 
 const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
   const {
@@ -21,6 +23,7 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
     reset,
     formState: { errors },
   } = useForm<FormValues>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => console.log(data);
 
   const handleCloseAndReset = () => {
