@@ -1,13 +1,13 @@
 import CardDifusion from "./CardDifusion";
 
-interface difusionCard {
+export interface difusionCard {
   id: string;
   title: string;
   description: string;
   isActive: boolean;
 }
 
-const cards: difusionCard[] = [
+export const cards: difusionCard[] = [
   {
     id: "1",
     title: "CSS Vacunas",
