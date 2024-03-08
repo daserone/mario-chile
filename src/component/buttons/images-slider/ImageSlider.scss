@@ -17,7 +17,13 @@
   right: 10px;
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+  .next-back {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
   .image-slide-button {
     display: flex;
     align-items: center;
