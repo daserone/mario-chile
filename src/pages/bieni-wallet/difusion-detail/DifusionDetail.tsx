@@ -6,6 +6,7 @@ import { cards } from "../disusion/components/DifusionList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import InformacionContent from "./components/InformacionContent";
+import MensajeriaContent from "./components/MensajeriaContent";
 
 const DifusionDetail = () => {
   const { id } = useParams();
@@ -66,8 +67,7 @@ const DifusionDetail = () => {
               </Tab>
               <Tab eventKey="mensajeria" title={<span>Mensajería</span>}>
                 <Card.Body>
-                  <Card.Title>Mensajería</Card.Title>
-                  <Card.Text>{difusion?.description}</Card.Text>
+                  <MensajeriaContent />
                 </Card.Body>
               </Tab>
             </Tabs>

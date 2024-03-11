@@ -197,3 +197,29 @@
 #dropdown-basic {
   color: red !important;
 }
+
+.dotted-file-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  height: 142px;
+  border: 1px dashed var(--Light-Solid-Color-Extra-Divider, #dbdade);
+  .dotted-file {
+    cursor: pointer;
+    display: inline-flex;
+    padding: 10px;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 6px;
+    background: var(--light-opacity-color-gray-gray-8, rgba(75, 70, 92, 0.08));
+    margin-bottom: 10px;
+  }
+  .dotted-file-text {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--Light-Solid-Color-Text-Primary, #3e4954);
+  }
+}
