@@ -1,0 +1,28 @@
+.detail-item {
+  display: flex;
+  padding-bottom: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1 0 0;
+  border-bottom: 1px solid var(--Borde, #dbdade);
+  .subtitle {
+    align-self: stretch;
+    color: var(--Light-Typography-Color-Muted-Text, #4b465c);
+    font-feature-settings: "clig" off, "liga" off;
+
+    /* Light/Form Input/3) Label sm */
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  .title {
+    color: var(--Light-Typography-Color-Body-Text, #4b465c);
+    font-feature-settings: "clig" off, "liga" off;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px; /* 146.667% */
+  }
+}
