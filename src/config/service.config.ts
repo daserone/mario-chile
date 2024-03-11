@@ -1,8 +1,8 @@
 import axio from "axios";
 
 const service = axio.create({
-  //baseURL: "https://bieniwallet.com/bieniwebbackdes/",
-  baseURL: "http://localhost/bieniwebback/",
+  baseURL: "https://bieniwallet.com/bieniwebbackdes/",
+  //baseURL: "http://localhost/bieniwebback/",
 });
 
 const serviceBieni = axio.create({
