@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { createUser, reset } from "@src/state/slice/user";
-
+const TOKEN_KEY = import.meta.env.TOKEN_KEY;
 export default function useAuth() {
   const dispatch = useDispatch();
 
@@ -16,6 +16,7 @@ export default function useAuth() {
 
   const logout = useCallback(() => {
     dispatch(reset());
+    localStorage.removeItem(TOKEN_KEY);
     // doLogout
   }, [dispatch]);
 
