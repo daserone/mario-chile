@@ -1,8 +1,8 @@
 import axio from "axios";
 
 const service = axio.create({
-  baseURL: "https://bieniwallet.com/bieniwebbackdes/",
-  //baseURL: "http://localhost/bieniwebback/",
+  //baseURL: "https://bieniwallet.com/bieniwebbackdes/",
+  baseURL: "http://localhost/bieniwebback/",
 });
 
 const serviceBieni = axio.create({
@@ -22,9 +22,11 @@ const templateData = {
 };
 
 const endpoint = {
-  usuario: "/controller/usuarios.php",
-  paciente: "/controller/pacientes.php",
-  login: "controller/login.php",
+  //usuario: "/src/usuarios.php",
+  usuario: "/src/usuario/",
+  paciente: "/src/pacientes.php",
+  login: "src/login.php",
+  difusion: "src/difusion/",
 };
 
 export { service, serviceBieni, buildUrl, templateData, endpoint };

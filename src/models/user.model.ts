@@ -3,6 +3,7 @@ export interface User {
   name: string;
   lastName?: string;
   email: string;
+  image?: string;
 }
 
 export interface UserSession extends User {

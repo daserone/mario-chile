@@ -17,7 +17,8 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 //Hook
 import { useDebounce } from "@src/hooks";
-//Model
+//Models
+import { DataRowPacientes } from "@models/paciente.model";
 import { ResponseNotificacion } from "@src/models";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
@@ -25,8 +26,6 @@ import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
 import { getPacientesManuales, postPaciente } from "@services/paciente.service";
-//Models
-import { DataRowPacientes } from "@models/paciente.model";
 //Helpers
 import { dropdownManual } from "../helpers/data";
 //Asset
