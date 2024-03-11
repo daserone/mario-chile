@@ -14,7 +14,7 @@ const service = axio.create({
 // interceptor;
 service.interceptors.request.use(
   (config) => {
-    if (config.url === "controller/login.php") {
+    if (config.url === endpoint.login) {
       return config;
     }
 
