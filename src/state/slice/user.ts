@@ -8,6 +8,8 @@ import {
 
 export const userKey = "user-backoffice";
 
+const TOKEN_KEY = import.meta.env.TOKEN_KEY;
+
 export const initial: UserSession = {
   id: 0,
   name: "",
@@ -21,6 +23,10 @@ export const userSlice = createSlice({
   initialState: getLocalStorage(userKey) ? getLocalStorage(userKey) : initial,
   reducers: {
     createUser: (state, action) => {
+      if (action.payload.token) {
+        localStorage.setItem(TOKEN_KEY, JSON.stringify(action.payload.token));
+      }
+
       persistLocalStorage<UserSession>(userKey, action.payload);
       return action.payload;
     },
