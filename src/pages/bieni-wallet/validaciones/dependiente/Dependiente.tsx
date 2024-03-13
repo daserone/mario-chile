@@ -182,7 +182,17 @@ const Dependiente = ({ tab }: Props) => {
 
   const columns: TableColumn<DataRow>[] = [
     {
-      name: "NOMBRE",
+      name: "PRINCIPAL",
+      selector: (row) => row.document,
+      cell: (row) => (
+        <div className="d-flex flex-column align-items-start">
+          {row.document}
+          <span className="text-muted">{row.documentType}</span>
+        </div>
+      ),
+    },
+    {
+      name: "DEPENDIENTE",
       selector: (row) => row.name,
       cell: (row) => (
         <div
@@ -246,7 +256,10 @@ const Dependiente = ({ tab }: Props) => {
     },
   ];
   //const data: DataRow[] = [];
+  console.log(selection);
+  //console.log(selection !== null && selection?.image.length);
 
+  console.log(selection?.image);
   return (
     <>
       <div className="px-2 border-bottom ">
@@ -285,7 +298,7 @@ const Dependiente = ({ tab }: Props) => {
             className="border-start border-top ps-lg-0"
           >
             <ImageSliders images={selection?.image ?? []} />
-            {selection !== null ? (
+            {selection !== null && selection?.image.length > 0 ? (
               <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
                 <Dropdown>
                   <Dropdown.Toggle as={CustomToggle} />
