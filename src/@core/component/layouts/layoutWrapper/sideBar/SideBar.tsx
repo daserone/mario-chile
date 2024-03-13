@@ -53,6 +53,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
             "menu-dark": skin === "semi-dark" || skin === "dark",
           }
         )}
+        style={{ zIndex: 1000 }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setMenuHover(false)}
       >

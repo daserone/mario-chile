@@ -1,13 +1,22 @@
+import {
+  useQuery,
+  keepPreviousData,
+  //useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+//Service
+import { getDifusiones } from "@services/difusion.service";
+//Component
 import CardDifusion from "./CardDifusion";
 
-interface difusionCard {
+export interface difusionCard {
   id: string;
   title: string;
   description: string;
   isActive: boolean;
 }
 
-const cards: difusionCard[] = [
+export const cards: difusionCard[] = [
   {
     id: "1",
     title: "CSS Vacunas",
@@ -45,6 +54,16 @@ const cards: difusionCard[] = [
   },
 ];
 const DifusionList = () => {
+  //Service
+  const queryClient = useQueryClient();
+
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["difusiones"],
+    queryFn: () => getDifusiones({ page: 1 }),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
+  });
+  console.log(data);
   return (
     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {cards.map((card) => (

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { user } from "@src/models";
+import { UserSession } from "@src/models";
 import {
   clearLocalStorage,
   persistLocalStorage,
@@ -8,7 +8,9 @@ import {
 
 export const userKey = "user-backoffice";
 
-export const initial: user = {
+const TOKEN_KEY = import.meta.env.TOKEN_KEY;
+
+export const initial: UserSession = {
   id: 0,
   name: "",
   email: "",
@@ -21,12 +23,16 @@ export const userSlice = createSlice({
   initialState: getLocalStorage(userKey) ? getLocalStorage(userKey) : initial,
   reducers: {
     createUser: (state, action) => {
-      persistLocalStorage<user>(userKey, action.payload);
+      if (action.payload.token) {
+        localStorage.setItem(TOKEN_KEY, JSON.stringify(action.payload.token));
+      }
+
+      persistLocalStorage<UserSession>(userKey, action.payload);
       return action.payload;
     },
     updateUser: (state, action) => {
       const result = { ...state, ...action.payload };
-      persistLocalStorage<user>(userKey, result);
+      persistLocalStorage<UserSession>(userKey, result);
       return result;
     },
     reset: () => {

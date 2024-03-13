@@ -6,6 +6,8 @@ import { Row, Col, Card, Button } from "react-bootstrap";
 import { useToggle, useDebounce } from "@src/hooks";
 //Helpers
 import { evaluateSuggestionFilter } from "@src/helpers/helpers";
+//Model
+import { UserDataRow } from "@src/models/user.model";
 //Component
 import ExportButton from "@src/component/buttons/ExportButton";
 import AddButton from "@src/component/buttons/AddButton";
@@ -24,10 +26,12 @@ const initial = { state: "", search: "" };
 const Usuarios = () => {
   //Hook
   const [params, setParams] = useState<Params>(initial);
+  const [selection, setSelection] = useState<UserDataRow | null>(null);
 
   const query = useDebounce(params, 2000);
 
   const { state, toggle } = useToggle(false);
+
   //Handle
   const handleChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLSelectElement
@@ -104,11 +108,20 @@ const Usuarios = () => {
                 </div>
               </div>
             </div>
-            <UsuariosTable params={query} />
+            <UsuariosTable
+              params={query}
+              setSelection={setSelection}
+              handleToggle={toggle}
+            />
           </Card>
         </Col>
       </Row>
-      <UsuarioFormulario state={state} handleToggle={toggle} />
+      <UsuarioFormulario
+        state={state}
+        handleToggle={toggle}
+        selection={selection}
+        setSelection={setSelection}
+      />
     </>
   );
 };

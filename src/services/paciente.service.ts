@@ -57,6 +57,20 @@ export const getPacientesCorreos = async ({ ...parameters }) => {
     throw new Error(`Error al obtener paciente correo: ${response.statusText}`);
   }
 };
+
+export const getPacientesDocumentos = async ({ ...parameters }) => {
+  const apiUrl = buildUrl(
+    endpoint.pacientes,
+    "pacientes/documentos",
+    parameters
+  );
+  const response = await service.get(apiUrl, { responseType: "json" });
+  if (response.status >= 200 && response.status < 300) {
+    return response?.data ?? templateData;
+  } else {
+    throw new Error(`Error al obtener paciente correo: ${response.statusText}`);
+  }
+};
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const postPaciente = (form: any) =>
   service.post(endpoint.paciente, form, {
@@ -65,7 +79,6 @@ export const postPaciente = (form: any) =>
       "Content-Type": "multipart/form-data",
     },
   });
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const postPacienteBieni = (form: any) =>
   serviceBieni.post("/controller/email.php", form, {

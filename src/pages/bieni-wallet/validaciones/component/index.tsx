@@ -1,2 +1,3 @@
+import { TabDocumentosAdicionales } from "./tabs";
 import Barra from "./Barra";
-export { Barra };
+export { Barra, TabDocumentosAdicionales };

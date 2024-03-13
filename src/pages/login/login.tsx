@@ -49,6 +49,7 @@ const Login = () => {
         if (status === 200) {
           const { responseCode, item }: ResponseNotificacion = data;
           if (responseCode === 1) {
+            // saveUser({ ...item, token: "test-token" });
             saveUser(item);
             history("/usuarios", { replace: true });
           } else {

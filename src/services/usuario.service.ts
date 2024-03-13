@@ -33,3 +33,11 @@ export const getUsuario = async ({ ...parameters }) => {
     throw new Error(`Error al obtener usuarios: ${response.statusText}`);
   }
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const postUsuario = (form: any) =>
+  service.post(endpoint.usuario, form, {
+    responseType: "json",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });

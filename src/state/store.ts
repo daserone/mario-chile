@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { user, alerta, LayoutSlice } from "@src/models";
+import { UserSession, alerta, LayoutSlice } from "@src/models";
 import { userSlice } from "./slice/user";
 import { alertaSlice } from "./slice/alerta.slice";
 import { layoutSlice } from "./slice/layout.slice";
 
 export interface AppStore {
-  auth: user | null;
+  auth: UserSession | null;
   alerta: alerta;
   layoutSlice: LayoutSlice;
 }
