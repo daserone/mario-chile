@@ -183,7 +183,7 @@ const TabDocumentosAdicionales = ({ tab }: Props) => {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomToggle} />
                   <Dropdown.Menu>
-                    <Dropdown.Item key={index}>opcion</Dropdown.Item>
+                    <Dropdown.Item>opcion</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
                 <Button variant="success" className="ms-1" size="sm">
