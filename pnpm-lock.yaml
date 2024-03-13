@@ -83,6 +83,9 @@ dependencies:
   react-select:
     specifier: ^5.8.0
     version: 5.8.0(@types/react@18.2.57)(react-dom@18.2.0)(react@18.2.0)
+  react-viewer:
+    specifier: ^3.2.2
+    version: 3.2.2
   styled-components:
     specifier: ^6.1.8
     version: 6.1.8(react-dom@18.2.0)(react@18.2.0)
@@ -2407,6 +2410,12 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react-viewer@3.2.2:
+    resolution: {integrity: sha512-DHOq1x6cXsAViY43204ILRzLVR5ovP1MgzsC+LzZCWlInRuHjzAgpQZ8GzWm1CkiNYuHGwCxH36X0JUHl2xDSg==}
+    dependencies:
+      classnames: 2.5.1
     dev: false
 
   /react@18.2.0:
