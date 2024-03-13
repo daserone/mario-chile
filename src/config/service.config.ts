@@ -1,7 +1,7 @@
 import axio from "axios";
 
 const TOKEN_KEY = process.env.BIENI_TOKEN_KEY;
-const BASE_URL = process.env.BIENI_WALLET_DES;
+const BASE_URL = process.env.BIENI_URL_DEV;
 const BASE_URL_LOCAL = process.env.BIENI_URL_LOCAL;
 
 const service = axio.create({
