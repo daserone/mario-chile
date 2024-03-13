@@ -1,42 +1,37 @@
 import React, { useState } from "react";
-import { Col, Row } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
+import { Col, Row, Button, Spinner } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import { TableColumn } from "react-data-table-component";
+import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
+//import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-import {
-  useQuery,
-  keepPreviousData,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-//Hook
-import { useDebounce } from "@src/hooks";
-//Models
+//Model
+//import { ResponseNotificacion } from "@src/models";
 import { DataRowPacientes } from "@models/paciente.model";
-import { ResponseNotificacion } from "@src/models";
 //Component
-import { WrapperDataTable } from "@src/component/wrapper";
-import { Barra } from "../component";
+import { WrapperDataTable } from "@component/wrapper";
+import Barra from "../../Barra";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
-import { getPacientesManuales, postPaciente } from "@services/paciente.service";
-//Helpers
-import { dropdownManual } from "../helpers/data";
-//Asset
+import {
+  getPacientesDocumentos,
+  postPacienteBieni,
+} from "@src/services/paciente.service";
+//Hook
+import { useDebounce } from "@src/hooks";
+//Assets
 import iconEmail from "@src/assets/icons/email-table.svg";
-//Style
-import "../Validaciones.scss";
-//Config
-const MySwal = withReactContent(Swal);
 
 interface DataRow extends DataRowPacientes {
   image: Array<string>;
+  email: string;
+  url: string;
+  family: string;
+}
+
+interface Props {
+  tab: string;
 }
 
 const CustomToggle = React.forwardRef(
@@ -55,116 +50,27 @@ const CustomToggle = React.forwardRef(
   )
 );
 
-interface Props {
-  tab: string;
-}
-
-const Manual = ({ tab }: Props) => {
+const TabDocumentosAdicionales = ({ tab }: Props) => {
   //Hook
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
   const [selection, setSelection] = useState<DataRow | null>(null);
-
   const query = useDebounce(search, 2000);
   //Solicitud
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
 
   const pacienteMutation = useMutation({
-    mutationFn: postPaciente,
+    mutationFn: postPacienteBieni,
   });
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["pacientes-manuales", page, query],
-    queryFn: () => getPacientesManuales({ page, search: query }),
+    queryKey: ["pacientes-documentos", page, query],
+    queryFn: () => getPacientesDocumentos({ page, search: query }),
     placeholderData: keepPreviousData,
-    enabled: tab === "manual",
+    enabled: tab === "documento",
     refetchOnWindowFocus: false,
   });
-  //Handle
-  const handleApprove = () => {
-    if (selection === null) {
-      toast.error("Seleccione un registro");
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const form: any = new FormData();
-    form.append("op", "principal/aprobar");
-    form.append("idusuario", selection.idusuario);
-    form.append("idpaciente", selection.idpaciente);
-    form.append("iddocumento", selection.iddocumento);
-    pacienteMutation.mutate(form, {
-      onSuccess: (rsp) => {
-        const { data, status } = rsp;
-        if (status >= 200 && status < 300) {
-          const { responseCode }: ResponseNotificacion = data;
-          if (responseCode === 1) {
-            toast.success("Principal aprobado.");
-            queryClient.invalidateQueries({
-              queryKey: ["pacientes-manuales", page, query],
-            });
-            setSelection(null);
-          }
-        }
-      },
-      onError: () => {
-        toast.error("Error al aprobar principal.");
-        setSelection(null);
-      },
-    });
-  };
-
-  const decline = (value: string) => {
-    if (selection === null) {
-      toast.error("Seleccione un registro");
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const form: any = new FormData();
-    form.append("op", "principal/rechazar");
-    form.append("idusuario", selection.idusuario);
-    form.append("idpaciente", selection.idpaciente);
-    form.append("iddocumento", selection.iddocumento);
-    form.append("idoption", value);
-    pacienteMutation.mutate(form, {
-      onSuccess: (rsp) => {
-        const { data, status } = rsp;
-        if (status >= 200 && status < 300) {
-          const { responseCode }: ResponseNotificacion = data;
-          if (responseCode === 1) {
-            toast.success("Principal rechazado.");
-            queryClient.invalidateQueries({
-              queryKey: ["pacientes-manuales", page, query],
-            });
-            setSelection(null);
-          }
-        }
-      },
-      onError: () => {
-        toast.error("Error al aprobar principal.");
-        setSelection(null);
-      },
-    });
-  };
-
-  const handlePrevDecline = async (value: string) => {
-    const result = await MySwal.fire({
-      title: "Rechazar paciente",
-      html: "Esta seguro de rechazar",
-      showCancelButton: true,
-      confirmButtonText: "Confirmar",
-      cancelButtonText: "Cancelar",
-      customClass: {
-        confirmButton: "btn btn-secondary",
-        cancelButton: "btn btn-outline-danger ms-1",
-      },
-      didClose: () => window.scrollTo(0, 0),
-      buttonsStyling: false,
-    });
-    if (result.value) {
-      decline(value);
-    }
-  };
 
   const handleMailClick = (correo: string) => {
     window.location.href = `mailto:${correo}?subject=Bieni`;
@@ -200,7 +106,9 @@ const Manual = ({ tab }: Props) => {
               />
             )}
           </div>
-          {row.name}
+          <div className="d-flex flex-column">
+            <div>{row.name}</div>
+          </div>
         </div>
       ),
     },
@@ -238,17 +146,13 @@ const Manual = ({ tab }: Props) => {
 
   return (
     <>
-      <div className="px-2 border-bottom ">
-        <h3>Filtro</h3>
+      <div>
+        <Barra texto={search} setTexto={setSearch} />
       </div>
-      <Row>
-        <Col xs={12}>
-          <Barra texto={search} setTexto={setSearch} />
-        </Col>
-      </Row>
       <div className="">
         <Row>
-          <Col xs={12} md={12} lg={8} className="border-top">
+          <Col xs={12} md={12} lg={8}>
+            {" "}
             <WrapperDataTable
               title=""
               columns={columns}
@@ -279,24 +183,10 @@ const Manual = ({ tab }: Props) => {
                 <Dropdown>
                   <Dropdown.Toggle as={CustomToggle} />
                   <Dropdown.Menu>
-                    {dropdownManual.map((item, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        onClick={() => {
-                          handlePrevDecline(item.value);
-                        }}
-                      >
-                        {item.label}
-                      </Dropdown.Item>
-                    ))}
+                    <Dropdown.Item key={index}>opcion</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-                <Button
-                  variant="success"
-                  className="ms-1"
-                  size="sm"
-                  onClick={handleApprove}
-                >
+                <Button variant="success" className="ms-1" size="sm">
                   <FontAwesomeIcon icon={faThumbsUp} className="me-1" />
                   Aprobar
                 </Button>
@@ -309,4 +199,4 @@ const Manual = ({ tab }: Props) => {
   );
 };
 
-export default Manual;
+export default TabDocumentosAdicionales;

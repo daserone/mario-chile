@@ -176,6 +176,10 @@ const Dependiente = ({ tab }: Props) => {
     }
   };
 
+  const handleMailClick = (correo: string) => {
+    window.location.href = `mailto:${correo}?subject=Bieni`;
+  };
+
   const columns: TableColumn<DataRow>[] = [
     {
       name: "NOMBRE",
@@ -196,7 +200,14 @@ const Dependiente = ({ tab }: Props) => {
             pacienteMutation.isPending ? (
               <Spinner animation="border" size="sm" />
             ) : (
-              <img src={iconEmail} alt="email" className="" />
+              <img
+                src={iconEmail}
+                alt="email"
+                className=""
+                onClick={() => {
+                  handleMailClick(row.email);
+                }}
+              />
             )}
           </div>
           {row.name}

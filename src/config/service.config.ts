@@ -1,12 +1,12 @@
 import axio from "axios";
 
 const TOKEN_KEY = process.env.BIENI_TOKEN_KEY;
-const BASE_URL = process.env.BIENI_URL_DEV;
-//const BASE_URL_LOCAL = process.env.BIENI_URL_LOCAL;
+//const BASE_URL = process.env.BIENI_URL_LOCAL;
+const BASE_URL_LOCAL = process.env.BIENI_URL_LOCAL;
 
 const service = axio.create({
-  baseURL: BASE_URL,
-  // baseURL: BASE_URL_LOCAL,
+  //baseURL: BASE_URL,
+  baseURL: BASE_URL_LOCAL,
 });
 
 // interceptor;
@@ -46,11 +46,11 @@ const templateData = {
 };
 
 const endpoint = {
-  //usuario: "/src/usuarios.php",
-  usuario: "/src/usuario/",
   paciente: "/src/pacientes.php",
   login: "src/login.php",
+  usuario: "/src/usuario/",
   difusion: "src/difusion/",
+  pacientes: "/src/paciente/",
 };
 
 export { service, serviceBieni, buildUrl, templateData, endpoint };

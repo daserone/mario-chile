@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Form, Offcanvas, Spinner } from "react-bootstrap";
@@ -5,35 +6,40 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 //Model
-import { User } from "@src/models";
-import { ResponseNotificacion } from "@src/models";
+import { UserDataRow, ResponseNotificacion } from "@src/models";
 //Service
 import { postUsuario } from "@services/usuario.service";
-interface FormValues extends User {
+interface FormValues extends UserDataRow {
   password?: string;
-  phone?: string;
-  state?: string;
   level?: string | number;
 }
 
 interface Props {
   state: boolean;
   handleToggle: (params: boolean) => void;
+  selection: UserDataRow | null;
+  setSelection: (params: UserDataRow | null) => void;
 }
 
-const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
+const UsuarioFormulario: React.FC<Props> = ({
+  state,
+  handleToggle,
+  selection,
+  setSelection,
+}) => {
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>();
 
   const handleCloseAndReset = () => {
     handleToggle(false);
     reset();
+    setSelection(null);
   };
-
   //Solicitud
   //const queryClient = useQueryClient();
   const usuarioMutation = useMutation({
@@ -67,6 +73,19 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
       },
     });
   };
+
+  useEffect(() => {
+    if (Object.values(selection ?? {}).length > 0) {
+      setValue("id", selection?.id ?? "");
+      setValue("idpersonal", selection?.idpersonal ?? "");
+      setValue("name", selection?.name ?? "");
+      setValue("lastName", selection?.lastName ?? "");
+      setValue("email", selection?.email ?? "");
+      setValue("phone", selection?.phone ?? "");
+      setValue("state", selection?.state ?? "");
+    }
+  }, [selection, setValue]);
+
   return (
     <>
       <Offcanvas show={state} onHide={handleCloseAndReset} placement="end">
@@ -168,8 +187,8 @@ const UsuarioFormulario: React.FC<Props> = ({ state, handleToggle }) => {
                 aria-invalid={errors.state ? "true" : "false"}
               >
                 <option value="">Seleccionar...</option>
-                <option value="active">Activo</option>
-                <option value="inactive">Inactivo</option>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
               </Form.Select>
               {errors.state && (
                 <Form.Text className="text-danger">

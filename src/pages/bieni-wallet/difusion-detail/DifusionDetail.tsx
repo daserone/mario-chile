@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, Col, Row, Tab, Tabs } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { difusionCard } from "../disusion/components/DifusionList";
