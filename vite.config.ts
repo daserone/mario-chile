@@ -16,11 +16,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    build: {
-      rollupOptions: {
-        external: ['flatpickr/dist/themes/material_green.css']
-      }
-    },
     resolve: {
       alias: [
         {
