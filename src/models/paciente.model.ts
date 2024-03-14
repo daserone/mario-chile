@@ -15,3 +15,7 @@ export interface DataRowPacientes {
   profileImage?: string;
   registrationDate: string;
 }
+
+export interface DataRowP extends DataRowPacientes {
+  image: Array<string>;
+}

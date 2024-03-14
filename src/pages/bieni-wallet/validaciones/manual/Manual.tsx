@@ -17,7 +17,8 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 //Hook
 import { useDebounce } from "@src/hooks";
-//Model
+//Models
+import { DataRowP, DataRowPacientes } from "@models/paciente.model";
 import { ResponseNotificacion } from "@src/models";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
@@ -25,8 +26,6 @@ import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
 import { getPacientesManuales, postPaciente } from "@services/paciente.service";
-//Models
-import { DataRowPacientes } from "@models/paciente.model";
 //Helpers
 import { dropdownManual } from "../helpers/data";
 //Asset
@@ -34,12 +33,9 @@ import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
 import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocumentPatient from "../component/modals/AddDocumentPatient";
 //Config
 const MySwal = withReactContent(Swal);
-
-interface DataRow extends DataRowPacientes {
-  image: Array<string>;
-}
 
 const CustomToggle = React.forwardRef(
   (
@@ -66,8 +62,8 @@ const Manual = ({ tab }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
-  const [selection, setSelection] = useState<DataRow | null>(null);
-
+  const [selection, setSelection] = useState<DataRowP | null>(null);
+  const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
   const query = useDebounce(search, 2000);
   //Solicitud
   const queryClient = useQueryClient();
@@ -168,7 +164,11 @@ const Manual = ({ tab }: Props) => {
     }
   };
 
-  const columns: TableColumn<DataRow>[] = [
+  const handleMailClick = (correo: string) => {
+    window.location.href = `mailto:${correo}?subject=Bieni`;
+  };
+
+  const columns: TableColumn<DataRowP>[] = [
     {
       name: "NOMBRE",
       selector: (row) => row.name,
@@ -188,7 +188,14 @@ const Manual = ({ tab }: Props) => {
             pacienteMutation.isPending ? (
               <Spinner animation="border" size="sm" />
             ) : (
-              <img src={iconEmail} alt="email" className="" />
+              <img
+                src={iconEmail}
+                alt="email"
+                className=""
+                onClick={() => {
+                  handleMailClick(row.email);
+                }}
+              />
             )}
           </div>
           {row.name}
@@ -231,6 +238,7 @@ const Manual = ({ tab }: Props) => {
         <AddDocuments
           handleAdd={() => {
             console.log("handleAdd");
+            setShowModalAdd(true);
           }}
         />
       ),
@@ -306,6 +314,14 @@ const Manual = ({ tab }: Props) => {
           </Col>
         </Row>
       </div>
+      <AddDocumentPatient
+        state={showModalAdd}
+        handleToggle={() => {
+          setShowModalAdd(!showModalAdd);
+        }}
+        selection={selection}
+        setSelection={(data: DataRowP | null) => setSelection(data)}
+      />
     </>
   );
 };

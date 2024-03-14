@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+//Component
 import Manual from "./manual/Manual";
 import Dependiente from "./dependiente/Dependiente";
 import Correo from "./correo/Correo";
+import { TabDocumentosAdicionales } from "./component";
+//Asset
 import hammer from "@src/assets/icons/hammer.svg";
 import hammerActive from "@src/assets/icons/hammer-active.svg";
 import lego from "@src/assets/icons/lego.svg";
@@ -61,6 +64,21 @@ const Validacion = () => {
                 }
               >
                 <Dependiente tab={key} />
+              </Tab>
+              <Tab
+                eventKey="documento"
+                title={
+                  <span>
+                    <img
+                      src={key == "documento" ? mailActive : mail}
+                      alt="correo-icon"
+                      className="me-1"
+                    />
+                    Documentos adicionales
+                  </span>
+                }
+              >
+                <TabDocumentosAdicionales tab={key} />
               </Tab>
               <Tab
                 eventKey="correo"
