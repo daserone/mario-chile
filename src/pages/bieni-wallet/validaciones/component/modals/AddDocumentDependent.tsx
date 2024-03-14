@@ -4,24 +4,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Form, Offcanvas } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 //Model
-import { DataRowP, DataRowPacientes } from "@src/models/paciente.model";
 import FilesBox from "@src/component/files/FilesBox";
 import FileItem from "@src/component/files/FileItem";
+import { DataRowD } from "@src/models/dependent.model";
 //Service
 interface FormValues {
-  name: string;
-  email: string;
-  document: string;
+  mainName: string;
+  documentMain: string;
+  dependentName: string;
+  documentDependent: string;
 }
 
 interface Props {
   state: boolean;
   handleToggle: (params: boolean) => void;
-  selection: DataRowP | null;
-  setSelection: (params: DataRowP | null) => void;
+  selection: DataRowD | null;
+  setSelection: (params: DataRowD | null) => void;
 }
 
-const AddDocumentPatient: React.FC<Props> = ({
+const AddDocumentDependent: React.FC<Props> = ({
   state,
   handleToggle,
   selection,
@@ -42,7 +43,7 @@ const AddDocumentPatient: React.FC<Props> = ({
   };
 
   const onSubmit = (value: FormValues) => {
-    const { name, email, document } = value;
+    const { mainName, documentMain, dependentName, documentDependent } = value;
   };
 
   useEffect(() => {}, []);
@@ -80,50 +81,69 @@ const AddDocumentPatient: React.FC<Props> = ({
             className="position-relative h-100"
           >
             <Form.Group className="mb-1" controlId="name">
-              <Form.Label>Nombre</Form.Label>
+              <Form.Label>Acudiente</Form.Label>
               <Form.Control
-                isInvalid={errors.name ? true : false}
+                isInvalid={errors.mainName ? true : false}
                 type="text"
-                placeholder="Nombre del paciente..."
-                {...register("name", { required: true, maxLength: 100 })}
+                placeholder="Nombre del perfil principal..."
+                {...register("mainName", { required: true })}
+                aria-invalid={errors.mainName ? "true" : "false"}
               />
-              {errors.name && (
+              {errors.mainName && (
                 <Form.Text className="text-danger">
                   Este campo es requerido
                 </Form.Text>
               )}
             </Form.Group>
 
-            <Form.Group className="mb-1" controlId="email">
-              <Form.Label>Correo</Form.Label>
+            <Form.Group className="mb-1" controlId="documentMain">
+              <Form.Label>Documento del acudiente</Form.Label>
               <Form.Control
-                isInvalid={errors.email ? true : false}
-                type="email"
-                placeholder="Correo del usuario..."
-                {...register("email", { required: true })}
-                aria-invalid={errors.email ? "true" : "false"}
-              />
-              {errors.email && (
-                <Form.Text className="text-danger">
-                  Este campo es requerido
-                </Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group className="mb-1" controlId="document">
-              <Form.Label>Documento</Form.Label>
-              <Form.Control
-                isInvalid={errors.document ? true : false}
+                isInvalid={errors.documentMain ? true : false}
                 type="text"
-                placeholder="Documento del paciente..."
-                {...register("document", { required: true })}
-                aria-invalid={errors.document ? "true" : "false"}
+                placeholder="Documento del perfil principal..."
+                {...register("documentMain", { required: true })}
+                aria-invalid={errors.documentMain ? "true" : "false"}
               />
-              {errors.document && (
+              {errors.documentMain && (
                 <Form.Text className="text-danger">
                   Este campo es requerido
                 </Form.Text>
               )}
             </Form.Group>
+
+            <Form.Group className="mb-1" controlId="name">
+              <Form.Label>Dependiente</Form.Label>
+              <Form.Control
+                isInvalid={errors.dependentName ? true : false}
+                type="text"
+                placeholder="Nombre del dependiente..."
+                {...register("dependentName", { required: true })}
+                aria-invalid={errors.dependentName ? "true" : "false"}
+              />
+              {errors.dependentName && (
+                <Form.Text className="text-danger">
+                  Este campo es requerido
+                </Form.Text>
+              )}
+            </Form.Group>
+
+            <Form.Group className="mb-1" controlId="documentDependent">
+              <Form.Label>Documento del dependiente</Form.Label>
+              <Form.Control
+                isInvalid={errors.documentDependent ? true : false}
+                type="text"
+                placeholder="Documento del dependiente..."
+                {...register("documentDependent", { required: true })}
+                aria-invalid={errors.documentDependent ? "true" : "false"}
+              />
+              {errors.documentDependent && (
+                <Form.Text className="text-danger">
+                  Este campo es requerido
+                </Form.Text>
+              )}
+            </Form.Group>
+
             <FilesBox
               title="Arrastra y suelta tus 
               documentos aquí"
@@ -162,4 +182,4 @@ const AddDocumentPatient: React.FC<Props> = ({
   );
 };
 
-export default AddDocumentPatient;
+export default AddDocumentDependent;

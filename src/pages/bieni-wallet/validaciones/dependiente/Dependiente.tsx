@@ -37,13 +37,9 @@ import "../Validaciones.scss";
 //Assets
 import iconEmail from "@src/assets/icons/email-table.svg"; //Config
 import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocumentDependent from "../component/modals/AddDocumentDependent";
+import { DataRowD } from "@src/models/dependent.model";
 const MySwal = withReactContent(Swal);
-
-interface DataRow extends DataRowPacientes {
-  relationship: string;
-  idfamiliar: string | number;
-  image: Array<string>;
-}
 
 const CustomToggle = React.forwardRef(
   (
@@ -72,8 +68,8 @@ const Dependiente = ({ tab }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
-  const [selection, setSelection] = useState<DataRow | null>(null);
-
+  const [selection, setSelection] = useState<DataRowD | null>(null);
+  const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
   const query = useDebounce(search, 2000);
   //Solicitud
   const queryClient = useQueryClient();
@@ -181,7 +177,7 @@ const Dependiente = ({ tab }: Props) => {
     window.location.href = `mailto:${correo}?subject=Bieni`;
   };
 
-  const columns: TableColumn<DataRow>[] = [
+  const columns: TableColumn<DataRowD>[] = [
     {
       name: "NOMBRE",
       selector: (row) => row.name,
@@ -252,6 +248,7 @@ const Dependiente = ({ tab }: Props) => {
           <AddDocuments
             handleAdd={() => {
               console.log("handleAdd");
+              setShowModalAdd(true);
             }}
           />
         </div>
@@ -329,6 +326,14 @@ const Dependiente = ({ tab }: Props) => {
           </Col>
         </Row>
       </div>
+      <AddDocumentDependent
+        state={showModalAdd}
+        handleToggle={() => {
+          setShowModalAdd(!showModalAdd);
+        }}
+        selection={selection}
+        setSelection={(data: DataRowD | null) => setSelection(data)}
+      />
     </>
   );
 };
