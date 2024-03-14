@@ -36,6 +36,7 @@ import { useDebounce } from "@src/hooks";
 import "../Validaciones.scss";
 //Assets
 import iconEmail from "@src/assets/icons/email-table.svg"; //Config
+import AddDocuments from "@src/component/buttons/AddDocuments";
 const MySwal = withReactContent(Swal);
 
 interface DataRow extends DataRowPacientes {
@@ -230,6 +231,18 @@ const Dependiente = ({ tab }: Props) => {
         <div className="d-flex flex-column align-items-start">
           {row.registrationDate}
           <span className="text-muted"></span>
+        </div>
+      ),
+    },
+    {
+      name: "",
+      cell: (row) => (
+        <div className="d-flex justify-content-end w-100">
+          <AddDocuments
+            handleAdd={() => {
+              console.log("handleAdd");
+            }}
+          />
         </div>
       ),
     },

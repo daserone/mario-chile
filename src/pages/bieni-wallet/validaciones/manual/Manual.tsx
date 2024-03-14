@@ -33,6 +33,7 @@ import { dropdownManual } from "../helpers/data";
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
+import AddDocuments from "@src/component/buttons/AddDocuments";
 //Config
 const MySwal = withReactContent(Swal);
 
@@ -222,6 +223,16 @@ const Manual = ({ tab }: Props) => {
           {row.registrationDate}
           <span className="text-muted"></span>
         </div>
+      ),
+    },
+    {
+      name: "",
+      cell: (row) => (
+        <AddDocuments
+          handleAdd={() => {
+            console.log("handleAdd");
+          }}
+        />
       ),
     },
   ];
