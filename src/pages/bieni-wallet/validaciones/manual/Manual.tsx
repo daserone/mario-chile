@@ -25,7 +25,11 @@ import { WrapperDataTable } from "@src/component/wrapper";
 import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
-import { getPacientesManuales, postPaciente } from "@services/paciente.service";
+import {
+  getPacientesManuales,
+  postPaciente,
+  postPacienteDelet,
+} from "@services/paciente.service";
 //Helpers
 import { dropdownManual } from "../helpers/data";
 //Asset
@@ -56,7 +60,10 @@ const CustomToggle = React.forwardRef(
 interface Props {
   tab: string;
 }
-
+interface ResponseNotificacionExt extends ResponseNotificacion {
+  rsp: string | number;
+  msg: string;
+}
 const Manual = ({ tab }: Props) => {
   //Hook
   const [page, setPage] = useState<number>(1);
@@ -70,6 +77,10 @@ const Manual = ({ tab }: Props) => {
 
   const pacienteMutation = useMutation({
     mutationFn: postPaciente,
+  });
+
+  const pacienteBieni = useMutation({
+    mutationFn: postPacienteDelet,
   });
 
   const { data, isError, isLoading } = useQuery({
@@ -112,6 +123,32 @@ const Manual = ({ tab }: Props) => {
     });
   };
 
+  const declineRegistro = (idusuario: number | string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form: any = new FormData();
+    form.append("op", "deletUsuario");
+    form.append("id", idusuario);
+    pacienteBieni.mutate(form, {
+      onSuccess: (rsp) => {
+        const { data, status } = rsp;
+        if (status >= 200 && status < 300) {
+          const { rsp, msg }: ResponseNotificacionExt = data;
+          if (rsp === 1) {
+            toast.success(msg);
+            queryClient.invalidateQueries({
+              queryKey: ["pacientes-manuales", page, query],
+            });
+            setSelection(null);
+          }
+        }
+      },
+      onError: () => {
+        toast.error("Error al aprobar principal.");
+        setSelection(null);
+      },
+    });
+  };
+
   const decline = (value: string) => {
     if (selection === null) {
       toast.error("Seleccione un registro");
@@ -130,11 +167,8 @@ const Manual = ({ tab }: Props) => {
         if (status >= 200 && status < 300) {
           const { responseCode }: ResponseNotificacion = data;
           if (responseCode === 1) {
-            toast.success("Principal rechazado.");
-            queryClient.invalidateQueries({
-              queryKey: ["pacientes-manuales", page, query],
-            });
-            setSelection(null);
+            //Eliminar registros fisicos
+            declineRegistro(selection.idusuario);
           }
         }
       },

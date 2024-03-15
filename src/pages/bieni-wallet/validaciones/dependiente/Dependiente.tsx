@@ -139,7 +139,7 @@ const Dependiente = ({ tab }: Props) => {
         if (status >= 200 && status < 300) {
           const { responseCode }: ResponseNotificacion = data;
           if (responseCode === 1) {
-            toast.success("Dependiente rechazado.");
+            toast.success("Dependiente rechazado");
             queryClient.invalidateQueries({
               queryKey: ["pacientes-dependientes", page, query],
             });
@@ -332,14 +332,6 @@ const Dependiente = ({ tab }: Props) => {
                 </Button>
               </div>
             ) : null}
-          </Col>
-          <Col
-            xs={12}
-            md={12}
-            lg={4}
-            className="border-start border-top ps-lg-0"
-          >
-            pdf
           </Col>
         </Row>
       </div>
