@@ -17,7 +17,7 @@ import { Barra } from "../component";
 //Service
 import {
   getPacientesCorreos,
-  postPacienteBieni,
+  postPacienteBieniMail,
 } from "@src/services/paciente.service";
 //Hook
 import { useDebounce } from "@src/hooks";
@@ -48,7 +48,7 @@ const Correo = ({ tab }: Props) => {
   const queryClient = useQueryClient();
 
   const pacienteMutation = useMutation({
-    mutationFn: postPacienteBieni,
+    mutationFn: postPacienteBieniMail,
   });
 
   const { data, isError, isLoading } = useQuery({

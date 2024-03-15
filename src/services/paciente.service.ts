@@ -80,8 +80,16 @@ export const postPaciente = (form: any) =>
     },
   });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const postPacienteBieni = (form: any) =>
+export const postPacienteBieniMail = (form: any) =>
   serviceBieni.post("/controller/email.php", form, {
+    responseType: "json",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const postPacienteDelet = (form: any) =>
+  serviceBieni.post("/controller/usuarios.php", form, {
     responseType: "json",
     headers: {
       "Content-Type": "multipart/form-data",

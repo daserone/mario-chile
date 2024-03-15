@@ -18,26 +18,28 @@ import withReactContent from "sweetalert2-react-content";
 //Hook
 import { useDebounce } from "@src/hooks";
 //Models
-import { DataRowPacientes } from "@models/paciente.model";
+import { DataRowPac } from "@models/paciente.model";
 import { ResponseNotificacion } from "@src/models";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Service
-import { getPacientesManuales, postPaciente } from "@services/paciente.service";
+import {
+  getPacientesManuales,
+  postPaciente,
+  postPacienteDelet,
+} from "@services/paciente.service";
 //Helpers
 import { dropdownManual } from "../helpers/data";
 //Asset
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
+import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocumentPatient from "../component/modals/AddDocumentPatient";
 //Config
 const MySwal = withReactContent(Swal);
-
-interface DataRow extends DataRowPacientes {
-  image: Array<string>;
-}
 
 const CustomToggle = React.forwardRef(
   (
@@ -58,20 +60,27 @@ const CustomToggle = React.forwardRef(
 interface Props {
   tab: string;
 }
-
+interface ResponseNotificacionExt extends ResponseNotificacion {
+  rsp: string | number;
+  msg: string;
+}
 const Manual = ({ tab }: Props) => {
   //Hook
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
-  const [selection, setSelection] = useState<DataRow | null>(null);
-
+  const [selection, setSelection] = useState<DataRowPac | null>(null);
+  const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
   const query = useDebounce(search, 2000);
   //Solicitud
   const queryClient = useQueryClient();
 
   const pacienteMutation = useMutation({
     mutationFn: postPaciente,
+  });
+
+  const pacienteBieni = useMutation({
+    mutationFn: postPacienteDelet,
   });
 
   const { data, isError, isLoading } = useQuery({
@@ -114,6 +123,32 @@ const Manual = ({ tab }: Props) => {
     });
   };
 
+  const declineRegistro = (idusuario: number | string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form: any = new FormData();
+    form.append("op", "deletUsuario");
+    form.append("id", idusuario);
+    pacienteBieni.mutate(form, {
+      onSuccess: (rsp) => {
+        const { data, status } = rsp;
+        if (status >= 200 && status < 300) {
+          const { rsp, msg }: ResponseNotificacionExt = data;
+          if (rsp === 1) {
+            toast.success(msg);
+            queryClient.invalidateQueries({
+              queryKey: ["pacientes-manuales", page, query],
+            });
+            setSelection(null);
+          }
+        }
+      },
+      onError: () => {
+        toast.error("Error al aprobar principal.");
+        setSelection(null);
+      },
+    });
+  };
+
   const decline = (value: string) => {
     if (selection === null) {
       toast.error("Seleccione un registro");
@@ -132,11 +167,8 @@ const Manual = ({ tab }: Props) => {
         if (status >= 200 && status < 300) {
           const { responseCode }: ResponseNotificacion = data;
           if (responseCode === 1) {
-            toast.success("Principal rechazado.");
-            queryClient.invalidateQueries({
-              queryKey: ["pacientes-manuales", page, query],
-            });
-            setSelection(null);
+            //Eliminar registros fisicos
+            declineRegistro(selection.idusuario);
           }
         }
       },
@@ -170,7 +202,7 @@ const Manual = ({ tab }: Props) => {
     window.location.href = `mailto:${correo}?subject=Bieni`;
   };
 
-  const columns: TableColumn<DataRow>[] = [
+  const columns: TableColumn<DataRowPac>[] = [
     {
       name: "NOMBRE",
       selector: (row) => row.name,
@@ -234,6 +266,17 @@ const Manual = ({ tab }: Props) => {
         </div>
       ),
     },
+    {
+      name: "",
+      cell: () => (
+        <AddDocuments
+          handleAdd={() => {
+            console.log("handleAdd");
+            setShowModalAdd(true);
+          }}
+        />
+      ),
+    },
   ];
 
   return (
@@ -273,7 +316,7 @@ const Manual = ({ tab }: Props) => {
             lg={4}
             className="border-start border-top ps-lg-0 "
           >
-            <ImageSliders images={selection?.image ?? []} />
+            <ImageSliders images={selection?.files ?? []} />
             {selection !== null ? (
               <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
                 <Dropdown>
@@ -305,6 +348,14 @@ const Manual = ({ tab }: Props) => {
           </Col>
         </Row>
       </div>
+      <AddDocumentPatient
+        state={showModalAdd}
+        handleToggle={() => {
+          setShowModalAdd(!showModalAdd);
+        }}
+        selection={selection}
+        setSelection={(data: DataRowPac | null) => setSelection(data)}
+      />
     </>
   );
 };

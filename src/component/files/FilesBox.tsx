@@ -3,14 +3,16 @@ import fileIcon from "@assets/icons/upload.svg";
 interface Props {
   label: string;
   handleClick: () => void;
+  title?: string;
 }
-const FilesBox = ({ label, handleClick }: Props) => {
+const FilesBox = ({ label, handleClick, title }: Props) => {
   return (
     <div className="dotted-file-box">
       <div className="dotted-file" onClick={handleClick}>
         <img src={fileIcon} alt="file" />
       </div>
-      <label className="dotted-file-text">{label}</label>
+      {title && <h3 className="text-center">{title}</h3>}
+      <label className="dotted-file-text text-center">{label}</label>
     </div>
   );
 };

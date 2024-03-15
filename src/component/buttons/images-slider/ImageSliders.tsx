@@ -1,21 +1,52 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   faChevronLeft,
   faChevronRight,
   faMaximize,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Viewer from "react-viewer";
+//Config
+//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 //Style
 import "./ImageSlider.scss";
-import Viewer from "react-viewer";
+//Assets
+import iconPdf from "@src/assets/PDF.svg";
+
+interface ImageItem {
+  url: string;
+  extension: string;
+}
 
 interface ImageSlidersProps {
-  images: string[];
+  images: ImageItem[];
 }
+
+const RenderItem = ({ url, extension }: ImageItem) => {
+  const extensiones = ["jpg", "png", "gif"];
+  const isImage = extensiones.includes(extension.toLowerCase());
+
+  return isImage ? (
+    <img src={url} alt="" />
+  ) : (
+    <div className="d-flex flex-column justify-content-center align-items-center mt-4">
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        <img src={iconPdf}></img> Ver archivo
+      </a>
+    </div>
+  );
+};
+
+const infoFile = (image: ImageItem[], key: number) => {
+  const item = image[key] ?? { url: "", extension: "" };
+  return {
+    url: item.url,
+    extension: item.extension,
+  };
+};
 
 const ImageSliders = ({ images }: ImageSlidersProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-  const currentImageLength = images.length;
   const [visible, setVisible] = useState(false);
 
   const handleNextImage = () => {
@@ -30,12 +61,13 @@ const ImageSliders = ({ images }: ImageSlidersProps) => {
     }
   };
 
-  const transformImages = () => {
-    const newImages = images.map((image) => {
-      return { src: image, alt: "" };
-    });
-    return newImages;
-  };
+  const currentImageLength = useMemo(() => images.length, [images]);
+
+  const { url, extension } = infoFile(images, currentImageIndex);
+
+  const adapterImages = useMemo(() => {
+    return [{ src: url, alt: "" }];
+  }, [url]);
 
   return (
     <>
@@ -46,7 +78,9 @@ const ImageSliders = ({ images }: ImageSlidersProps) => {
               Sin imagenes
             </div>
           ) : (
-            <img src={images[currentImageIndex]}></img>
+            <div>
+              <RenderItem url={url} extension={extension} />
+            </div>
           )}
           {/* slide buttons  */}
           <div className="image-slides">
@@ -79,13 +113,15 @@ const ImageSliders = ({ images }: ImageSlidersProps) => {
           </div>
         </div>
       </div>
-      <Viewer
-        visible={visible}
-        onClose={() => {
-          setVisible(false);
-        }}
-        images={transformImages()}
-      />
+      {extension !== "pdf" ? (
+        <Viewer
+          visible={visible}
+          onClose={() => {
+            setVisible(false);
+          }}
+          images={adapterImages}
+        />
+      ) : null}
     </>
   );
 };

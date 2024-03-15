@@ -21,8 +21,7 @@ import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Model
 import { ResponseNotificacion } from "@src/models";
-//Models
-import { DataRowPacientes } from "@models/paciente.model";
+import { DataRowDep } from "@src/models/dependent.model";
 //Service
 import {
   getPacientesDependientes,
@@ -32,17 +31,15 @@ import {
 import { dropdownDependiente } from "../helpers/data";
 //Hook
 import { useDebounce } from "@src/hooks";
+//Assets
+import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
-//Assets
-import iconEmail from "@src/assets/icons/email-table.svg"; //Config
-const MySwal = withReactContent(Swal);
+//Config
+import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocumentDependent from "../component/modals/AddDocumentDependent";
 
-interface DataRow extends DataRowPacientes {
-  relationship: string;
-  idfamiliar: string | number;
-  image: Array<string>;
-}
+const MySwal = withReactContent(Swal);
 
 const CustomToggle = React.forwardRef(
   (
@@ -71,8 +68,8 @@ const Dependiente = ({ tab }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
-  const [selection, setSelection] = useState<DataRow | null>(null);
-
+  const [selection, setSelection] = useState<DataRowDep | null>(null);
+  const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
   const query = useDebounce(search, 2000);
   //Solicitud
   const queryClient = useQueryClient();
@@ -142,7 +139,7 @@ const Dependiente = ({ tab }: Props) => {
         if (status >= 200 && status < 300) {
           const { responseCode }: ResponseNotificacion = data;
           if (responseCode === 1) {
-            toast.success("Dependiente rechazado.");
+            toast.success("Dependiente rechazado");
             queryClient.invalidateQueries({
               queryKey: ["pacientes-dependientes", page, query],
             });
@@ -180,9 +177,19 @@ const Dependiente = ({ tab }: Props) => {
     window.location.href = `mailto:${correo}?subject=Bieni`;
   };
 
-  const columns: TableColumn<DataRow>[] = [
+  const columns: TableColumn<DataRowDep>[] = [
     {
-      name: "NOMBRE",
+      name: "PRINCIPAL",
+      selector: (row) => row.document,
+      cell: (row) => (
+        <div className="d-flex flex-column align-items-start">
+          {row.document}
+          <span className="text-muted">{row.documentType}</span>
+        </div>
+      ),
+    },
+    {
+      name: "DEPENDIENTE",
       selector: (row) => row.name,
       cell: (row) => (
         <div
@@ -244,8 +251,20 @@ const Dependiente = ({ tab }: Props) => {
         </div>
       ),
     },
+    {
+      name: "",
+      cell: () => (
+        <div className="d-flex justify-content-end w-100">
+          <AddDocuments
+            handleAdd={() => {
+              console.log("handleAdd");
+              setShowModalAdd(true);
+            }}
+          />
+        </div>
+      ),
+    },
   ];
-  //const data: DataRow[] = [];
 
   return (
     <>
@@ -284,8 +303,8 @@ const Dependiente = ({ tab }: Props) => {
             lg={4}
             className="border-start border-top ps-lg-0"
           >
-            <ImageSliders images={selection?.image ?? []} />
-            {selection !== null ? (
+            <ImageSliders images={selection?.files ?? []} />
+            {selection !== null && selection?.files.length > 0 ? (
               <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
                 <Dropdown>
                   <Dropdown.Toggle as={CustomToggle} />
@@ -316,6 +335,14 @@ const Dependiente = ({ tab }: Props) => {
           </Col>
         </Row>
       </div>
+      <AddDocumentDependent
+        state={showModalAdd}
+        handleToggle={() => {
+          setShowModalAdd(!showModalAdd);
+        }}
+        selection={selection}
+        setSelection={(data: DataRowDep | null) => setSelection(data)}
+      />
     </>
   );
 };
