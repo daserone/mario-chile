@@ -32,16 +32,24 @@ import {
 import { dropdownDependiente } from "../helpers/data";
 //Hook
 import { useDebounce } from "@src/hooks";
+//Assets
+import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
-//Assets
-import iconEmail from "@src/assets/icons/email-table.svg"; //Config
+//Config
 const MySwal = withReactContent(Swal);
+
+interface ImageItem {
+  url: string;
+  extension: string;
+}
 
 interface DataRow extends DataRowPacientes {
   relationship: string;
   idfamiliar: string | number;
   image: Array<string>;
+  pdf: Array<string>;
+  files: ImageItem[];
 }
 
 const CustomToggle = React.forwardRef(
@@ -255,11 +263,7 @@ const Dependiente = ({ tab }: Props) => {
       ),
     },
   ];
-  //const data: DataRow[] = [];
-  console.log(selection);
-  //console.log(selection !== null && selection?.image.length);
 
-  console.log(selection?.image);
   return (
     <>
       <div className="px-2 border-bottom ">
@@ -297,8 +301,8 @@ const Dependiente = ({ tab }: Props) => {
             lg={4}
             className="border-start border-top ps-lg-0"
           >
-            <ImageSliders images={selection?.image ?? []} />
-            {selection !== null && selection?.image.length > 0 ? (
+            <ImageSliders images={selection?.files ?? []} />
+            {selection !== null && selection?.files.length > 0 ? (
               <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
                 <Dropdown>
                   <Dropdown.Toggle as={CustomToggle} />
@@ -326,6 +330,14 @@ const Dependiente = ({ tab }: Props) => {
                 </Button>
               </div>
             ) : null}
+          </Col>
+          <Col
+            xs={12}
+            md={12}
+            lg={4}
+            className="border-start border-top ps-lg-0"
+          >
+            pdf
           </Col>
         </Row>
       </div>

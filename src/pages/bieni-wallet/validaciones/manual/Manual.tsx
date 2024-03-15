@@ -35,8 +35,15 @@ import "../Validaciones.scss";
 //Config
 const MySwal = withReactContent(Swal);
 
+interface ImageItem {
+  url: string;
+  extension: string;
+}
+
 interface DataRow extends DataRowPacientes {
   image: Array<string>;
+  pdf: Array<string>;
+  files: ImageItem[];
 }
 
 const CustomToggle = React.forwardRef(
@@ -273,7 +280,7 @@ const Manual = ({ tab }: Props) => {
             lg={4}
             className="border-start border-top ps-lg-0 "
           >
-            <ImageSliders images={selection?.image ?? []} />
+            <ImageSliders images={selection?.files ?? []} />
             {selection !== null ? (
               <div className="d-flex flex-row justify-content-around border-top py-2 w-100">
                 <Dropdown>
