@@ -15,3 +15,14 @@ export interface DataRowPacientes {
   profileImage?: string;
   registrationDate: string;
 }
+
+interface ImageItem {
+  url: string;
+  extension: string;
+}
+
+export interface DataRowPac extends DataRowPacientes {
+  image?: Array<string>;
+  pdf?: Array<string>;
+  files: ImageItem[];
+}

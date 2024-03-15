@@ -18,7 +18,7 @@ import withReactContent from "sweetalert2-react-content";
 //Hook
 import { useDebounce } from "@src/hooks";
 //Models
-import { DataRowPacientes } from "@models/paciente.model";
+import { DataRowPac } from "@models/paciente.model";
 import { ResponseNotificacion } from "@src/models";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
@@ -32,19 +32,10 @@ import { dropdownManual } from "../helpers/data";
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
+import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocumentPatient from "../component/modals/AddDocumentPatient";
 //Config
 const MySwal = withReactContent(Swal);
-
-interface ImageItem {
-  url: string;
-  extension: string;
-}
-
-interface DataRow extends DataRowPacientes {
-  image: Array<string>;
-  pdf: Array<string>;
-  files: ImageItem[];
-}
 
 const CustomToggle = React.forwardRef(
   (
@@ -71,8 +62,8 @@ const Manual = ({ tab }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
-  const [selection, setSelection] = useState<DataRow | null>(null);
-
+  const [selection, setSelection] = useState<DataRowPac | null>(null);
+  const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
   const query = useDebounce(search, 2000);
   //Solicitud
   const queryClient = useQueryClient();
@@ -177,7 +168,7 @@ const Manual = ({ tab }: Props) => {
     window.location.href = `mailto:${correo}?subject=Bieni`;
   };
 
-  const columns: TableColumn<DataRow>[] = [
+  const columns: TableColumn<DataRowPac>[] = [
     {
       name: "NOMBRE",
       selector: (row) => row.name,
@@ -239,6 +230,17 @@ const Manual = ({ tab }: Props) => {
           {row.registrationDate}
           <span className="text-muted"></span>
         </div>
+      ),
+    },
+    {
+      name: "",
+      cell: () => (
+        <AddDocuments
+          handleAdd={() => {
+            console.log("handleAdd");
+            setShowModalAdd(true);
+          }}
+        />
       ),
     },
   ];
@@ -312,6 +314,14 @@ const Manual = ({ tab }: Props) => {
           </Col>
         </Row>
       </div>
+      <AddDocumentPatient
+        state={showModalAdd}
+        handleToggle={() => {
+          setShowModalAdd(!showModalAdd);
+        }}
+        selection={selection}
+        setSelection={(data: DataRowPac | null) => setSelection(data)}
+      />
     </>
   );
 };

@@ -203,9 +203,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 20px 10px;
   border-radius: 6px;
-  height: 142px;
+  min-height: 142px;
   border: 1px dashed var(--Light-Solid-Color-Extra-Divider, #dbdade);
   .dotted-file {
     cursor: pointer;
@@ -221,5 +221,19 @@
     font-size: 12px;
     font-weight: 400;
     color: var(--Light-Solid-Color-Text-Primary, #3e4954);
+  }
+}
+
+.file-item {
+  margin: 8px 0;
+  display: flex;
+  padding: 8px 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px;
+  background: var(--color-secundario-opacidad-8, rgba(168, 170, 174, 0.08));
+  .icon {
+    cursor: pointer;
   }
 }

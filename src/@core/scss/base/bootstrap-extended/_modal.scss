@@ -137,7 +137,7 @@
   }
 
   .btn-close {
-    top: $modal-header-padding-y / 2;
+    top: calc($modal-header-padding-y / 2);
     z-index: 10;
     transform: none;
     position: absolute;
@@ -227,6 +227,7 @@
 }
 
 .offcanvas {
+  background-color: white !important;
   .offcanvas-header {
     padding-top: 2rem;
     .btn-close {

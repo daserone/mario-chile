@@ -21,8 +21,7 @@ import { Barra } from "../component";
 import ImageSliders from "@src/component/buttons/images-slider/ImageSliders";
 //Model
 import { ResponseNotificacion } from "@src/models";
-//Models
-import { DataRowPacientes } from "@models/paciente.model";
+import { DataRowDep } from "@src/models/dependent.model";
 //Service
 import {
   getPacientesDependientes,
@@ -37,20 +36,10 @@ import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
 //Config
+import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocumentDependent from "../component/modals/AddDocumentDependent";
+
 const MySwal = withReactContent(Swal);
-
-interface ImageItem {
-  url: string;
-  extension: string;
-}
-
-interface DataRow extends DataRowPacientes {
-  relationship: string;
-  idfamiliar: string | number;
-  image: Array<string>;
-  pdf: Array<string>;
-  files: ImageItem[];
-}
 
 const CustomToggle = React.forwardRef(
   (
@@ -79,8 +68,8 @@ const Dependiente = ({ tab }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
-  const [selection, setSelection] = useState<DataRow | null>(null);
-
+  const [selection, setSelection] = useState<DataRowDep | null>(null);
+  const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
   const query = useDebounce(search, 2000);
   //Solicitud
   const queryClient = useQueryClient();
@@ -188,7 +177,7 @@ const Dependiente = ({ tab }: Props) => {
     window.location.href = `mailto:${correo}?subject=Bieni`;
   };
 
-  const columns: TableColumn<DataRow>[] = [
+  const columns: TableColumn<DataRowDep>[] = [
     {
       name: "PRINCIPAL",
       selector: (row) => row.document,
@@ -259,6 +248,19 @@ const Dependiente = ({ tab }: Props) => {
         <div className="d-flex flex-column align-items-start">
           {row.registrationDate}
           <span className="text-muted"></span>
+        </div>
+      ),
+    },
+    {
+      name: "",
+      cell: () => (
+        <div className="d-flex justify-content-end w-100">
+          <AddDocuments
+            handleAdd={() => {
+              console.log("handleAdd");
+              setShowModalAdd(true);
+            }}
+          />
         </div>
       ),
     },
@@ -341,6 +343,14 @@ const Dependiente = ({ tab }: Props) => {
           </Col>
         </Row>
       </div>
+      <AddDocumentDependent
+        state={showModalAdd}
+        handleToggle={() => {
+          setShowModalAdd(!showModalAdd);
+        }}
+        selection={selection}
+        setSelection={(data: DataRowDep | null) => setSelection(data)}
+      />
     </>
   );
 };
