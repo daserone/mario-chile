@@ -23,7 +23,7 @@ interface ImageSlidersProps {
 }
 
 const RenderItem = ({ url, extension }: ImageItem) => {
-  const extensiones = ["jpg", "png", "gif"];
+  const extensiones = ["jpg", "png", "gif", "jpeg"];
   const isImage = extensiones.includes(extension.toLowerCase());
 
   return isImage ? (

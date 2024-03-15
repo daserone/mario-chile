@@ -165,10 +165,12 @@ const Manual = ({ tab }: Props) => {
       onSuccess: (rsp) => {
         const { data, status } = rsp;
         if (status >= 200 && status < 300) {
-          const { responseCode }: ResponseNotificacion = data;
+          const { responseCode, msg }: ResponseNotificacionExt = data;
           if (responseCode === 1) {
             //Eliminar registros fisicos
             declineRegistro(selection.idusuario);
+          } else {
+            toast.success(msg);
           }
         }
       },
