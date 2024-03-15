@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Form, Offcanvas } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 //Model
-import { DataRowP, DataRowPacientes } from "@src/models/paciente.model";
+import { DataRowPac, DataRowPacientes } from "@src/models/paciente.model";
 import FilesBox from "@src/component/files/FilesBox";
 import FileItem from "@src/component/files/FileItem";
 //Service
@@ -17,8 +17,8 @@ interface FormValues {
 interface Props {
   state: boolean;
   handleToggle: (params: boolean) => void;
-  selection: DataRowP | null;
-  setSelection: (params: DataRowP | null) => void;
+  selection: DataRowPac | null;
+  setSelection: (params: DataRowPac | null) => void;
 }
 
 const AddDocumentPatient: React.FC<Props> = ({
