@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 //Model
 import FilesBox from "@src/component/files/FilesBox";
 import FileItem from "@src/component/files/FileItem";
-import { DataRowD } from "@src/models/dependent.model";
+import { DataRowDep } from "@src/models/dependent.model";
 //Service
 interface FormValues {
   mainName: string;
@@ -18,8 +18,8 @@ interface FormValues {
 interface Props {
   state: boolean;
   handleToggle: (params: boolean) => void;
-  selection: DataRowD | null;
-  setSelection: (params: DataRowD | null) => void;
+  selection: DataRowDep | null;
+  setSelection: (params: DataRowDep | null) => void;
 }
 
 const AddDocumentDependent: React.FC<Props> = ({
