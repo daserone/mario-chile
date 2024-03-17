@@ -4,9 +4,14 @@ const TOKEN_KEY = process.env.BIENI_TOKEN_KEY;
 const BASE_URL = process.env.BIENI_URL_DEV;
 const BASE_URL_LOCAL = process.env.BIENI_URL_LOCAL;
 
+const entornos = {
+  local: BASE_URL_LOCAL,
+  dev: BASE_URL,
+  prod: "",
+};
+
 const service = axio.create({
-  baseURL: BASE_URL,
-  //baseURL: BASE_URL_LOCAL,
+  baseURL: entornos["local"],
 });
 // interceptor;
 service.interceptors.request.use(
