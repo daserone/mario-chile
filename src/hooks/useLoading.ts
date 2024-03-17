@@ -38,7 +38,9 @@ export const useLoadingFile = (
   };
 
   const handleFileUpload = async (file: File) => {
+    //Uuid
     const uid = new Date().getTime().toString();
+
     const updateFileState = (state: FileState) => {
       setFiles((prevFiles) => ({ ...prevFiles, [uid]: state }));
     };
