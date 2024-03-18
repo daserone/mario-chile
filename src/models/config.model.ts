@@ -23,8 +23,9 @@ export interface AppLayout {
 export interface AppThemeConfig {
   app: {
     appName: string;
-    appLogoImage: string; // URL of the image
-    appLogoCollapsed: string; // URL of the image
+    appNameWhite: string;
+    appLogo: string; // URL of the image
+    appLogoWhite: string; // URL of the image
   };
   layout: AppLayout;
 }

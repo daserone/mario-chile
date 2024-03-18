@@ -11,7 +11,7 @@ const BottonDarkMode = ({ skin, setSkin }: Props) => {
       <Nav className="d-none d-lg-block">
         <Nav.Link href="#home">
           {skin === "dark" ? (
-            <Sun className="ficon" onClick={() => setSkin("light")} />
+            <Sun className="text-muted" onClick={() => setSkin("light")} />
           ) : (
             <Moon className="ficon" onClick={() => setSkin("dark")} />
           )}

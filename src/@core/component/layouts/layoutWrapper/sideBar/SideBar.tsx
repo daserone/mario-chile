@@ -42,6 +42,8 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
     return null;
   }
 
+  console.log(skin);
+
   return (
     <>
       <div
@@ -57,17 +59,42 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setMenuHover(false)}
       >
-        <Sidebar>
+        <Sidebar
+          backgroundColor={skin === "dark" ? "#283046" : "white"}
+          className={classnames(
+            "main-menu menu-fixed menu-accordion menu-shadow",
+            {
+              expanded: menuHover || menuCollapsed === false,
+              "menu-light": skin !== "semi-dark" && skin !== "dark",
+              "menu-dark": skin === "semi-dark" || skin === "dark",
+            }
+          )}
+          style={{ zIndex: 1000 }}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={() => setMenuHover(false)}
+        >
           <Menu>
-            <div className="d-flex justify-content-between p-2">
+            <div className="d-flex justify-content-between py-2 px-1">
               {menuCollapsed ? (
                 <img
-                  src={themeConfig.app.appLogoCollapsed}
+                  src={
+                    skin === "dark"
+                      ? themeConfig.app.appLogoWhite
+                      : themeConfig.app.appLogo
+                  }
                   alt="logo"
-                  style={{ height: "35px" }}
+                  style={{ height: "40px", width: "40px", objectFit: "cover" }}
                 />
               ) : (
-                <img src={themeConfig.app.appName} alt="logo" />
+                <img
+                  src={
+                    skin === "dark"
+                      ? themeConfig.app.appNameWhite
+                      : themeConfig.app.appName
+                  }
+                  alt="logo"
+                  style={{ height: "40px", width: "100px", objectFit: "cover" }}
+                />
               )}
               <MenuFeather
                 onClick={() => setMenuCollapsed(!menuCollapsed)}
@@ -89,79 +116,15 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
                 menuHover || !menuCollapsed ? "margin-small-2" : "margin-small"
               } `}
             >
-              BieniWallet
+              Mis Pedidos
             </span>
             {/* pacientes  */}
             <MenuItemSidebar
               icon={users}
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
-              text="Pacientes"
+              text="Mis Pedidos"
               url="bieni-wallet/pacientes"
-            />
-            {/* validacion  */}
-            <MenuItemSidebar
-              icon={listCheck}
-              menuCollapsed={menuCollapsed}
-              menuHover={menuHover}
-              text="Validación"
-              url="bieni-wallet/validacion"
-            />
-            {/* afiliados  */}
-            <MenuItemSidebar
-              icon={reportSearch}
-              menuCollapsed={menuCollapsed}
-              menuHover={menuHover}
-              text="Afiliados"
-              url="bieni-wallet/afiliados"
-            />
-            {/* difusion  */}
-            <MenuItemSidebar
-              icon={speakerphone}
-              menuCollapsed={menuCollapsed}
-              menuHover={menuHover}
-              text="Difusión"
-              url="bieni-wallet/difusion"
-            />
-            {/* BieniMedico  */}
-            <span
-              className={` menu-title-divider ${
-                menuHover || !menuCollapsed ? "margin-small-2" : "margin-small"
-              } `}
-            >
-              BieniMédico
-            </span>
-            {/* estadisticas  */}
-            {/* <MenuItemSidebar
-              icon={infographic}
-              menuCollapsed={menuCollapsed}
-              menuHover={menuHover}
-              text="Estadísticas"
-              url="bieni-medico/estadisticas"
-            /> */}
-            {/* clientes  */}
-            <MenuItemSidebar
-              icon={brand}
-              menuCollapsed={menuCollapsed}
-              menuHover={menuHover}
-              text="Clientes"
-              url="bieni-medico/clientes"
-            />
-            {/* planes  */}
-            <MenuItemSidebar
-              icon={moneyReport}
-              menuCollapsed={menuCollapsed}
-              menuHover={menuHover}
-              text="Planes"
-              url="bieni-medico/planes"
-            />
-            {/* integraciones  */}
-            <MenuItemSidebar
-              icon={shape}
-              menuCollapsed={menuCollapsed}
-              menuHover={menuHover}
-              text="Integraciones"
-              url="bieni-medico/integraciones"
             />
           </Menu>
         </Sidebar>

@@ -1,14 +1,17 @@
 //Template config options
-import appName from "../assets/images/logo/bieni.svg";
-import appLogoImage from "../assets/images/logo/logo2.svg";
-import appLogoCollapsed from "../assets/images/logo/bieni-icon.svg";
+import appName from "@assets/images/logo/logo-name.png";
+import appNameWhite from "@assets/images/logo/logo-name-white.png";
+import appLogo from "@assets/images/logo/logo.png";
+import appLogoWhite from "@assets/images/logo/logo-white.png";
+
 import { AppThemeConfig } from "@src/models";
 
 const themeConfig: AppThemeConfig = {
   app: {
     appName: appName,
-    appLogoImage: appLogoImage,
-    appLogoCollapsed: appLogoCollapsed,
+    appNameWhite: appNameWhite,
+    appLogo: appLogo,
+    appLogoWhite: appLogoWhite,
   },
   layout: {
     isRTL: false,

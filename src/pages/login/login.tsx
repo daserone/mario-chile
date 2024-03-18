@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 //Hook
 import { useForm } from "../../hooks";
 //Assets
-import bieni from "@assets/images/logo/bieni-icon.svg";
+import bieni from "@assets/images/logo/logo-name.png";
 import fondo from "@assets/images/pages/fondo.svg";
 //Redux
 //Service
@@ -89,13 +89,13 @@ const Login = () => {
         >
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
             <div className="fondo__img text-center">
-              <img width="50rem" height="50rem" src={bieni} alt="logo"></img>
+              <img width="200rem" height="200rem" src={bieni} alt="logo"></img>
             </div>
             <CardTitle className="fw-bolder my-1 text-center" color="#5c586b">
-              Bienvenido a BieniMédico
+              Nowli Express
             </CardTitle>
             <CardText className="mb-2  text-center">
-              Todos tus registros médicos en un solo lugar.
+              <small>¡Bienvenido! Por favor inicie sesión.</small>
             </CardText>
             <Form
               className="auth-login-form mt-2"
@@ -140,8 +140,7 @@ const Login = () => {
                     onClick={() => {
                       restorePassword();
                     }}
-                    className="cursor-pointer"
-                    style={{ color: "#887ef2" }}
+                    className="cursor-pointer text-primary"
                   >
                     Olvidé mi contraseña
                   </span>
@@ -179,12 +178,12 @@ const Login = () => {
               <div className="d-flex justify-content-center">
                 <div className="fw-bold mb-2 text-dark">
                   <small>
-                    ¿Aún no utilizas BieniMédico?{" "}
+                    ¿Necesitas ayuda?{" "}
                     <small
                       onClick={() => {
                         history("/contactanos");
                       }}
-                      style={{ color: "#887ef2", cursor: "pointer" }}
+                      className="cursor-pointer text-primary"
                     >
                       Contáctanos
                     </small>

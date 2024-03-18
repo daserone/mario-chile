@@ -16,7 +16,7 @@ const MenuItemSidebar = ({
   url,
 }: Props) => {
   return (
-    <MenuItem component={<Link to={url} />}>
+    <MenuItem className="" component={<Link to={url} />}>
       <img src={icon} alt="" height={20} width={20} />
       {(menuHover || !menuCollapsed) && (
         <span

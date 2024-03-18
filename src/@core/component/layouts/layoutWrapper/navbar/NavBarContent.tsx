@@ -9,7 +9,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { BottonDarkMode } from "../BottonDarkMode";
 import { Menu } from "react-feather";
 // image clinic
-import logoClinic from "@src/assets/images/logo-ejemplo.svg";
+import logoClinic from "@src/assets/images/logo/logo.png";
 import profilePic from "@src/assets/images/profile.png";
 import iconNotif from "@src/assets/sidebar/notification.svg";
 import iconSearch from "@src/assets/sidebar/search.svg";
@@ -79,8 +79,8 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
               <Menu className="ficon" />
             </Nav.Link>
             <div className="clinic">
-              <img src={logoClinic} alt="" />
-              <span className="font-medium-2">Clínica el sol</span>
+              <img src={logoClinic} alt="" width={50} />
+              <span className="font-medium-2">NOWLI</span>
               <FontAwesomeIcon icon={faChevronDown} size="lg" />
             </div>
           </Nav>

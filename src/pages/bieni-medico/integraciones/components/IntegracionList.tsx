@@ -1,5 +1,5 @@
 import CardIntegracion from "./CardIntegracion";
-import logoClinic from "@src/assets/images/logo-ejemplo.svg";
+import logoClinic from "@src/assets/images/logo/logo.png";
 
 interface integracionCard {
   id: string;
