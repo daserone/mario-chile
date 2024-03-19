@@ -102,6 +102,15 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
                 size={20}
               />
             </div>
+            {/* home  */}
+            <MenuItemSidebar
+              icon={shape}
+              menuCollapsed={menuCollapsed}
+              menuHover={menuHover}
+              text="Inicio"
+              url="home"
+            />
+
             {/* usuarios  */}
             <MenuItemSidebar
               icon={layoutGrid}

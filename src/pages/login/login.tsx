@@ -76,22 +76,17 @@ const Login = () => {
         backgroundSize: "cover",
       }}
     >
-      <Row className="auth-inner m-0 py-4">
+      <Row className="auth-inner m-0 py-4 d-flex justify-content-center">
         <Col
-          className="d-none d-lg-flex align-items-center p-5"
-          lg="4"
-          sm="12"
-        ></Col>
-        <Col
-          className="d-flex align-items-center auth-bg px-2 p-lg-5 rounded shadow-sm"
+          className="d-flex align-items-center auth-bg px-5 rounded shadow-sm"
           lg="4"
           sm="12"
         >
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
             <div className="fondo__img text-center">
-              <img width="200rem" height="200rem" src={bieni} alt="logo"></img>
+              <img width="200px" height="150px" src={bieni} alt="logo"></img>
             </div>
-            <CardTitle className="fw-bolder my-1 text-center" color="#5c586b">
+            <CardTitle className="fw-bolder my-1 text-center text-info">
               Nowli Express
             </CardTitle>
             <CardText className="mb-2  text-center">

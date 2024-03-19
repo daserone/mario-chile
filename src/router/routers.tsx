@@ -11,6 +11,7 @@ import Clientes from "@src/pages/bieni-medico/clientes/Clientes.tsx";
 import Planes from "@src/pages/bieni-medico/planes/Planes.tsx";
 import Integraciones from "@src/pages/bieni-medico/integraciones/Integraciones.tsx";
 import DifusionDetail from "@src/pages/bieni-wallet/difusion-detail/DifusionDetail.tsx";
+import Home from "@src/pages/home/Home.tsx";
 //Page
 const Usuarios = lazy(() => import("../pages/usuarios/usuarios"));
 const Login = lazy(() => import("../pages/login/login.tsx"));
@@ -23,11 +24,12 @@ function Routers() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="usuarios" />} />
+          <Route path="/" element={<Navigate to="/home" />} />
           <Route path="login" element={<Login />} />
           <Route element={<AuthGuard />}>
             <Route element={<WrapperVerticalLayout />}>
-              <Route path="/" element={<Navigate to="/usuarios" />} />
+              <Route path="/" element={<Navigate to="/home" />} />
+              <Route path="home" element={<Home />} />
               <Route path="usuarios" element={<Usuarios />} />
               <Route path="bieni-wallet/pacientes" element={<Pacientes />} />
               <Route

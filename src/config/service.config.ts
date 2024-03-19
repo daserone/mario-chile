@@ -11,7 +11,7 @@ const entornos = {
 };
 
 const service = axio.create({
-  baseURL: entornos["local"],
+  baseURL: entornos["dev"],
 });
 // interceptor;
 service.interceptors.request.use(
