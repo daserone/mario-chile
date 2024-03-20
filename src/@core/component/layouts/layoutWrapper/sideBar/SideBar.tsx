@@ -14,6 +14,7 @@ import brand from "../../../../../assets/sidebar/brand.svg";
 import shape from "../../../../../assets/sidebar/shape.svg";
 
 import MenuItemSidebar from "./MenuItemSidebar";
+import { faChartBar, faChartLine } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   skin: string;
@@ -109,11 +110,13 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuHover={menuHover}
               text="Inicio"
               url="home"
+              isFontAwesome
+              faIcon={faChartLine}
             />
 
             {/* usuarios  */}
             <MenuItemSidebar
-              icon={layoutGrid}
+              icon={users}
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Usuarios"
@@ -129,7 +132,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
             </span>
             {/* pacientes  */}
             <MenuItemSidebar
-              icon={users}
+              icon={layoutGrid}
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Mis Pedidos"
