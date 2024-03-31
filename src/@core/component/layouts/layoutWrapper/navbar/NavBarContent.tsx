@@ -45,7 +45,7 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
         img={profilePic}
         imgHeight="40"
         imgWidth="40"
-        status={user?.active ? "online" : "offline"}
+        status={user?.is_active ? "online" : "offline"}
         onClick={(e) => {
           e.preventDefault();
           onClick(e);
@@ -115,11 +115,13 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
                         img={profilePic ?? ""}
                         imgHeight="40"
                         imgWidth="40"
-                        status={user?.active ? "online" : "offline"}
+                        status={user?.is_active ? "online" : "offline"}
                       />
                     </div>
                     <div>
-                      <span className="align-middle">{user?.name ?? ""}</span>
+                      <span className="align-middle">
+                        {user?.full_name ?? ""}
+                      </span>
                       {/* <div className="mt-1 mb-1">{user?.niveldescripcion}</div> */}
                     </div>
                   </div>

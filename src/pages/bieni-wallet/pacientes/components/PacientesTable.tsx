@@ -3,7 +3,6 @@ import { TableColumn } from "react-data-table-component";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 //Service
-import { getPacientes } from "@services/paciente.service";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 //Assets
@@ -44,7 +43,7 @@ const PacientesTable: React.FC<Props> = ({ params }) => {
   //Solicitud
   const { data, isError, isLoading } = useQuery({
     queryKey: ["pacientes", page, params],
-    queryFn: () => getPacientes({ page, ...params }),
+    // queryFn: () => getPacientes({ page, ...params }),
     placeholderData: keepPreviousData,
   });
   //Column
@@ -129,8 +128,8 @@ const PacientesTable: React.FC<Props> = ({ params }) => {
       columns={columns}
       isLoading={isLoading}
       isError={isError}
-      data={data?.data ?? []}
-      recordsTotals={data?.recordsTotals ?? 0}
+      data={[]}
+      recordsTotals={0}
       countPerPage={countPerPage}
       setCountPerPage={setCountPerPage}
       page={page}

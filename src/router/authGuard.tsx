@@ -4,8 +4,9 @@ import { AppStore } from "@store/store";
 
 export const AuthGuard = () => {
   const auth = useSelector((store: AppStore) => store.auth);
+  console.log(auth);
 
-  if (!auth?.active) {
+  if (!auth?.is_active) {
     return <Navigate replace to="/login" />;
   }
 

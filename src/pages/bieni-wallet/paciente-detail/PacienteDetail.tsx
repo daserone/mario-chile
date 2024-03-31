@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 //Models
 import { DataRowPacientes } from "@models/paciente.model";
 //Service
-import { getPaciente } from "@services/paciente.service";
+// import { getPaciente } from "@services/paciente.service";
 //Component
 import { Avatar } from "@src/@core/component/layouts/layoutWrapper/Avatar";
 import DetailBox from "./components/DetailBox";
@@ -26,12 +26,12 @@ const PacienteDetail = () => {
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ["paciente", id],
-    queryFn: () => getPaciente({ idpaciente: id }),
+    // queryFn: () => getPaciente({ idpaciente: id }),
     refetchOnWindowFocus: false,
   });
 
   const entity: DataRow = useMemo(() => {
-    const initial = {
+    const initial: DataRow = {
       idusuario: 0,
       idpaciente: 0,
       document: "",
@@ -44,13 +44,17 @@ const PacienteDetail = () => {
       verification: "verificacion-automatica",
       registrationDate: "",
       profileImage: "",
+      iddocumento: 0,
+      email: "",
+      kinship: "",
     };
     //Sin registros
-    if (data && data.recordsTotals === 0) {
-      return initial;
-    }
+    // if (data && data.recordsTotals === 0) {
+    //   return initial;
+    // }
 
-    return data?.data ?? initial;
+    // return data?.data ?? initial;
+    return initial;
   }, [data]);
 
   return (

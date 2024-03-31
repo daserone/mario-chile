@@ -11,7 +11,7 @@ import fondo from "@assets/images/pages/fondo.svg";
 //Service
 import { doLogin } from "@services/usuario.service";
 //Model
-import { ResponseNotificacion } from "@src/models";
+import { LoginRequest, LoginResponse } from "@src/models";
 //Style
 import "../../@core/scss/react/pages/page-authentication.scss";
 import useAuth from "@src/@core/hooks/useAuth";
@@ -25,7 +25,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const { value, handleSubmit, handleInput } = useForm({
     email: "",
-    contrasena: "Australopithecus",
+    contrasena: "",
   });
 
   const { saveUser } = useAuth();
@@ -39,26 +39,42 @@ const Login = () => {
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const form: any = new FormData();
-    form.append("op", "dologinWithCredencial");
-    form.append("correo", value.email.trim());
-    form.append("clave", value.contrasena.trim());
+
+    const form: LoginRequest = {
+      username: value.email,
+      password: value.contrasena,
+    };
+
     doLogin(form)
       .then((rsp) => {
-        const { status, data } = rsp;
-        if (status === 200) {
-          const { responseCode, item }: ResponseNotificacion = data;
-          if (responseCode === 1) {
+        try {
+          const { status, data } = rsp;
+          console.log(status, data);
+          if (status === 200) {
+            const { accessToken, user }: LoginResponse = data;
             // saveUser({ ...item, token: "test-token" });
-            saveUser(item);
+            saveUser(data);
             history("/usuarios", { replace: true });
-          } else {
-            toast.error("Correo o contraseña incorrecta.");
           }
+        } catch (error) {
+          console.error(error);
+          toast.error("Error al procesar solicitud.");
         }
       })
       .catch((e) => {
-        console.error(e);
+        console.error(e, "ERROR");
+        const { response } = e;
+
+        if (response?.status === 400) {
+          toast.error("Usuario o contraseña incorrectos.");
+          return;
+        }
+
+        if (response?.status === 404) {
+          toast.error("Usuario no encontrado.");
+          return;
+        }
+
         toast.error("Error al procesar solicitud.");
       });
   };
@@ -98,10 +114,7 @@ const Login = () => {
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="mb-1">
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlInput1"
-                >
+                <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type="text"
@@ -114,10 +127,7 @@ const Login = () => {
               </div>
               <div className="mb-1">
                 <div className="mb-1">
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
+                  <Form.Group className="mb-3">
                     <Form.Label>Contraseña</Form.Label>
                     <Form.Control
                       name="contrasena"

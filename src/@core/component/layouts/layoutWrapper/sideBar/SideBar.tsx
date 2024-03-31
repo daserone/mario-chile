@@ -43,8 +43,6 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
     return null;
   }
 
-  console.log(skin);
-
   return (
     <>
       <div

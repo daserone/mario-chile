@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TableColumn } from "react-data-table-component";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 //Service
-import { getPacientes } from "@services/paciente.service";
+// import { getPacientes } from "@services/paciente.service";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 //Model
@@ -18,12 +18,12 @@ export const UserTable = ({ idUsuario, idPaciente }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   //Solicitud
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["pacientes", page, idUsuario, idPaciente],
-    queryFn: () =>
-      getPacientes({ page, idusuario: idUsuario, idpaciente: idPaciente }),
-    placeholderData: keepPreviousData,
-  });
+  // const { data, isError, isLoading } = useQuery({
+  //   queryKey: ["pacientes", page, idUsuario, idPaciente],
+  //   queryFn: () =>
+  //     getPacientes({ page, idusuario: idUsuario, idpaciente: idPaciente }),
+  //   placeholderData: keepPreviousData,
+  // });
 
   const columns: TableColumn<DataRowPacientes>[] = [
     {
@@ -101,9 +101,9 @@ export const UserTable = ({ idUsuario, idPaciente }: Props) => {
       <WrapperDataTable
         title=""
         columns={columns}
-        isLoading={isLoading}
-        isError={isError}
-        data={data?.data ?? []}
+        isLoading={false}
+        isError={false}
+        data={[]}
         recordsTotals={0}
         countPerPage={countPerPage}
         setCountPerPage={setCountPerPage}

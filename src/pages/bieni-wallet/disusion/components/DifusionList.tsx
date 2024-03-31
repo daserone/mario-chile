@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 //Service
-import { getDifusiones } from "@services/difusion.service";
+
 //Component
 import CardDifusion from "./CardDifusion";
 
@@ -59,7 +59,7 @@ const DifusionList = () => {
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ["difusiones"],
-    queryFn: () => getDifusiones({ page: 1 }),
+    // queryFn: () => getDifusiones({ page: 1 }),
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
   });

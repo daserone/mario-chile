@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserSession } from "@src/models";
+import { User } from "@src/models";
 import {
   clearLocalStorage,
   persistLocalStorage,
@@ -8,14 +8,16 @@ import {
 
 export const userKey = "user-backoffice";
 
-const TOKEN_KEY = import.meta.env.TOKEN_KEY;
+const TOKEN_KEY = process.env.NOWLI_TOKEN_KEY;
 
-export const initial: UserSession = {
-  id: 0,
-  name: "",
+export const initial: User = {
+  id: "",
   email: "",
-  token: "",
-  active: false,
+  full_name: "",
+  is_admin: false,
+  hashed_password: "",
+  is_active: false,
+  user_role: [],
 };
 
 export const userSlice = createSlice({
@@ -23,16 +25,18 @@ export const userSlice = createSlice({
   initialState: getLocalStorage(userKey) ? getLocalStorage(userKey) : initial,
   reducers: {
     createUser: (state, action) => {
-      if (action.payload.token) {
-        localStorage.setItem(TOKEN_KEY, JSON.stringify(action.payload.token));
+      console.log(action.payload.access_token, "PAYLOAD");
+
+      if (action.payload.access_token) {
+        localStorage.setItem(TOKEN_KEY ?? "token", action.payload.access_token);
       }
 
-      persistLocalStorage<UserSession>(userKey, action.payload);
-      return action.payload;
+      persistLocalStorage<User>(userKey, action.payload.user);
+      return action.payload.user;
     },
     updateUser: (state, action) => {
       const result = { ...state, ...action.payload };
-      persistLocalStorage<UserSession>(userKey, result);
+      persistLocalStorage<User>(userKey, result);
       return result;
     },
     reset: () => {

@@ -2,12 +2,13 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { createUser, reset } from "@src/state/slice/user";
+import { LoginResponse } from "@src/models";
 const TOKEN_KEY = import.meta.env.TOKEN_KEY;
 export default function useAuth() {
   const dispatch = useDispatch();
 
   const saveUser = useCallback(
-    (item: unknown) => {
+    (item: LoginResponse) => {
       // doLogin
       dispatch(createUser(item));
     },

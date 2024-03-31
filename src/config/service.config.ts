@@ -1,8 +1,8 @@
 import axio from "axios";
 
-const TOKEN_KEY = process.env.BIENI_TOKEN_KEY;
-const BASE_URL = process.env.BIENI_URL_DEV;
-const BASE_URL_LOCAL = process.env.BIENI_URL_LOCAL;
+const TOKEN_KEY = process.env.NOWLI_TOKEN_KEY;
+const BASE_URL = process.env.NOWLI_URL_DEV;
+const BASE_URL_LOCAL = process.env.NOWLI_URL_LOCAL;
 
 const entornos = {
   local: BASE_URL_LOCAL,
@@ -11,7 +11,7 @@ const entornos = {
 };
 
 const service = axio.create({
-  baseURL: entornos["dev"],
+  baseURL: entornos["local"],
 });
 // interceptor;
 service.interceptors.request.use(
@@ -21,6 +21,8 @@ service.interceptors.request.use(
     }
 
     const token = localStorage.getItem(TOKEN_KEY!) ?? "";
+
+    console.log(token);
 
     if (token !== "") {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -33,15 +35,6 @@ service.interceptors.request.use(
   }
 );
 
-const serviceBieni = axio.create({
-  baseURL: "https://bieniwallet.com/bienibackdes/",
-});
-
-const buildUrl = (url: string, op: string, parameters = {}) => {
-  const queryString = new URLSearchParams(parameters).toString();
-  return `${url}?op=${op}&${queryString}`;
-};
-
 const templateData = {
   data: [],
   recordsTotals: 0,
@@ -50,11 +43,7 @@ const templateData = {
 };
 
 const endpoint = {
-  paciente: "/src/pacientes.php",
-  login: "src/login.php",
-  usuario: "/src/usuario/",
-  difusion: "src/difusion/",
-  pacientes: "/src/paciente/",
+  login: "token",
 };
 
-export { service, serviceBieni, buildUrl, templateData, endpoint };
+export { service, templateData };

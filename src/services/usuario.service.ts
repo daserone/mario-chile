@@ -1,41 +1,51 @@
-import {
-  service,
-  buildUrl,
-  templateData,
-  endpoint,
-} from "@src/config/service.config";
+import { service } from "@src/config/service.config";
+import { LoginRequest } from "@src/models";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const doLogin = (form: any) =>
-  service.post(endpoint.login, form, {
+const endpoint = {
+  login: "token",
+  user: "users/me",
+  createUser: "create_user",
+  getUsers: "get_users?company_name=",
+};
+
+export const doLogin = (form: LoginRequest) => {
+  let formData = new FormData();
+  formData.append("username", form.username);
+  formData.append("password", form.password);
+  return service.post(endpoint.login, formData, {
     responseType: "json",
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+};
 
 export const getUsuarios = async ({ ...parameters }) => {
-  const apiUrl = buildUrl(endpoint.usuario, "usuarios", parameters);
-  const response = await service.get(apiUrl, { responseType: "json" });
+  console.log(parameters);
+  let company_name = parameters.company_name;
+
+  const response = await service.get(`get_users?company_name=${company_name}`, {
+    responseType: "json",
+  });
   if (response.status >= 200 && response.status < 300) {
-    return response?.data ?? templateData;
+    console.log();
+
+    return response?.data ?? {};
   } else {
     throw new Error(`Error al obtener usuarios: ${response.statusText}`);
   }
 };
 
-export const getUsuario = async ({ ...parameters }) => {
-  const apiUrl = buildUrl(endpoint.usuario, "usuario", parameters);
-  const response = await service.get(apiUrl, { responseType: "json" });
+export const getUser = async ({ ...parameters }) => {
+  const response = await service.get(endpoint.user, { responseType: "json" });
   if (response.status >= 200 && response.status < 300) {
-    return response?.data?.data ?? templateData;
+    return response?.data ?? {};
   } else {
-    throw new Error(`Error al obtener usuarios: ${response.statusText}`);
+    throw new Error(`Error al obtener usuario: ${response.statusText}`);
   }
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const postUsuario = (form: any) =>
-  service.post(endpoint.usuario, form, {
+export const createUser = (form: any) =>
+  service.post(endpoint.createUser, form, {
     responseType: "json",
     headers: {
       "Content-Type": "multipart/form-data",

@@ -5,11 +5,11 @@ import { Button, ButtonGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 //Model
-import { UserDataRow } from "@src/models/user.model";
+import { User } from "@src/models/user.model";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 //Service
-import { getUsuarios } from "@services/usuario.service";
+import { getUser, getUsuarios } from "@services/usuario.service";
 
 interface Params {
   state: string;
@@ -19,7 +19,7 @@ interface Params {
 interface Props {
   handleToggle: (params: boolean) => void;
   params: Params;
-  setSelection: (params: UserDataRow | null) => void;
+  setSelection: (params: User | null) => void;
 }
 
 const UsuariosTable: React.FC<Props> = ({
@@ -32,34 +32,35 @@ const UsuariosTable: React.FC<Props> = ({
   //Solicitud
   const { data, isError, isLoading } = useQuery({
     queryKey: ["usuarios", page, params],
-    queryFn: () => getUsuarios({ page, ...params }),
+    queryFn: () => getUsuarios({ company_name: "ChileTopia" }),
     placeholderData: keepPreviousData,
   });
+
   //Column
-  const columns: TableColumn<UserDataRow>[] = [
+  const columns: TableColumn<User>[] = [
     {
       name: "USUARIO",
-      selector: (row) => row.name,
+      selector: (row) => row.full_name,
     },
     {
       name: "CORREO",
       selector: (row) => row.email,
     },
     {
-      name: "ESTADO",
-      selector: (row) => row.state,
+      name: "ROL",
+      selector: (row) => row.is_admin,
       cell: (row) => (
         <div>
-          {row.state === "activo" ? (
-            <span className="active-badge">Activo</span>
+          {row.is_admin ? (
+            <span className="active-badge">Admin</span>
           ) : (
-            <span className="inactive-badge">Inactivo</span>
+            <span className="inactive-badge">Empleado</span>
           )}
         </div>
       ),
     },
     {
-      name: "ACCIÓN",
+      name: "",
       cell: (row) => (
         <ButtonGroup aria-label="Basic example">
           <Button
@@ -86,8 +87,8 @@ const UsuariosTable: React.FC<Props> = ({
       columns={columns}
       isLoading={isLoading}
       isError={isError}
-      data={data?.data ?? []}
-      recordsTotals={data?.recordsTotals ?? 0}
+      data={data?.items ?? []}
+      recordsTotals={data?.total_pages ?? 0}
       countPerPage={countPerPage}
       setCountPerPage={setCountPerPage}
       page={page}
