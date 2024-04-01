@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { WrapperVerticalLayout } from "@core/component/layouts";
 //Routes
 import { AuthGuard } from "./authGuard.tsx";
-import Pacientes from "@src/pages/bieni-wallet/pacientes/Pacientes.tsx";
+import Pacientes from "@src/pages/orders/Orders.tsx";
 import PacienteDetail from "@src/pages/bieni-wallet/paciente-detail/PacienteDetail.tsx";
 import Difusion from "@src/pages/bieni-wallet/disusion/Difusion.tsx";
 import Clientes from "@src/pages/bieni-medico/clientes/Clientes.tsx";

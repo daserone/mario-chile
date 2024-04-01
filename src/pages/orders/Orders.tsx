@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFilter } from "@fortawesome/free-solid-svg-icons";
 import Flatpickr from "react-flatpickr";
 //Component
-import PacientesTable from "./components/PacientesTable";
+import OrdersTable from "./components/OrdersTable";
 import ExportButton from "@src/component/buttons/ExportButton";
 //Hook
 import { useDebounce } from "@src/hooks";
@@ -22,21 +22,13 @@ const optionsFlatpickr = {
 };
 
 interface Params {
-  date: string | Date;
-  from: string | undefined;
-  to: string | undefined;
-  profile: string;
-  verification: string;
-  search: string;
+  company_name: string;
+  filter: string;
 }
 
 const initial = {
-  date: "",
-  from: "",
-  to: "",
-  profile: "",
-  verification: "",
-  search: "",
+  company_name: "ChileTopia",
+  filter: "",
 };
 const Pacientes = () => {
   //Hook
@@ -76,8 +68,8 @@ const Pacientes = () => {
     <>
       <Row>
         <Col>
-          <h2 className="my-2">
-            <span className="text-muted">BieniWallet /</span> Pacientes
+          <h2 className="mt-3">
+            <span className="">Pedidos </span>
           </h2>
           <Card>
             <Card.Header className="d-flex">
@@ -96,7 +88,6 @@ const Pacientes = () => {
                     id="hf-picker2"
                     className="form-control"
                     placeholder="Insertar fecha"
-                    value={params.date ?? ""}
                     onChange={(date) => {
                       if (date !== null) {
                         handleDateTime(date);
@@ -105,48 +96,15 @@ const Pacientes = () => {
                     options={optionsFlatpickr}
                   />
                 </div>
-                {/* perfil select col  */}
                 <div className="col-6 col-lg-4">
-                  <select
-                    className="form-select"
-                    value={params.profile || ""}
-                    name="profile"
-                    onChange={handleChange}
-                  >
-                    <option value="" selected disabled>
-                      Perfil
-                    </option>
-                    <option value="1">Activo</option>
-                    <option value="2">Inactivo</option>
-                  </select>
-                </div>
-                {/* verificacion select col  */}
-                <div className="col-6 col-lg-4 mt-2 mt-lg-0">
-                  <select
-                    className="form-select"
-                    value={params.verification || ""}
-                    name="verification"
-                    onChange={handleChange}
-                  >
-                    <option value="" selected disabled>
-                      Verificación
-                    </option>
-                    <option value="verificacion-automatica">Automatico</option>
-                    <option value="verificacion-manual">Manual</option>
-                  </select>
-                </div>
-              </div>
-              <div className="w-100 row mt-2 justify-content-between ps-1 pe-1">
-                {/* search col  */}
-                <div className="col-12 col-lg-4">
                   <div className="input-group">
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Buscar por nombre o cedula..."
-                      value={params.search || ""}
-                      name="search"
+                      placeholder="Buscar..."
+                      name="filter"
                       onChange={handleChange}
+                      value={params.filter}
                     />
                     <button className="btn btn-outline-secondary" type="button">
                       <FontAwesomeIcon icon={faSearch} />
@@ -154,12 +112,12 @@ const Pacientes = () => {
                   </div>
                 </div>
                 {/* add button col  */}
-                <div className="col-12 col-lg-3 mt-2 mt-lg-0 d-flex justify-content-end ">
+                <div className="col-12 col-lg-2 mt-2 mt-lg-0 d-flex justify-content-end ">
                   <ExportButton />
                 </div>
               </div>
             </div>
-            <PacientesTable params={params} />
+            <OrdersTable params={params} />
           </Card>
         </Col>
       </Row>

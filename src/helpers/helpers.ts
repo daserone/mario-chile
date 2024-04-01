@@ -38,3 +38,12 @@ export const evaluateSuggestionFilter = (data: Data) => {
   }
   return iterado;
 };
+
+// if - return empty string
+
+export const removeHyphen = (value: string) => {
+  if (value === "-") {
+    return "";
+  }
+  return value;
+};

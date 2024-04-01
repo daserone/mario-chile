@@ -7,7 +7,7 @@ import { useToggle, useDebounce } from "@src/hooks";
 //Helpers
 import { evaluateSuggestionFilter } from "@src/helpers/helpers";
 //Model
-import { UserDataRow } from "@src/models/user.model";
+import { User } from "@src/models/user.model";
 //Component
 import ExportButton from "@src/component/buttons/ExportButton";
 import AddButton from "@src/component/buttons/AddButton";
@@ -17,18 +17,21 @@ import UsuariosTable from "./components/UsuarioTable";
 import "./Usuarios.scss";
 
 interface Params {
-  state: string;
-  search: string;
+  company_name: string;
+  filter: string;
 }
 
-const initial = { state: "", search: "" };
+const initial = {
+  company_name: "ChileTopia",
+  filter: "",
+};
 
 const Usuarios = () => {
   //Hook
   const [params, setParams] = useState<Params>(initial);
-  const [selection, setSelection] = useState<UserDataRow | null>(null);
+  const [selection, setSelection] = useState<User | null>(null);
 
-  const query = useDebounce(params, 2000);
+  const query = useDebounce(params, 1000);
 
   const { state, toggle } = useToggle(false);
 
@@ -50,7 +53,7 @@ const Usuarios = () => {
 
   return (
     <>
-      <h2 className="my-2">Usuarios</h2>
+      <h2 className="mt-3">Usuarios</h2>
       <Row>
         <Col>
           <Card>
@@ -70,10 +73,10 @@ const Usuarios = () => {
                   <div className="input-group">
                     <input
                       type="text"
-                      name="search"
+                      name="filter"
                       className="form-control"
                       placeholder="Buscar usuario..."
-                      value={params.search || ""}
+                      value={params.filter || ""}
                       onChange={handleChange}
                     />
                     <button
@@ -85,22 +88,7 @@ const Usuarios = () => {
                     </button>
                   </div>
                 </div>
-                {/* state select col  */}
-                <div className="col-12 col-lg-3 mt-2 mt-lg-0">
-                  {/* state select input  */}
-                  <select
-                    name="state"
-                    className="form-select"
-                    onChange={handleChange}
-                    value={params.state || ""}
-                  >
-                    <option value="" disabled selected hidden>
-                      Estado
-                    </option>
-                    <option value="activo">Activo</option>
-                    <option value="inactivo">Inactivo</option>
-                  </select>
-                </div>
+
                 {/* export and add button col  */}
                 <div className="col-12 col-lg-5 d-flex gap-2 justify-content-between mt-2 mt-lg-0">
                   <ExportButton />

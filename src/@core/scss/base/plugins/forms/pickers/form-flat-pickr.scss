@@ -6,7 +6,6 @@
 .flatpickr-calendar {
   z-index: 0;
   .flatpickr-day {
-    
     &.today {
       border-color: $primary !important;
       background: #f3f2fe !important;
@@ -25,7 +24,7 @@
 
     &.inRange,
     &.inRange:hover {
-      background: lighten($color: $primary, $amount: 30%);
+      background: lighten($color: $primary, $amount: 10%);
       border-color: lighten($color: $primary, $amount: 30%);
       box-shadow: -5px 0 0 lighten($color: $primary, $amount: 30%),
         5px 0 0 lighten($color: $primary, $amount: 30%);

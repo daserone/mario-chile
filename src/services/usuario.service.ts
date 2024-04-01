@@ -23,10 +23,16 @@ export const doLogin = (form: LoginRequest) => {
 export const getUsuarios = async ({ ...parameters }) => {
   console.log(parameters);
   let company_name = parameters.company_name;
+  let page = parameters.page;
+  let items = parameters.items;
+  let filter = parameters.filter;
 
-  const response = await service.get(`get_users?company_name=${company_name}`, {
-    responseType: "json",
-  });
+  const response = await service.get(
+    `get_users?company_name=${company_name}&page=${page}&items=${items}&filter=${filter}`,
+    {
+      responseType: "json",
+    }
+  );
   if (response.status >= 200 && response.status < 300) {
     console.log();
 

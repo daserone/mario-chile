@@ -32,7 +32,7 @@ const UsuariosTable: React.FC<Props> = ({
   //Solicitud
   const { data, isError, isLoading } = useQuery({
     queryKey: ["usuarios", page, params],
-    queryFn: () => getUsuarios({ company_name: "ChileTopia" }),
+    queryFn: () => getUsuarios({ page, items: countPerPage, ...params }),
     placeholderData: keepPreviousData,
   });
 
