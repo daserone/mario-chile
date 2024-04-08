@@ -5,16 +5,14 @@ import { Menu as MenuFeather } from "react-feather";
 import themeConfig from "@src/config/theme.config";
 import layoutGrid from "../../../../../assets/sidebar/layout-grid.svg";
 import users from "../../../../../assets/sidebar/users.svg";
-import listCheck from "../../../../../assets/sidebar/list-check.svg";
-import reportSearch from "../../../../../assets/sidebar/report-search.svg";
-import speakerphone from "../../../../../assets/sidebar/speakerphone.svg";
-// import infographic from "../../../../../assets/sidebar/infographic.svg";
-import moneyReport from "../../../../../assets/sidebar/money-report.svg";
-import brand from "../../../../../assets/sidebar/brand.svg";
-import shape from "../../../../../assets/sidebar/shape.svg";
 
 import MenuItemSidebar from "./MenuItemSidebar";
-import { faChartBar, faChartLine } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartBar,
+  faChartLine,
+  faList,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   skin: string;
@@ -103,7 +101,7 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
             </div>
             {/* home  */}
             <MenuItemSidebar
-              icon={shape}
+              icon={""}
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Inicio"
@@ -114,17 +112,22 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
 
             {/* usuarios  */}
             <MenuItemSidebar
-              icon={users}
+              icon={""}
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Usuarios"
               url="usuarios"
+              isFontAwesome
+              faIcon={faUsers}
             />
             {/* biniwallet  */}
             <span
               className={` menu-title-divider ${
                 menuHover || !menuCollapsed ? "margin-small-2" : "margin-small"
-              } `}
+              }
+                ${skin === "dark" ? "text-light" : "text-muted"}
+              
+              `}
             >
               Mis Pedidos
             </span>
@@ -135,6 +138,8 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               menuHover={menuHover}
               text="Mis Pedidos"
               url="bieni-wallet/pacientes"
+              isFontAwesome
+              faIcon={faList}
             />
           </Menu>
         </Sidebar>

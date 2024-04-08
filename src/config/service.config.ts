@@ -1,8 +1,11 @@
+import useAuth from "@src/@core/hooks/useAuth";
 import axio from "axios";
+import { useNavigate } from "react-router-dom";
 
 const TOKEN_KEY = process.env.NOWLI_TOKEN_KEY;
 const BASE_URL = process.env.NOWLI_URL_DEV;
 const BASE_URL_LOCAL = process.env.NOWLI_URL_LOCAL;
+const USER_KEY = process.env.NOWLI_USER_KEY;
 
 const entornos = {
   local: BASE_URL_LOCAL,
@@ -31,6 +34,21 @@ service.interceptors.request.use(
     return config;
   },
   function (error) {
+    return Promise.reject(error);
+  }
+);
+
+service.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem(TOKEN_KEY!);
+      localStorage.removeItem(USER_KEY!);
+      window.location.href = "/login";
+    }
+
     return Promise.reject(error);
   }
 );

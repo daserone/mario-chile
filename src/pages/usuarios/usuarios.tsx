@@ -54,7 +54,7 @@ const Usuarios = () => {
   return (
     <>
       <h2 className="mt-3">Usuarios</h2>
-      <Row>
+      <Row className="">
         <Col>
           <Card>
             <Card.Header className="d-flex">
@@ -66,7 +66,7 @@ const Usuarios = () => {
               ) : null}
             </Card.Header>
             <div className="card-header-inputs ">
-              <div className="w-100 row mt-2 mb-2 ps-1 pe-1">
+              <div className="w-100 row mt-2  mb-2 ps-1 pe-1">
                 {/* search col  */}
                 <div className="col-12 col-lg-4 ">
                   {/* search input  */}

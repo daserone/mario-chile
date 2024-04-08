@@ -54,7 +54,7 @@ const Login = () => {
             const { accessToken, user }: LoginResponse = data;
             // saveUser({ ...item, token: "test-token" });
             saveUser(data);
-            history("/usuarios", { replace: true });
+            history("/home", { replace: true });
           }
         } catch (error) {
           console.error(error);

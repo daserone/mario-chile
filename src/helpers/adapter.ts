@@ -3,7 +3,7 @@ import { es } from "date-fns/locale";
 
 type DateOrString = string | Date | null | undefined;
 
-export const adapterDateTime = (date: DateOrString, formt: string) => {
+export const formatDate = (date: DateOrString, formt: string) => {
   try {
     let result = "";
 
@@ -12,14 +12,11 @@ export const adapterDateTime = (date: DateOrString, formt: string) => {
     }
 
     if (typeof date === "string") {
-      // Asigna el tipo de dato a 'auxFecha'
-      const fechaArray: string[] = date.split(" ");
-      // Asigna el tipo de dato a 'dateTime'
-      const dateTime: Date = new Date(
-        fechaArray.length > 1 || date.includes("T00:00:00")
-          ? `${date}`
-          : `${date}T00:00:00`
-      );
+      // 2024-03-31T11:18:22-03:00
+
+      // remove -03:00
+
+      const dateTime = new Date(date);
 
       result = format(dateTime, formt, { locale: es });
     } else {
@@ -30,4 +27,23 @@ export const adapterDateTime = (date: DateOrString, formt: string) => {
   } catch (e) {
     console.error(e);
   }
+};
+
+// only date
+export const adapterDate = (date: DateOrString) => {
+  console.log(date);
+
+  return formatDate(date, "dd/MM/yyyy");
+};
+
+// only time
+export const adapterTime = (date: DateOrString) => {
+  // 10:20 am/pm
+  return formatDate(date, "hh:mm a");
+};
+
+// date and time
+
+export const adapterDateTime = (date: DateOrString) => {
+  return formatDate(date, "dd/MM/yyyy HH:mm a");
 };

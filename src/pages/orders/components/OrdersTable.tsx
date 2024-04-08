@@ -10,6 +10,10 @@ import iconEmail from "@src/assets/icons/email-table.svg";
 import { getOrders } from "@src/services/orders.service";
 import { ItemShopify } from "@src/models/orders.model";
 import { removeHyphen } from "@src/helpers/helpers";
+import { adapterDate, adapterDateTime } from "@src/helpers/adapter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import ManageOrder from "@src/component/buttons/ManageOrder";
 
 interface Params {
   company_name: string;
@@ -18,9 +22,15 @@ interface Params {
 
 interface Props {
   params: Params;
+  handleToggle: (params: boolean) => void;
+  setSelection: (params: ItemShopify | null) => void;
 }
 
-const OrdersTable: React.FC<Props> = ({ params }) => {
+const OrdersTable: React.FC<Props> = ({
+  params,
+  handleToggle,
+  setSelection,
+}) => {
   const history = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
@@ -45,7 +55,7 @@ const OrdersTable: React.FC<Props> = ({ params }) => {
       selector: (row) => row.created_at,
       cell: (row) => (
         <div className="d-flex flex-column align-items-start">
-          {row.created_at}
+          {adapterDateTime(row.created_at)}
         </div>
       ),
     },
@@ -77,6 +87,28 @@ const OrdersTable: React.FC<Props> = ({ params }) => {
         </div>
       ),
     },
+    {
+      name: "",
+
+      cell: (row) => (
+        <div className="d-flex w-100 justify-content-end pe-3">
+          <ManageOrder
+            handleConfirm={() => {
+              console.log("Confirmar");
+            }}
+            handleCancel={() => {
+              console.log("Cancelar");
+            }}
+            handleGuides={() => {
+              console.log("Crear guias");
+            }}
+            handlePrepared={() => {
+              console.log("Preparado");
+            }}
+          />
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -91,9 +123,16 @@ const OrdersTable: React.FC<Props> = ({ params }) => {
       setCountPerPage={setCountPerPage}
       page={page}
       setPage={setPage}
-      handleClick={(item: ItemShopify) => {}}
+      handleClick={(item: ItemShopify) => {
+        setSelection(item);
+        handleToggle(true);
+      }}
       handleDoubleClick={(item: ItemShopify) => {}}
       isExpandable={false}
+      isSelectable
+      handleSelect={(item: any) => {
+        console.log(item);
+      }}
     />
   );
 };

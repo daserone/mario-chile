@@ -36,7 +36,7 @@ import { dropdownManual } from "../helpers/data";
 import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
-import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocuments from "@src/component/buttons/ManageOrder";
 import AddDocumentPatient from "../component/modals/AddDocumentPatient";
 //Config
 const MySwal = withReactContent(Swal);

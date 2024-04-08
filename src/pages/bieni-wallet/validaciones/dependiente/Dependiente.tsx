@@ -36,7 +36,7 @@ import iconEmail from "@src/assets/icons/email-table.svg";
 //Style
 import "../Validaciones.scss";
 //Config
-import AddDocuments from "@src/component/buttons/AddDocuments";
+import AddDocuments from "@src/component/buttons/ManageOrder";
 import AddDocumentDependent from "../component/modals/AddDocumentDependent";
 
 const MySwal = withReactContent(Swal);

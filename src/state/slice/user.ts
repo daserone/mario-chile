@@ -6,9 +6,9 @@ import {
   getLocalStorage,
 } from "../../helpers/helpers";
 
-export const userKey = "user-backoffice";
-
 const TOKEN_KEY = process.env.NOWLI_TOKEN_KEY;
+
+const USER_KEY = process.env.NOWLI_USER_KEY;
 
 export const initial: User = {
   id: "",
@@ -22,7 +22,9 @@ export const initial: User = {
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: getLocalStorage(userKey) ? getLocalStorage(userKey) : initial,
+  initialState: getLocalStorage(USER_KEY!)
+    ? getLocalStorage(USER_KEY!)
+    : initial,
   reducers: {
     createUser: (state, action) => {
       console.log(action.payload.access_token, "PAYLOAD");
@@ -31,16 +33,16 @@ export const userSlice = createSlice({
         localStorage.setItem(TOKEN_KEY ?? "token", action.payload.access_token);
       }
 
-      persistLocalStorage<User>(userKey, action.payload.user);
+      persistLocalStorage<User>(USER_KEY!, action.payload.user);
       return action.payload.user;
     },
     updateUser: (state, action) => {
       const result = { ...state, ...action.payload };
-      persistLocalStorage<User>(userKey, result);
+      persistLocalStorage<User>(USER_KEY!, result);
       return result;
     },
     reset: () => {
-      clearLocalStorage(userKey);
+      clearLocalStorage(USER_KEY!);
       return initial;
     },
   },

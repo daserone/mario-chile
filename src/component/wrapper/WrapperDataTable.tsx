@@ -1,5 +1,7 @@
 import DataTable, { createTheme } from "react-data-table-component";
 import Alert from "react-bootstrap/Alert";
+import { useSkin } from "@src/@core/hooks/useSkin";
+import React from "react";
 
 interface Props {
   title?: string;
@@ -12,13 +14,12 @@ interface Props {
   setCountPerPage: (params: number) => void;
   page: number;
   setPage: (params: number) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleClick: (params: any) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleDoubleClick: (params: any) => void;
   isExpandable: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   childrenExpandable?: any;
+  isSelectable?: boolean;
+  handleSelect?: (params: any) => void;
 }
 
 const paginationOptions = {
@@ -48,6 +49,8 @@ export const WrapperDataTable: React.FC<Props> = ({
   handleDoubleClick,
   isExpandable,
   childrenExpandable,
+  isSelectable,
+  handleSelect,
 }) => {
   //Handle
   const handlePage = (page: number) => {
@@ -57,7 +60,12 @@ export const WrapperDataTable: React.FC<Props> = ({
   const handleCountPerPage = (countPerPage: number) => {
     setCountPerPage(countPerPage);
   };
-  //Style
+
+  const { skin, setSkin } = useSkin();
+
+  console.log(skin);
+
+  //Style light
   createTheme(
     "solarized",
     {
@@ -84,10 +92,41 @@ export const WrapperDataTable: React.FC<Props> = ({
     },
     "dark"
   );
+
+  //Style dark
+
+  createTheme(
+    "dark-solarized",
+    {
+      text: {
+        primary: "#f8f8f8",
+        secondary: "#f8f8f8",
+      },
+      background: {
+        default: "#283046",
+        hover: "red",
+      },
+      divider: {
+        default: "#424242",
+      },
+      action: {
+        button: "rgba(0,0,0,.54)",
+        hover: "rgba(198, 198, 198, 0.08)",
+        disabled: "rgba(0,0,0,.12)",
+      },
+      highlightOnHover: {
+        default: "#37425e",
+        text: "rgba(248, 247, 247, 0.87)",
+      },
+    },
+    "dark"
+  );
+
   const customStyles = {
     headCells: {
       style: {
-        color: "#4B465C",
+        background: skin === "dark" ? "#37425e" : "#f8f8f8",
+        color: skin === "dark" ? "#f8f8f8" : "#4B465C",
         fontWeight: "600",
       },
     },
@@ -98,6 +137,8 @@ export const WrapperDataTable: React.FC<Props> = ({
       },
     },
   };
+
+  //  customCheckbox for datatable
 
   return (
     <>
@@ -111,7 +152,7 @@ export const WrapperDataTable: React.FC<Props> = ({
           fixedHeader
           fixedHeaderScrollHeight="600px"
           persistTableHead
-          theme="solarized"
+          theme={skin === "dark" ? "dark-solarized" : "solarized"}
           customStyles={customStyles}
           columns={columns}
           progressPending={isLoading}
@@ -141,6 +182,8 @@ export const WrapperDataTable: React.FC<Props> = ({
           expandableRowsComponent={
             childrenExpandable || ExpandedTemplateDefault
           }
+          selectableRows={isSelectable}
+          onSelectedRowsChange={handleSelect}
         />
       )}
     </>

@@ -10,9 +10,11 @@ import ExportButton from "@src/component/buttons/ExportButton";
 import { useDebounce } from "@src/hooks";
 //Helper
 import { evaluateSuggestionFilter } from "@src/helpers/helpers";
-import { adapterDateTime } from "@src/helpers/adapter";
+import { adapterDateTime, formatDate } from "@src/helpers/adapter";
 //Style
 import "flatpickr/dist/themes/material_green.css";
+import OrderDetailModal from "./components/OrderDetailsModal";
+import { ItemShopify } from "@src/models/orders.model";
 //Config
 const optionsFlatpickr = {
   altInput: true,
@@ -33,6 +35,8 @@ const initial = {
 const Pacientes = () => {
   //Hook
   const [params, setParams] = useState<Params>(initial);
+  const [selection, setSelection] = useState<ItemShopify | null>(null);
+  const [state, setState] = useState<boolean>(false);
 
   const query = useDebounce(params, 2000);
   //Handle
@@ -54,8 +58,8 @@ const Pacientes = () => {
   const handleDateTime = (date: any) => {
     const [from, to] = date;
     //Formato
-    const f = adapterDateTime(from, "yyyy-MM-dd");
-    const t = adapterDateTime(to, "yyyy-MM-dd");
+    const f = formatDate(from, "yyyy-MM-dd");
+    const t = formatDate(to, "yyyy-MM-dd");
 
     setParams((prev: Params) => ({
       ...prev,
@@ -81,7 +85,7 @@ const Pacientes = () => {
               ) : null}
             </Card.Header>
             <div className="card-header-inputs">
-              <div className="w-100 row mt-2 border-bottom ps-1 pe-1 pb-2">
+              <div className="w-100 row mt-2  mb-2 ps-1 pe-1">
                 {/* search col  */}
                 <div className="col-6 col-lg-4">
                   <Flatpickr
@@ -112,15 +116,25 @@ const Pacientes = () => {
                   </div>
                 </div>
                 {/* add button col  */}
-                <div className="col-12 col-lg-2 mt-2 mt-lg-0 d-flex justify-content-end ">
+                <div className="col-12 col-lg-4 mt-2 mt-lg-0 d-flex justify-content-end ">
                   <ExportButton />
                 </div>
               </div>
             </div>
-            <OrdersTable params={params} />
+            <OrdersTable
+              params={params}
+              setSelection={setSelection}
+              handleToggle={setState}
+            />
           </Card>
         </Col>
       </Row>
+      <OrderDetailModal
+        state={state}
+        handleToggle={setState}
+        selection={selection}
+        setSelection={setSelection}
+      />
     </>
   );
 };
