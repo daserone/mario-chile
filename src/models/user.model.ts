@@ -26,10 +26,22 @@ export interface Company {
   description: string;
   apiKey?: string;
   isActive: boolean;
-  scope?: Scope;
 }
 
-export interface Scope {}
+export interface Role {
+  id: string;
+  name: string;
+  description: string;
+  apiKeys: string;
+  isActive: boolean;
+}
+
+export interface CompanyState {
+  companies?: Company[];
+  company?: Company;
+  error?: string;
+  loading?: boolean;
+}
 
 export interface LoginRequest {
   username: string;

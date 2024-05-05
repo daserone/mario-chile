@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Row, Col, Card, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFilter } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +15,7 @@ import { adapterDateTime, formatDate } from "@src/helpers/adapter";
 import "flatpickr/dist/themes/material_green.css";
 import OrderDetailModal from "./components/OrderDetailsModal";
 import { ItemShopify } from "@src/models/orders.model";
+import useCompanies from "@src/hooks/useCompanies";
 //Config
 const optionsFlatpickr = {
   altInput: true,
@@ -29,7 +30,7 @@ interface Params {
 }
 
 const initial = {
-  company_name: "ChileTopia",
+  company_name: "",
   filter: "",
 };
 const Pacientes = () => {
@@ -68,6 +69,16 @@ const Pacientes = () => {
       to: t,
     }));
   };
+  const { company } = useCompanies();
+
+  useEffect(() => {
+    if (company.name !== "") {
+      setParams((prev: Params) => ({
+        ...prev,
+        company_name: company.name,
+      }));
+    }
+  }, [company]);
   return (
     <>
       <Row>

@@ -2,7 +2,7 @@ import { service } from "@src/config/service.config";
 import { LoginRequest } from "@src/models";
 
 const endpoint = {
-  getOrders: "get_shopify_orders",
+  getOrders: "api/shopify/get_shopify_orders",
 };
 
 export const getOrders = async ({ ...parameters }) => {

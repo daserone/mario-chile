@@ -54,7 +54,7 @@ const ManageOrder = ({
         </MenuItem>
         <MenuItem onClick={handleGuides}>
           <FontAwesomeIcon icon={faTags} className="text-primary me-1" />
-          Crear guias
+          Crear guías
         </MenuItem>
         <MenuItem onClick={handlePrepared}>
           <FontAwesomeIcon icon={faCheckDouble} className="text-info me-1" />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { faSearch, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Row, Col, Card, Button } from "react-bootstrap";
@@ -15,6 +15,7 @@ import UsuarioFormulario from "./components/UsuarioFormulario";
 import UsuariosTable from "./components/UsuarioTable";
 //Style
 import "./Usuarios.scss";
+import useCompanies from "@src/hooks/useCompanies";
 
 interface Params {
   company_name: string;
@@ -22,7 +23,7 @@ interface Params {
 }
 
 const initial = {
-  company_name: "ChileTopia",
+  company_name: "",
   filter: "",
 };
 
@@ -50,6 +51,16 @@ const Usuarios = () => {
   };
   //Helpers
   const isFiltros = evaluateSuggestionFilter(query);
+  const { company } = useCompanies();
+
+  useEffect(() => {
+    if (company.name !== "") {
+      setParams((prev: Params) => ({
+        ...prev,
+        company_name: company.name,
+      }));
+    }
+  }, [company]);
 
   return (
     <>

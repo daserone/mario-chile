@@ -4,7 +4,7 @@ import { LoginRequest } from "@src/models";
 const endpoint = {
   login: "token",
   user: "users/me",
-  createUser: "create_user",
+  createUser: "create_user_admin",
   getUsers: "get_users?company_name=",
 };
 
@@ -54,6 +54,17 @@ export const createUser = (form: any) =>
   service.post(endpoint.createUser, form, {
     responseType: "json",
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
+
+export const getRoles = async () => {
+  const response = await service.get("get_roles", {
+    responseType: "json",
+  });
+  if (response.status >= 200 && response.status < 300) {
+    return response?.data ?? [];
+  } else {
+    throw new Error(`Error al obtener roles: ${response.statusText}`);
+  }
+};

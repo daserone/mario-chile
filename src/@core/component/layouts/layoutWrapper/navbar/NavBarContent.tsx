@@ -19,6 +19,9 @@ import { useSelector } from "react-redux";
 import { AppStore } from "@src/state/store";
 import useAuth from "@src/@core/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import useCompanies from "@src/hooks/useCompanies";
+import { NavDropdown } from "react-bootstrap";
+import { Company } from "@src/models";
 
 interface Props {
   setMenuVisibility: (params: boolean) => void;
@@ -61,6 +64,15 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
     logout();
     history("/login", { replace: true });
   };
+
+  const { companies, getCompanies, setCompany, company } = useCompanies();
+
+  React.useEffect(() => {
+    getCompanies();
+  }, []);
+
+  console.log(companies);
+
   return (
     <>
       {" "}
@@ -78,11 +90,31 @@ const NavBarContent = ({ setMenuVisibility, setSkin, skin }: Props) => {
             >
               <Menu className="ficon" />
             </Nav.Link>
-            <div className="clinic">
-              <img src={logoClinic} alt="" width={50} />
-              <span className="font-medium-2">NOWLI</span>
-              <FontAwesomeIcon icon={faChevronDown} size="lg" />
-            </div>
+            <NavDropdown
+              id="nav-dropdown-dark-example"
+              title={
+                <div style={{ display: "inline-block" }}>
+                  {" "}
+                  {company?.name == ""
+                    ? "Selecciona una empresa"
+                    : company?.description}
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    style={{ marginLeft: "5px" }}
+                  />
+                </div>
+              }
+              menuVariant="light"
+            >
+              {companies?.map((item: Company) => (
+                <NavDropdown.Item
+                  key={item.id}
+                  onClick={() => setCompany(item)}
+                >
+                  {item.description ?? ""}
+                </NavDropdown.Item>
+              ))}
+            </NavDropdown>
           </Nav>
           <BottonDarkMode skin={skin} setSkin={setSkin} />
           <div className="user-items">

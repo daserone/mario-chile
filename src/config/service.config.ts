@@ -19,6 +19,7 @@ const service = axio.create({
 // interceptor;
 service.interceptors.request.use(
   (config) => {
+    config.headers["ngrok-skip-browser-warning"] = "true";
     if (config.url === endpoint.login) {
       return config;
     }
@@ -43,6 +44,7 @@ service.interceptors.response.use(
     return response;
   },
   (error) => {
+    console.log(error.response);
     if (error.response?.status === 401) {
       localStorage.removeItem(TOKEN_KEY!);
       localStorage.removeItem(USER_KEY!);
