@@ -101,8 +101,7 @@ const Usuarios = () => {
                 </div>
 
                 {/* export and add button col  */}
-                <div className="col-12 col-lg-5 d-flex gap-2 justify-content-between mt-2 mt-lg-0">
-                  <ExportButton />
+                <div className="col-12 col-lg-5 d-flex gap-2 justify-content-end mt-2 mt-lg-0">
                   <AddButton title="Agregar usuario" handleClick={toggle} />
                 </div>
               </div>

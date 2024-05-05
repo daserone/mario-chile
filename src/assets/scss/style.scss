@@ -1,3 +1,11 @@
+$white: #fff;
+$border-color: #e5e9f2;
+$countdown-color: #ff5b5b;
+$primary: #2c3363;
+$primary-color1: #148c9a;
+$text-color: #3e4954;
+$text-color2: #6e6b7b;
+
 .rdt_TableCol_Sortable > .form-control {
   font-size: 1rem !important;
   font-weight: 900 !important;
@@ -235,5 +243,173 @@
   background: var(--color-secundario-opacidad-8, rgba(168, 170, 174, 0.08));
   .icon {
     cursor: pointer;
+  }
+}
+
+.auction-card1 {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  &:hover {
+    .auction-img {
+      img {
+        transform: scale(1.2);
+      }
+    }
+  }
+  .auction-img {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      border-radius: 5px 5px 0px 0px;
+      transition: all 0.65s ease;
+    }
+    .auction-timer {
+      border-radius: 30px;
+      padding: 12px 20px;
+      text-align: center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 20px;
+      background: $white;
+      min-width: 230px;
+
+      .countdown {
+        h4 {
+          font-size: 24px;
+          font-weight: 600;
+          color: $countdown-color;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  .auction-content {
+    padding: 30px 25px;
+    h4 {
+      font-size: 23px;
+      font-weight: 600;
+      color: $primary;
+      line-height: 1.4;
+      margin-top: -5px;
+    }
+    p {
+      font-size: 16px;
+      font-weight: 500;
+      color: $text-color2;
+      span {
+        font-size: 20px;
+        font-weight: 700;
+        color: $text-color;
+      }
+    }
+    .price {
+      font-size: 16px;
+      font-weight: 700;
+      color: $primary-color1;
+    }
+  }
+
+  .auction-card-bttm {
+    margin-top: 25px;
+  }
+
+  .author-area {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    cursor: pointer;
+
+    .author-emo {
+      border-radius: 50%;
+      background: $white;
+      padding: 7px;
+      border: 1px solid transparent;
+      z-index: 1;
+
+      img {
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+      }
+    }
+
+    .author-name {
+      background: $primary;
+      padding: 6px 20px 6px 44px;
+      border-radius: 33px;
+      margin-left: -27px;
+      transform: scaleX(0.1);
+      transform-origin: left;
+      transition: 0.6s ease;
+
+      span {
+        font-size: 14px;
+        font-weight: 600;
+        color: $white;
+      }
+    }
+
+    &:hover {
+      .author-emo {
+        border: 1px solid $primary;
+      }
+
+      .author-name {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  .share-area {
+    .share-btn {
+      i {
+        height: 34px;
+        width: 34px;
+        line-height: 34px;
+        border-radius: 50%;
+        background-color: $border-color;
+        text-align: center;
+        transition: 0.5s ease;
+        z-index: 9;
+
+        &:hover {
+          background: $primary;
+          color: $white;
+        }
+      }
+    }
+
+    .social-icons {
+      padding: 5px;
+      margin-right: 0px;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: 0.5s ease;
+      z-index: 1;
+      margin-bottom: 0px;
+    }
+
+    &:hover {
+      .social-icons {
+        transform: scaleX(1);
+
+        li {
+          margin-right: 8px;
+
+          i {
+            font-size: 1rem;
+            transition: all 0.42s ease;
+            &:hover {
+              color: $primary;
+            }
+          }
+        }
+      }
+    }
   }
 }

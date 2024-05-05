@@ -120,7 +120,6 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               isFontAwesome
               faIcon={faUsers}
             />
-            {/* biniwallet  */}
             <span
               className={` menu-title-divider ${
                 menuHover || !menuCollapsed ? "margin-small-2" : "margin-small"
@@ -131,13 +130,31 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
             >
               Mis Pedidos
             </span>
-            {/* pacientes  */}
             <MenuItemSidebar
               icon={layoutGrid}
               menuCollapsed={menuCollapsed}
               menuHover={menuHover}
               text="Mis Pedidos"
-              url="bieni-wallet/pacientes"
+              url="orders"
+              isFontAwesome
+              faIcon={faList}
+            />
+            <span
+              className={` menu-title-divider ${
+                menuHover || !menuCollapsed ? "margin-small-2" : "margin-small"
+              }
+                ${skin === "dark" ? "text-light" : "text-muted"}
+              
+              `}
+            >
+              Mis Productos
+            </span>
+            <MenuItemSidebar
+              icon={layoutGrid}
+              menuCollapsed={menuCollapsed}
+              menuHover={menuHover}
+              text="Mis Productos"
+              url="products"
               isFontAwesome
               faIcon={faList}
             />

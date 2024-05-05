@@ -61,6 +61,11 @@ const UsuarioFormulario: React.FC<Props> = ({
     mutationFn: createUser,
   });
   const onSubmit = (value: FormValues) => {
+    if (value.password !== value.password_confirmation) {
+      toast.error("Las contraseñas no coinciden.");
+      return;
+    }
+
     const companyRoles = createCompanyRolesDictionary(
       value.company_name.map((e: any) => e.value),
       value.role.map((e: any) => e.value)
@@ -75,18 +80,12 @@ const UsuarioFormulario: React.FC<Props> = ({
 
     console.log(body);
 
-    usuarioMutation.mutate(value, {
+    usuarioMutation.mutate(body, {
       onSuccess: (rsp) => {
-        const { data, status } = rsp;
-        if (status >= 200 && status < 300) {
-          const { responseCode, message }: ResponseNotificacion = data;
-          if (responseCode === 1) {
-            toast.success(message);
-            handleCloseAndReset();
-          } else if (responseCode === 2) {
-            toast.error(message);
-          }
-        }
+        console.log(rsp);
+
+        toast.success("Usuario creado correctamente.");
+        handleCloseAndReset();
       },
       onError: () => {
         toast.error("Error en el servidor.");

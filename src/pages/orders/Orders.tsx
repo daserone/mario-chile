@@ -33,7 +33,7 @@ const initial = {
   company_name: "",
   filter: "",
 };
-const Pacientes = () => {
+const Orders = () => {
   //Hook
   const [params, setParams] = useState<Params>(initial);
   const [selection, setSelection] = useState<ItemShopify | null>(null);
@@ -150,4 +150,4 @@ const Pacientes = () => {
   );
 };
 
-export default Pacientes;
+export default Orders;
