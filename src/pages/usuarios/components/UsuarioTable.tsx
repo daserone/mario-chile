@@ -14,6 +14,7 @@ import { getUser, getUsuarios } from "@services/usuario.service";
 interface Params {
   state: string;
   search: string;
+  company_name: string;
 }
 
 interface Props {
@@ -34,6 +35,7 @@ const UsuariosTable: React.FC<Props> = ({
     queryKey: ["usuarios", page, params],
     queryFn: () => getUsuarios({ page, items: countPerPage, ...params }),
     placeholderData: keepPreviousData,
+    enabled: params.company_name !== "",
   });
 
   //Column

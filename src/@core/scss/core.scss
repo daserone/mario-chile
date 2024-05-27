@@ -15,3 +15,32 @@
   height: 1em !important;
   width: 1em !important;
 }
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 50px !important;
+}
+//hover
+.image-gallery-left-nav .image-gallery-svg:hover,
+.image-gallery-right-nav .image-gallery-svg:hover {
+  color: $primary !important;
+}
+.image-gallery-fullscreen-button .image-gallery-svg {
+  margin-right: 10px !important;
+}
+.image-gallery-fullscreen-button .image-gallery-svg:hover {
+  color: $primary !important;
+}
+
+.image-gallery-bullets .image-gallery-bullet:hover {
+  background-color: $primary !important;
+}
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:focus,
+.image-gallery-thumbnail:hover {
+  border: 2px solid $primary !important;
+  border-radius: 3px;
+}
+.image-gallery-image {
+  border-radius: 0.25rem;
+}

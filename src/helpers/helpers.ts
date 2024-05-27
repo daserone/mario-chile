@@ -47,3 +47,11 @@ export const removeHyphen = (value: string) => {
   }
   return value;
 };
+
+export const formatPrice = (price: number) => {
+  //chilean peso
+  return new Intl.NumberFormat("es-CL", {
+    style: "currency",
+    currency: "CLP",
+  }).format(price);
+};

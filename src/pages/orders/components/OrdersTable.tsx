@@ -39,6 +39,7 @@ const OrdersTable: React.FC<Props> = ({
     queryKey: ["orders", page, params],
     queryFn: () => getOrders({ page, items: countPerPage, ...params }),
     placeholderData: keepPreviousData,
+    enabled: params.company_name !== "",
   });
   //Column
 

@@ -1,8 +1,10 @@
+import { formatPrice } from "@src/helpers/helpers";
 import useCompanies from "@src/hooks/useCompanies";
 import { getProducts } from "@src/services/products.service";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 interface Params {
   company_name: string;
@@ -23,12 +25,14 @@ const Products = () => {
     queryKey: ["products", page, params],
     queryFn: () => getProducts({ page, items: countPerPage, ...params }),
     placeholderData: keepPreviousData,
+    enabled: params.company_name !== "",
   });
 
   const { company } = useCompanies();
 
   useEffect(() => {
     if (company.name !== "") {
+      setPage(1);
       setParams((prev: Params) => ({
         ...prev,
         company_name: company.name,
@@ -79,12 +83,15 @@ const Products = () => {
 
                       <p>
                         {"Precio"} :{" "}
-                        <span>
-                          $<span>{product_variant[0]?.price}</span>
-                        </span>
+                        <span>{formatPrice(product_variant[0]?.price)}</span>
                       </p>
                       <div className="auction-card-bttm">
-                        <a className="btn-sm btn btn-primary">ver producto</a>
+                        <Link
+                          to={`/products/${title}`}
+                          className="btn btn-primary"
+                        >
+                          Ver producto
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -92,13 +99,16 @@ const Products = () => {
               );
             })}
           </div>
-
+        </Col>
+      </Row>
+      <Row>
+        <Col>
           {/* pagination  */}
           {/* data total pages  */}
           {data?.total_pages > 1 && (
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center flex-wrap">
               <nav aria-label="Page navigation example">
-                <ul className="pagination">
+                <ul className="pagination d-flex flex-wrap">
                   <li className="page-item">
                     <a
                       className="page-link"

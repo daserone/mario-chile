@@ -1,5 +1,5 @@
-@import '~swiper/swiper-bundle';
-@import '../../../base/plugins/extensions/ext-component-swiper.scss';
+@import "~swiper/swiper-bundle";
+@import "../../../base/plugins/extensions/ext-component-swiper.scss";
 
 /* cube effect */
 .swiper-cube {
@@ -29,13 +29,13 @@
   }
 }
 
-html[dir='rtl'] {
+html[dir="rtl"] {
   .swiper {
     .swiper-button-next,
     .swiper-button-prev {
       transform: rotate(180deg);
       &:after {
-        content: '';
+        content: "";
       }
     }
     .swiper-button-next {
