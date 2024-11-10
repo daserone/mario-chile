@@ -6,14 +6,12 @@ import { useNavigate } from "react-router-dom";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 //Assets
-import iconEmail from "@src/assets/icons/email-table.svg";
 import { getOrders } from "@src/services/orders.service";
 import { ItemShopify } from "@src/models/orders.model";
 import { removeHyphen } from "@src/helpers/helpers";
-import { adapterDate, adapterDateTime } from "@src/helpers/adapter";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { adapterDateTime } from "@src/helpers/adapter";
 import ManageOrder from "@src/component/buttons/ManageOrder";
+import { Button } from "react-bootstrap";
 
 interface Params {
   company_name: string;
@@ -24,12 +22,14 @@ interface Props {
   params: Params;
   handleToggle: (params: boolean) => void;
   setSelection: (params: ItemShopify | null) => void;
+  openModalAssignDistrict: (order: ItemShopify) => void;
 }
 
 const OrdersTable: React.FC<Props> = ({
   params,
   handleToggle,
   setSelection,
+  openModalAssignDistrict,
 }) => {
   const history = useNavigate();
   const [page, setPage] = useState<number>(1);
@@ -57,6 +57,21 @@ const OrdersTable: React.FC<Props> = ({
       cell: (row) => (
         <div className="d-flex flex-column align-items-start">
           {adapterDateTime(row.created_at)}
+        </div>
+      ),
+    },
+    {
+      name: "DISTRITO",
+      selector: (row) => row.district?.name ?? "",
+      cell: (row) => (
+        <div className="d-flex flex-column align-items-start">
+          {row.district ? (
+            row.district.name
+          ) : (
+            <Button size="sm" onClick={() => openModalAssignDistrict(row)}>
+              Asignar
+            </Button>
+          )}
         </div>
       ),
     },
@@ -111,6 +126,8 @@ const OrdersTable: React.FC<Props> = ({
       ),
     },
   ];
+
+  console.log(data, "DATA");
 
   return (
     <WrapperDataTable

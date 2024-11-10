@@ -4,6 +4,12 @@ export interface OrdersResponse {
   items?: ItemShopify[];
 }
 
+interface ItemShopifyDistrict {
+  id: string;
+  name: string;
+  code: string;
+}
+
 export interface ItemShopify {
   id?: string;
   order_id?: number;
@@ -36,6 +42,9 @@ export interface ItemShopify {
   company?: Company;
   shopify_item: ShopifyItem[];
   shopify_fulfillment?: any[];
+  district?: ItemShopifyDistrict;
+  province?: ItemShopifyDistrict;
+  city?: ItemShopifyDistrict;
 }
 
 export interface Company {

@@ -1,5 +1,10 @@
 import useCompanies from "@src/hooks/useCompanies";
-import { getProducts, getSingleProduct } from "@src/services/products.service";
+import {
+  assignDimensions,
+  DimensionsRequest,
+  getProducts,
+  getSingleProduct,
+} from "@src/services/products.service";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
@@ -8,6 +13,8 @@ import { useParams } from "react-router-dom";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { formatPrice } from "@src/helpers/helpers";
+import { Product } from "@src/models/products.model";
+import ModalDimensions from "./components/ModalDimensions";
 
 interface Params {
   company_name: string;
@@ -18,13 +25,13 @@ const initial = {
   company_name: "",
   filter: "",
 };
-
 const ProductDetail = () => {
   const { name } = useParams<{ name: string }>();
   const [page, setPage] = useState<number>(1);
   const [countPerPage, setCountPerPage] = useState<number>(10);
   const [params, setParams] = useState<Params>(initial);
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [modalDimensions, setModalDimensions] = useState<boolean>(false);
 
   const { company } = useCompanies();
 
@@ -58,19 +65,6 @@ const ProductDetail = () => {
   const [images, setImages] = useState<any>([]);
 
   useEffect(() => {
-    // [{
-    //     original: "https://picsum.photos/id/1018/1000/600/",
-    //     thumbnail: "https://picsum.photos/id/1018/250/150/",
-    //   },
-    //   {
-    //     original: "https://picsum.photos/id/1015/1000/600/",
-    //     thumbnail: "https://picsum.photos/id/1015/250/150/",
-    //   },
-    //   {
-    //     original: "https://picsum.photos/id/1019/1000/600/",
-    //     thumbnail: "https://picsum.photos/id/1019/250/150/",
-    //   },]
-
     let images: any = [];
     product?.product_image?.map((img: any) => {
       images.push({
@@ -79,8 +73,28 @@ const ProductDetail = () => {
       });
     });
     setImages(images);
-    console.log(product);
+    console.log(product, "PRODUCT");
   }, [product]);
+
+  const assignDimensionsToVariant = (form: any) => {
+    let body: DimensionsRequest = {
+      variant_id: product?.product_variant[0].id!,
+      depth: form.depth,
+      height: form.height,
+      width: form.width,
+      weight: form.weight,
+    };
+
+    assignDimensions(body)
+      .then((response) => {
+        console.log(response);
+        setModalDimensions(false);
+        fetchProduct();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -135,6 +149,38 @@ const ProductDetail = () => {
                             <p>{variant.barcode}</p>
                           </div>
                         </div>
+                        {/* dimensions  */}
+                        <div className="col-4">
+                          <div className="d-flex flex-column">
+                            <h4>Dimensiones:</h4>
+
+                            {variant.height === null ||
+                            variant.width === null ||
+                            variant.depth === null ? (
+                              <div className="">
+                                <p>Dimensiones no disponibles</p>
+                                {/* assign button  */}
+                                <div className="d-flex flex-row">
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={() => setModalDimensions(true)}
+                                  >
+                                    Asignar
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="">
+                                <p>
+                                  Peso: {variant.weight} {variant.weight_unit}
+                                </p>
+                                <p>Alto: {variant.height} cm</p>
+                                <p>Ancho: {variant.width} cm</p>
+                                <p>Largo: {variant.depth} cm</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     );
                   })}
@@ -144,6 +190,13 @@ const ProductDetail = () => {
           </Card>
         </Col>
       </Row>
+      <ModalDimensions
+        isOpen={modalDimensions}
+        handleClose={() => setModalDimensions(false)}
+        saveDimensions={(form) => {
+          assignDimensionsToVariant(form);
+        }}
+      />
     </>
   );
 };

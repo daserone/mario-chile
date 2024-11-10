@@ -16,6 +16,9 @@ import "flatpickr/dist/themes/material_green.css";
 import OrderDetailModal from "./components/OrderDetailsModal";
 import { ItemShopify } from "@src/models/orders.model";
 import useCompanies from "@src/hooks/useCompanies";
+import ModalDistricts from "./components/ModalAssignDistrict";
+import { assignDistrict } from "@src/services/orders.service";
+import { useQueryClient } from "@tanstack/react-query";
 //Config
 const optionsFlatpickr = {
   altInput: true,
@@ -79,6 +82,25 @@ const Orders = () => {
       }));
     }
   }, [company]);
+
+  const [modalAssignDistrict, setModalAssignDistrict] =
+    useState<boolean>(false);
+
+  const [selectedOrder, setSelectedOrder] = useState<ItemShopify | null>(null);
+  const queryClient = useQueryClient();
+
+  const handleAssignDistrict = (districtId: string) => {
+    assignDistrict({
+      order_id: selectedOrder?.id ?? "",
+      district_id: districtId,
+    }).then((data) => {
+      console.log(data);
+      queryClient.invalidateQueries({
+        queryKey: ["orders", 1, params],
+      });
+    });
+  };
+
   return (
     <>
       <Row>
@@ -136,6 +158,10 @@ const Orders = () => {
               params={params}
               setSelection={setSelection}
               handleToggle={setState}
+              openModalAssignDistrict={(order) => {
+                setSelectedOrder(order);
+                setModalAssignDistrict(true);
+              }}
             />
           </Card>
         </Col>
@@ -145,6 +171,15 @@ const Orders = () => {
         handleToggle={setState}
         selection={selection}
         setSelection={setSelection}
+      />
+      <ModalDistricts
+        isOpen={modalAssignDistrict}
+        handleClose={() => setModalAssignDistrict(false)}
+        provinceId={selectedOrder?.province?.id ?? ""}
+        cityId={selectedOrder?.city?.id ?? ""}
+        saveDistrict={(districtId: string) => {
+          handleAssignDistrict(districtId);
+        }}
       />
     </>
   );
