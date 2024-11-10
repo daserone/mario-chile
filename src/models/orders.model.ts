@@ -45,6 +45,7 @@ export interface ItemShopify {
   district?: ItemShopifyDistrict;
   province?: ItemShopifyDistrict;
   city?: ItemShopifyDistrict;
+  nowly_confirmed?: boolean;
 }
 
 export interface Company {

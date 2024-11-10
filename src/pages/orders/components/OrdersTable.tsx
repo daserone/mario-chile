@@ -6,12 +6,20 @@ import { useNavigate } from "react-router-dom";
 //Component
 import { WrapperDataTable } from "@src/component/wrapper";
 //Assets
-import { getOrders } from "@src/services/orders.service";
+import {
+  cancelOrder,
+  confirmOrder,
+  createOrder,
+  getOrders,
+  reprintLabel,
+} from "@src/services/orders.service";
 import { ItemShopify } from "@src/models/orders.model";
 import { removeHyphen } from "@src/helpers/helpers";
 import { adapterDateTime } from "@src/helpers/adapter";
 import ManageOrder from "@src/component/buttons/ManageOrder";
 import { Button } from "react-bootstrap";
+import useSwal from "@src/hooks/useSwal";
+import toast from "react-hot-toast";
 
 interface Params {
   company_name: string;
@@ -42,6 +50,104 @@ const OrdersTable: React.FC<Props> = ({
     enabled: params.company_name !== "",
   });
   //Column
+
+  const { showConfirm, showCancelReason, showConfirmWithInput } = useSwal();
+
+  const handleCancelOrder = (order: ItemShopify) => {
+    showCancelReason(
+      "Cancelar",
+      "¿Estás seguro de cancelar la orden?",
+      "warning",
+      "Cancelar orden",
+      "No"
+    ).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Cancelar", result);
+        let body = {
+          order_id: order.order_id!,
+          reason: result.value,
+          company_name: params.company_name,
+        };
+
+        cancelOrder(body)
+          .then((response) => {
+            toast.success("Orden cancelada con éxito");
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error("Error al cancelar la orden");
+          });
+      }
+    });
+  };
+
+  const handleConfirmOrder = (order: ItemShopify) => {
+    showConfirm(
+      "Confirmar",
+      "¿Estás seguro de confirmar la orden?",
+      "warning"
+    ).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Confirmar", result);
+        confirmOrder({
+          order_id: order.order_id!,
+          company_name: params.company_name,
+        })
+          .then((response) => {
+            toast.success("Orden confirmada con éxito");
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error("Error al confirmar la orden");
+          });
+      }
+    });
+  };
+
+  const handleCreateGuides = (order: ItemShopify) => {
+    showConfirmWithInput(
+      "Crear guías",
+      "¿Estás seguro de crear guías?",
+      "warning",
+      "Crear guías",
+      "No",
+      "Comentario"
+    ).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Crear guías", result);
+        createOrder({
+          order_id: order.id!,
+          comment: result.value,
+          alternate_shipping: {},
+        })
+          .then((response) => {
+            console.log(response, "response");
+            var file = new Blob([response], { type: "application/pdf" });
+            //var file = data['response'];
+            var fileURL = URL.createObjectURL(file);
+            window.open(fileURL);
+
+            toast.success("Guías creadas con éxito");
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error("Error al crear guías");
+          });
+      }
+    });
+  };
+
+  const handlePrintLabel = (order: ItemShopify) => {
+    reprintLabel({
+      order_id: order.id!,
+    }).then((response) => {
+      console.log(response);
+      var file = new Blob([response], { type: "application/pdf" });
+      //var file = data['response'];
+      var fileURL = URL.createObjectURL(file);
+      window.open(fileURL);
+    });
+  };
 
   const columns: TableColumn<ItemShopify>[] = [
     {
@@ -90,7 +196,8 @@ const OrdersTable: React.FC<Props> = ({
       selector: (row) => row.financial_status ?? "",
       cell: (row) => (
         <div className="d-flex flex-column align-items-start">
-          {row.financial_status}
+          {row.nowly_confirmed && "Confirmado"}
+          {row.cancelled_at && "Cancelado"}
         </div>
       ),
     },
@@ -111,15 +218,32 @@ const OrdersTable: React.FC<Props> = ({
           <ManageOrder
             handleConfirm={() => {
               console.log("Confirmar");
+              if (row.cancelled_at !== null) {
+                toast.error("La orden ha sido cancelada");
+                return;
+              }
+              handleConfirmOrder(row);
             }}
             handleCancel={() => {
               console.log("Cancelar");
+              if (row.cancelled_at !== null) {
+                toast.error("La orden ya ha sido cancelada");
+                return;
+              }
+              handleCancelOrder(row);
             }}
             handleGuides={() => {
               console.log("Crear guias");
+
+              // if (row.cancelled_at !== null) {
+              //   toast.error("La orden ha sido cancelada");
+              //   return;
+              // }
+              handleCreateGuides(row);
             }}
             handlePrepared={() => {
               console.log("Preparado");
+              handlePrintLabel(row);
             }}
           />
         </div>

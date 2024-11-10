@@ -159,15 +159,6 @@ const ProductDetail = () => {
                             variant.depth === null ? (
                               <div className="">
                                 <p>Dimensiones no disponibles</p>
-                                {/* assign button  */}
-                                <div className="d-flex flex-row">
-                                  <button
-                                    className="btn btn-primary"
-                                    onClick={() => setModalDimensions(true)}
-                                  >
-                                    Asignar
-                                  </button>
-                                </div>
                               </div>
                             ) : (
                               <div className="">
@@ -179,6 +170,15 @@ const ProductDetail = () => {
                                 <p>Largo: {variant.depth} cm</p>
                               </div>
                             )}
+                          </div>
+                          {/* assign button  */}
+                          <div className="d-flex flex-row">
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => setModalDimensions(true)}
+                            >
+                              Asignar dimensiones
+                            </button>
                           </div>
                         </div>
                       </div>
