@@ -139,6 +139,15 @@ const WrapperSideBar = ({ menuCollapsed, skin, setMenuCollapsed }: Props) => {
               isFontAwesome
               faIcon={faList}
             />
+            {/* <MenuItemSidebar
+              icon={layoutGrid}
+              menuCollapsed={menuCollapsed}
+              menuHover={menuHover}
+              text="Tracking"
+              url="trackings"
+              isFontAwesome
+              faIcon={faList}
+            /> */}
             <span
               className={` menu-title-divider ${
                 menuHover || !menuCollapsed ? "margin-small-2" : "margin-small"

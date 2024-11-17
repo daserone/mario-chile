@@ -3,7 +3,9 @@ import {
   faCheck,
   faCheckDouble,
   faEllipsisVertical,
+  faPrint,
   faTags,
+  faTruck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, MenuItem, MenuHeader } from "@szhsin/react-menu";
@@ -16,6 +18,7 @@ interface ManageOrderProps {
   handleCancel?: () => void;
   handleGuides?: () => void;
   handlePrepared?: () => void;
+  handleStatus?: () => void;
 }
 
 const ManageOrder = ({
@@ -23,6 +26,7 @@ const ManageOrder = ({
   handleCancel,
   handleGuides,
   handlePrepared,
+  handleStatus,
 }: ManageOrderProps) => {
   return (
     <div>
@@ -57,9 +61,15 @@ const ManageOrder = ({
           Crear guías
         </MenuItem>
         <MenuItem onClick={handlePrepared}>
-          <FontAwesomeIcon icon={faCheckDouble} className="text-info me-1" />
-          Preparado
+          <FontAwesomeIcon icon={faPrint} className="text-info me-1" />
+          Imprimir
         </MenuItem>
+        {handleStatus && (
+          <MenuItem onClick={handleStatus}>
+            <FontAwesomeIcon icon={faTruck} className="text-warning me-1" />
+            Estatus
+          </MenuItem>
+        )}
       </Menu>
     </div>
   );

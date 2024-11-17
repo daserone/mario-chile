@@ -175,3 +175,21 @@ export const reprintLabel = async (data: ReprintLabelRequest) => {
     throw new Error(`Error al reimprimir etiqueta: ${response.statusText}`);
   }
 };
+
+//tracking status
+// /api/blu/get_order_status?order_id=1
+export const getOrderStatus = async (order_id: string) => {
+  const response = await service.get(
+    `api/blu/get_order_status?order_id=${order_id}`,
+    {
+      responseType: "json",
+    }
+  );
+  if (response.status >= 200 && response.status < 300) {
+    return response?.data ?? {};
+  } else {
+    throw new Error(
+      `Error al obtener estado de pedido: ${response.statusText}`
+    );
+  }
+};

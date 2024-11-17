@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFilter } from "@fortawesome/free-solid-svg-icons";
 import Flatpickr from "react-flatpickr";
 //Component
-import OrdersTable from "./components/OrdersTable";
+import TrackingTable from "./components/TrackingTable";
 import ExportButton from "@src/component/buttons/ExportButton";
 //Hook
 import { useDebounce } from "@src/hooks";
@@ -13,13 +13,10 @@ import { evaluateSuggestionFilter } from "@src/helpers/helpers";
 import { adapterDateTime, formatDate } from "@src/helpers/adapter";
 //Style
 import "flatpickr/dist/themes/material_green.css";
-import OrderDetailModal from "./components/OrderDetailsModal";
 import { ItemShopify } from "@src/models/orders.model";
 import useCompanies from "@src/hooks/useCompanies";
-import ModalDistricts from "./components/ModalAssignDistrict";
 import { assignDistrict } from "@src/services/orders.service";
 import { useQueryClient } from "@tanstack/react-query";
-import TrackingStatusModal from "./components/TrackingStatus";
 //Config
 const optionsFlatpickr = {
   altInput: true,
@@ -37,13 +34,11 @@ const initial = {
   company_name: "",
   filter: "",
 };
-const Orders = () => {
+const Trackings = () => {
   //Hook
   const [params, setParams] = useState<Params>(initial);
   const [selection, setSelection] = useState<ItemShopify | null>(null);
   const [state, setState] = useState<boolean>(false);
-  const [modalTrackingStatus, setModalTrackingStatus] =
-    useState<boolean>(false);
 
   const query = useDebounce(params, 2000);
   //Handle
@@ -157,7 +152,7 @@ const Orders = () => {
                 </div>
               </div>
             </div>
-            <OrdersTable
+            <TrackingTable
               params={params}
               setSelection={setSelection}
               handleToggle={setState}
@@ -165,38 +160,12 @@ const Orders = () => {
                 setSelectedOrder(order);
                 setModalAssignDistrict(true);
               }}
-              openModalTrackingStatus={(order) => {
-                setSelectedOrder(order);
-                setModalTrackingStatus(true);
-              }}
             />
           </Card>
         </Col>
       </Row>
-      <OrderDetailModal
-        state={state}
-        handleToggle={setState}
-        selection={selection}
-        setSelection={setSelection}
-      />
-      <ModalDistricts
-        isOpen={modalAssignDistrict}
-        handleClose={() => setModalAssignDistrict(false)}
-        provinceId={selectedOrder?.province?.id ?? ""}
-        cityId={selectedOrder?.city?.id ?? ""}
-        saveDistrict={(districtId: string) => {
-          handleAssignDistrict(districtId);
-        }}
-      />
-      {selectedOrder && (
-        <TrackingStatusModal
-          selectedOrder={selectedOrder}
-          isOpen={modalTrackingStatus}
-          onClose={() => setModalTrackingStatus(false)}
-        />
-      )}
     </>
   );
 };
 
-export default Orders;
+export default Trackings;

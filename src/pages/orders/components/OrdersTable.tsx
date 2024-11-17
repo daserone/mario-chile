@@ -20,6 +20,8 @@ import ManageOrder from "@src/component/buttons/ManageOrder";
 import { Button } from "react-bootstrap";
 import useSwal from "@src/hooks/useSwal";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTruckArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 interface Params {
   company_name: string;
@@ -31,6 +33,7 @@ interface Props {
   handleToggle: (params: boolean) => void;
   setSelection: (params: ItemShopify | null) => void;
   openModalAssignDistrict: (order: ItemShopify) => void;
+  openModalTrackingStatus: (order: ItemShopify) => void;
 }
 
 const OrdersTable: React.FC<Props> = ({
@@ -38,6 +41,7 @@ const OrdersTable: React.FC<Props> = ({
   handleToggle,
   setSelection,
   openModalAssignDistrict,
+  openModalTrackingStatus,
 }) => {
   const history = useNavigate();
   const [page, setPage] = useState<number>(1);
@@ -198,6 +202,7 @@ const OrdersTable: React.FC<Props> = ({
         <div className="d-flex flex-column align-items-start">
           {row.nowly_confirmed && "Confirmado"}
           {row.cancelled_at && "Cancelado"}
+          {row.tags}
         </div>
       ),
     },
@@ -214,7 +219,13 @@ const OrdersTable: React.FC<Props> = ({
       name: "",
 
       cell: (row) => (
-        <div className="d-flex w-100 justify-content-end pe-3">
+        <div className="d-flex w-100 justify-content-end pe-3 align-items-center">
+          {row.blu_tracking_number && (
+            <FontAwesomeIcon
+              icon={faTruckArrowRight}
+              className="text-warning"
+            />
+          )}
           <ManageOrder
             handleConfirm={() => {
               console.log("Confirmar");
@@ -245,6 +256,14 @@ const OrdersTable: React.FC<Props> = ({
               console.log("Preparado");
               handlePrintLabel(row);
             }}
+            handleStatus={
+              row.blu_tracking_number
+                ? () => {
+                    console.log("Estatus");
+                    openModalTrackingStatus(row);
+                  }
+                : undefined
+            }
           />
         </div>
       ),
