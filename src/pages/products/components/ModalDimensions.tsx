@@ -78,20 +78,6 @@ function ModalDimensions({
                     </Form.Text>
                   )}
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="length">
-                  <Form.Label>Largo (cm)</Form.Label>
-
-                  <Form.Control
-                    type="number"
-                    placeholder="Largo"
-                    {...register("length", { required: true })}
-                  />
-                  {errors.length && (
-                    <Form.Text className="text-danger">
-                      Este campo es requerido
-                    </Form.Text>
-                  )}
-                </Form.Group>
                 <Form.Group className="mb-3" controlId="depth">
                   <Form.Label>Profundidad (cm)</Form.Label>
                   <Form.Control
@@ -109,7 +95,7 @@ function ModalDimensions({
                 <Form.Group className="mb-3" controlId="weight">
                   <Form.Label>Peso (kg)</Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     placeholder="Peso"
                     {...register("weight", { required: true })}
                   />

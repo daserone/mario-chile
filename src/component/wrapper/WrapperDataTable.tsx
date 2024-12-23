@@ -20,6 +20,8 @@ interface Props {
   childrenExpandable?: any;
   isSelectable?: boolean;
   handleSelect?: (params: any) => void;
+  clearSelectedRows?: boolean;
+  contextActions?: React.ReactNode | React.ReactNode[];
 }
 
 const paginationOptions = {
@@ -51,6 +53,8 @@ export const WrapperDataTable: React.FC<Props> = ({
   childrenExpandable,
   isSelectable,
   handleSelect,
+  clearSelectedRows,
+  contextActions,
 }) => {
   //Handle
   const handlePage = (page: number) => {
@@ -184,6 +188,8 @@ export const WrapperDataTable: React.FC<Props> = ({
           }
           selectableRows={isSelectable}
           onSelectedRowsChange={handleSelect}
+          clearSelectedRows={clearSelectedRows}
+          contextActions={contextActions}
         />
       )}
     </>

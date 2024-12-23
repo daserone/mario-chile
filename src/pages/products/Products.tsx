@@ -48,6 +48,26 @@ const Products = () => {
             <span className="">Mis Productos </span>
           </h2>
           <div className="row gy-4 mb-60 d-flex justify-content-center">
+            {/* search  */}
+            <div className="col-lg-4 col-md-6 col-sm-10">
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Buscar"
+                  onChange={(e) =>
+                    setParams((prev) => ({
+                      ...prev,
+                      filter: e.target.value,
+                    }))
+                  }
+                />
+                <button className="btn btn-primary">
+                  <i className="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+
             {data?.items?.length === 0 && (
               <div className="col-lg-12">
                 <div className="alert alert-warning p-3" role="alert">

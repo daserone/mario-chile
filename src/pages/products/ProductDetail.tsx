@@ -167,7 +167,7 @@ const ProductDetail = () => {
                                 </p>
                                 <p>Alto: {variant.height} cm</p>
                                 <p>Ancho: {variant.width} cm</p>
-                                <p>Largo: {variant.depth} cm</p>
+                                <p>Profundidad: {variant.depth} cm</p>
                               </div>
                             )}
                           </div>

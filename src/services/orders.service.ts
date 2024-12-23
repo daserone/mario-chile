@@ -157,6 +157,31 @@ export const createOrder = async (data: CreateOrderRequest) => {
   }
 };
 
+// {
+//   "orders": [
+//     {
+//       "order_id": "string",
+//       "comment": "string",
+//       "alternate_shipping": {}
+//     }
+//   ]
+// }
+
+export interface CreateOrderMultipleRequest {
+  orders: CreateOrderRequest[];
+}
+
+export const createOrderMultiple = async (data: CreateOrderMultipleRequest) => {
+  const response = await service.post(`api/blu/bulk_create_order`, data, {
+    responseType: "json",
+  });
+  if (response.status >= 200 && response.status < 300) {
+    return response?.data ?? {};
+  } else {
+    throw new Error(`Error al crear pedido: ${response.statusText}`);
+  }
+};
+
 //api/blu/reprint_label
 interface ReprintLabelRequest {
   order_id: string;

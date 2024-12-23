@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { TableColumn } from "react-data-table-component";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import {
+  useQuery,
+  keepPreviousData,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 //Service
 //Component
@@ -10,6 +14,8 @@ import {
   cancelOrder,
   confirmOrder,
   createOrder,
+  createOrderMultiple,
+  CreateOrderMultipleRequest,
   getOrders,
   reprintLabel,
 } from "@src/services/orders.service";
@@ -22,6 +28,8 @@ import useSwal from "@src/hooks/useSwal";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTruckArrowRight } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+import { set } from "date-fns";
 
 interface Params {
   company_name: string;
@@ -57,6 +65,29 @@ const OrdersTable: React.FC<Props> = ({
 
   const { showConfirm, showCancelReason, showConfirmWithInput } = useSwal();
 
+  // {
+  //   "orders": [
+  //     {
+  //       "order_id": "string",
+  //       "comment": "string",
+  //       "alternate_shipping": {}
+  //     }
+  //   ]
+  // }
+
+  const [selectedRows, setSelectedRows] = useState<ItemShopify[]>([]);
+  const [toggledClearRows, setToggleClearRows] = useState(false);
+
+  const handleChange = ({ selectedRows }: { selectedRows: ItemShopify[] }) => {
+    setSelectedRows(selectedRows);
+  };
+
+  // Toggle the state so React Data Table changes to clearSelectedRows are triggered
+  const handleClearRows = () => {
+    setToggleClearRows(!toggledClearRows);
+  };
+  const queryClient = useQueryClient();
+
   const handleCancelOrder = (order: ItemShopify) => {
     showCancelReason(
       "Cancelar",
@@ -76,6 +107,9 @@ const OrdersTable: React.FC<Props> = ({
         cancelOrder(body)
           .then((response) => {
             toast.success("Orden cancelada con éxito");
+            queryClient.invalidateQueries({
+              queryKey: ["orders", page, params],
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -99,6 +133,9 @@ const OrdersTable: React.FC<Props> = ({
         })
           .then((response) => {
             toast.success("Orden confirmada con éxito");
+            queryClient.invalidateQueries({
+              queryKey: ["orders", page, params],
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -108,7 +145,10 @@ const OrdersTable: React.FC<Props> = ({
     });
   };
 
-  const handleCreateGuides = (order: ItemShopify) => {
+  const handleCreateGuides = (
+    order: ItemShopify,
+    multiple: boolean = false
+  ) => {
     showConfirmWithInput(
       "Crear guías",
       "¿Estás seguro de crear guías?",
@@ -119,19 +159,55 @@ const OrdersTable: React.FC<Props> = ({
     ).then((result) => {
       if (result.isConfirmed) {
         console.log("Crear guías", result);
-        createOrder({
-          order_id: order.id!,
+
+        let bodyMultiple: CreateOrderMultipleRequest = {
+          orders: [],
+        };
+
+        let body = {
+          order_id: order.id!.toString(),
           comment: result.value,
           alternate_shipping: {},
-        })
+        };
+
+        if (multiple) {
+          selectedRows.forEach((order) => {
+            bodyMultiple.orders.push({
+              order_id: order.id!.toString(),
+              comment: result.value,
+              alternate_shipping: {},
+            });
+          });
+        }
+
+        console.log(
+          {
+            body,
+            bodyMultiple,
+          },
+          "body"
+        );
+
+        const endpoint = multiple
+          ? createOrderMultiple(bodyMultiple)
+          : createOrder(body);
+
+        endpoint
           .then((response) => {
             console.log(response, "response");
-            var file = new Blob([response], { type: "application/pdf" });
-            //var file = data['response'];
-            var fileURL = URL.createObjectURL(file);
-            window.open(fileURL);
+            if (!multiple) {
+              var file = new Blob([response], { type: "application/pdf" });
+              //var file = data['response'];
+              var fileURL = URL.createObjectURL(file);
+              window.open(fileURL);
+            }
+            setToggleClearRows(!toggledClearRows);
+            setSelectedRows([]);
 
             toast.success("Guías creadas con éxito");
+            queryClient.invalidateQueries({
+              queryKey: ["orders", page, params],
+            });
           })
           .catch((error) => {
             console.log(error);
@@ -151,6 +227,13 @@ const OrdersTable: React.FC<Props> = ({
       var fileURL = URL.createObjectURL(file);
       window.open(fileURL);
     });
+  };
+
+  const handleTags = (tags: string[] | string) => {
+    if (Array.isArray(tags)) {
+      return tags.join(", ");
+    }
+    return tags;
   };
 
   const columns: TableColumn<ItemShopify>[] = [
@@ -200,9 +283,7 @@ const OrdersTable: React.FC<Props> = ({
       selector: (row) => row.financial_status ?? "",
       cell: (row) => (
         <div className="d-flex flex-column align-items-start">
-          {row.nowly_confirmed && "Confirmado"}
-          {row.cancelled_at && "Cancelado"}
-          {row.tags}
+          {row.cancelled_at && "Cancelado"}-{handleTags(row.tags ?? "")}
         </div>
       ),
     },
@@ -270,31 +351,45 @@ const OrdersTable: React.FC<Props> = ({
     },
   ];
 
-  console.log(data, "DATA");
-
   return (
-    <WrapperDataTable
-      title=""
-      columns={columns}
-      isLoading={isLoading}
-      isError={isError}
-      data={data?.items ?? []}
-      recordsTotals={data?.total_items ?? 0}
-      countPerPage={countPerPage}
-      setCountPerPage={setCountPerPage}
-      page={page}
-      setPage={setPage}
-      handleClick={(item: ItemShopify) => {
-        setSelection(item);
-        handleToggle(true);
-      }}
-      handleDoubleClick={(item: ItemShopify) => {}}
-      isExpandable={false}
-      isSelectable
-      handleSelect={(item: any) => {
-        console.log(item);
-      }}
-    />
+    <>
+      {selectedRows.length > 0 && (
+        <div className="d-flex justify-content-between align-items-center bg-info p-2">
+          <h4 className="text-white">
+            Crear guías para {selectedRows.length}{" "}
+            {selectedRows.length > 1 ? "órdenes" : "orden"}
+          </h4>
+          <Button
+            variant="primary"
+            onClick={() => handleCreateGuides(selectedRows[0], true)}
+          >
+            Crear guías
+          </Button>
+        </div>
+      )}
+
+      <WrapperDataTable
+        title=""
+        columns={columns}
+        isLoading={isLoading}
+        isError={isError}
+        data={data?.items ?? []}
+        recordsTotals={data?.total_items ?? 0}
+        countPerPage={countPerPage}
+        setCountPerPage={setCountPerPage}
+        page={page}
+        setPage={setPage}
+        handleClick={(item: ItemShopify) => {
+          setSelection(item);
+          handleToggle(true);
+        }}
+        handleDoubleClick={(item: ItemShopify) => {}}
+        isExpandable={false}
+        isSelectable
+        handleSelect={handleChange}
+        clearSelectedRows={toggledClearRows}
+      />
+    </>
   );
 };
 
