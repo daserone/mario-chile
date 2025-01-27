@@ -124,8 +124,6 @@ const TrackingTable: React.FC<Props> = ({
     },
   ];
 
-  console.log(data, "DATA");
-
   return (
     <WrapperDataTable
       title=""

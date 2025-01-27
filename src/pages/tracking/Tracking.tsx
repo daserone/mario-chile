@@ -81,30 +81,15 @@ const Trackings = () => {
     }
   }, [company]);
 
-  const [modalAssignDistrict, setModalAssignDistrict] =
-    useState<boolean>(false);
-
   const [selectedOrder, setSelectedOrder] = useState<ItemShopify | null>(null);
   const queryClient = useQueryClient();
-
-  const handleAssignDistrict = (districtId: string) => {
-    assignDistrict({
-      order_id: selectedOrder?.id ?? "",
-      district_id: districtId,
-    }).then((data) => {
-      console.log(data);
-      queryClient.invalidateQueries({
-        queryKey: ["orders", 1, params],
-      });
-    });
-  };
 
   return (
     <>
       <Row>
         <Col>
           <h2 className="mt-3">
-            <span className="">Pedidos </span>
+            <span className="">Novedades </span>
           </h2>
           <Card>
             <Card.Header className="d-flex">
@@ -158,7 +143,6 @@ const Trackings = () => {
               handleToggle={setState}
               openModalAssignDistrict={(order) => {
                 setSelectedOrder(order);
-                setModalAssignDistrict(true);
               }}
             />
           </Card>

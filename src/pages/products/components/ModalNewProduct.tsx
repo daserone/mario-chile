@@ -5,10 +5,10 @@ import { Button, Form, Offcanvas } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-interface ModalDimensionsProps {
+interface ModalNewProductProps {
   isOpen: boolean;
   handleClose: () => void;
-  saveDimensions: (form: FormValues) => void;
+  saveProduct: (form: FormValues) => void;
 }
 
 interface FormValues {
@@ -16,13 +16,16 @@ interface FormValues {
   width: number;
   weight: number;
   depth: number;
+  name: string;
+  description: string;
+  price: string;
 }
 
-function ModalDimensions({
+function ModalNewProduct({
   isOpen,
   handleClose,
-  saveDimensions,
-}: ModalDimensionsProps) {
+  saveProduct,
+}: ModalNewProductProps) {
   const {
     register,
     handleSubmit,
@@ -33,7 +36,7 @@ function ModalDimensions({
   } = useForm<FormValues>();
 
   const onSubmit = (form: FormValues) => {
-    saveDimensions(form);
+    saveProduct(form);
     reset();
     handleClose();
   };
@@ -42,7 +45,7 @@ function ModalDimensions({
     <>
       <Offcanvas show={isOpen} onHide={handleClose} placement="end">
         <Offcanvas.Header>
-          <Offcanvas.Title>Dimensiones</Offcanvas.Title>
+          <Offcanvas.Title>Nuevo producto</Offcanvas.Title>
           <div className="btn-close" onClick={handleClose}>
             <FontAwesomeIcon icon={faClose} />
           </div>
@@ -51,6 +54,46 @@ function ModalDimensions({
           <div className="d-flex flex-column">
             <div className="col-12">
               <Form onSubmit={handleSubmit(onSubmit)}>
+                <Form.Group className="mb-3" controlId="name">
+                  <Form.Label>Nombre </Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Nombre"
+                    {...register("name", { required: true })}
+                  />
+                  {errors.name && (
+                    <Form.Text className="text-danger">
+                      Este campo es requerido
+                    </Form.Text>
+                  )}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="description">
+                  <Form.Label>Descripción</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Descripción"
+                    {...register("description", { required: true })}
+                  />
+                  {errors.description && (
+                    <Form.Text className="text-danger">
+                      Este campo es requerido
+                    </Form.Text>
+                  )}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="price">
+                  <Form.Label>Precio</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Precio"
+                    {...register("price", { required: true })}
+                  />
+                  {errors.price && (
+                    <Form.Text className="text-danger">
+                      Este campo es requerido
+                    </Form.Text>
+                  )}
+                </Form.Group>
+
                 <Form.Group className="mb-3" controlId="height">
                   <Form.Label>Alto (cm) </Form.Label>
                   <Form.Control
@@ -116,4 +159,4 @@ function ModalDimensions({
   );
 }
 
-export default ModalDimensions;
+export default ModalNewProduct;
